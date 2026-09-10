@@ -1,0 +1,13 @@
+.venv-*
+cache/
+models/
+data/
+logs/
+runtime/
+tmp/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.partial
+*.lockfile
+vendor/slime/

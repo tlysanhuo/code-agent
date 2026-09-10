@@ -1,0 +1,28 @@
+{
+  "status": "cpu_integration_verified_training_not_ready",
+  "selected_framework": "slime",
+  "training_launch_ready": false,
+  "upstream_agent_tests": {
+    "passed": 64,
+    "skipped": 1,
+    "skip_reason": "SGLang reasoning parser dependency absent in lean CPU environment"
+  },
+  "dsh_harness_tests": {
+    "passed": 7,
+    "skipped": 0,
+    "scope": "Real SDK and fixed harmless tool; fake tokenizer/model/sandbox/evaluator boundaries"
+  },
+  "custom_generate_function_path": "slime_dsh.generate.generate",
+  "qualified_training_tasks": 0,
+  "historical_custom_qualified_tasks": 2,
+  "expanded_candidates": 24,
+  "expanded_candidates_qualified": 0,
+  "missing_conditions": [
+    "Project-local real task execution provider and upstream evaluation environment are not connected. Upstream /tmp and /home/agent paths require project-local mounts and lifecycle cleanup.",
+    "Real Qwen tokenizer, SGLang reasoning/tool parser and multiround sampled probabilities remain unverified in the training path.",
+    "Pinned slime mainline lacks a verified Qwen3.5-27B BF16 LoRA recipe. PR #1865 is unmerged and its patch does not apply.",
+    "No GPU update, memory, weight-sync or checkpoint recovery check has run. At most two H100 80GB cards; do not substitute full fine-tuning.",
+    "Training data must be requalified by the selected upstream protocol and historical evaluation/development exclusions retained."
+  ],
+  "evidence": "reports/verification.json"
+}

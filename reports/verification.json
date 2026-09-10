@@ -1,0 +1,57 @@
+{
+  "recorded_utc": "2026-09-10T02:29:42.564476+00:00",
+  "kind": "Sanitized summary of local checks; source artifacts remain private and are not bundled",
+  "upstream_slime_commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+  "test_reports": [
+    {
+      "source": "runtime/slime/upstream-check-1/junit.xml",
+      "source_sha256": "bd00e16abb5c77be1b58301142536b6595a3df21a753a27925630eca2ac358ae",
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "duration_seconds": 9.05
+    },
+    {
+      "source": "runtime/slime/harness-check-iLJUxtao/junit.xml",
+      "source_sha256": "2eac179b8b22622fc35e82ac18d8603b231457fd932063474fa0abfbbdf8d973",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 18.483
+    }
+  ],
+  "dsh_native_protocol": {
+    "passed": true,
+    "model_and_tokenizer": "synthetic CPU fixtures",
+    "runtime_closed": true
+  },
+  "parameter_updates": 0,
+  "slime_real_training_rollouts": 0,
+  "benchmark_status": {
+    "official_protocol_baseline_completed": false,
+    "historical_custom_swe_smith": {
+      "attempts": 3,
+      "accepted_repairs": 0,
+      "termination": "context limit, empty patches"
+    },
+    "custom_swe_gym": "stopped; facility smoke only"
+  },
+  "source_code_sha256": {
+    "scripts/env.sh": "08de5a76914614b2c240340495de940cca94f52561732dcdf886e85e0556a3c9",
+    "scripts/agent_rl.sh": "9d9105af02a9eab5c8aca70ad384f2b8ab6c350a6680b85d966f40f13e3fbf61",
+    "scripts/slime_rl.sh": "22a3d825cd4f4745c1a1d84d66fc73aa9bb8a8cb83e7d71aabbad1fa0a72abb9",
+    "scripts/check_slime_dsh.py": "807e32f5ef657dcb1fa01d57140ad14164a2ac56d9cdfddb5153ddfcc48046fd",
+    "scripts/check_slime_harness.py": "4c5b9f505c9c37103254048d21805847c55db7ee11d32e066e321307d667abf1",
+    "scripts/agent_rl_dsh_worker.py": "93ed05d18d541def3420cc46181fd7baf01837f2b8544bb0990d469d803ab915",
+    "slime_dsh/__init__.py": "f3fb55b5a96e1d6b2f8992fa7becbc4265e042b2d8ca67664372c65b48d047c6",
+    "slime_dsh/harness.py": "b211375bd91976dc75191d34b17f145355ccc082ef36e9fb721c6218ca11cde9",
+    "slime_dsh/generate.py": "56361e9dbc2745635fd396b446d5df925eea0047d57065319b4ad2682b8beb7d",
+    "configs/slime/cpu-requirements.lock": "5fdf1543a2c7cab2b017034a2b699c69ce66952f795f15a5473c3802c5e4f858",
+    "configs/slime/upstream-agent-sha256.json": "da659518b7b25d71198e161cf1c198de6b6957e65980e5e96bcfae79849d0def",
+    "configs/dsh-requirements.in": "8f14f44e4c74d7e696e6b33f6b05f0bc9cdb9d86ed3004a0cb061a72a9d5367d",
+    "configs/dsh-requirements.lock": "3deb0788887b856cbbbf3a4c57d8ed2c22655e19dc9f213ce8354ee2b88034e0",
+    "configs/agent-rl/dsh-qwen-rl.patch.yml": "ceace11b2da30e56b7a8051c438bec24e7808a74b62ca2094535f715a81f4005"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "vendor/slime/examples/coding_agent_rl/generate.py": "493f995c961ae302d81725c134f122a6933a4396236a498d514550dd8d7707b1",
+  "vendor/slime/examples/coding_agent_rl/swe.py": "ca8f69d23bb7f3b0fadd8e9bdccb6519ff87367203ae4f39e195696a752cfca7",
+  "vendor/slime/slime/agent/harness/common.py": "57919ecd4240f6631678f4ea395e2e0a784403ed4bb893c5e42992eabbe4b1fa",
+  "vendor/slime/slime/agent/sandbox.py": "0c1b475e02ccce0ed3089c9f73272c755d5090f7e63e9be909a44c8a40339d91"
+}

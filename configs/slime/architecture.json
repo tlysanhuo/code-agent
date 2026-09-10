@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "selected_utc": "2026-09-09T17:06:57.342648+00:00",
+  "framework": {
+    "name": "slime",
+    "url": "https://github.com/THUDM/slime",
+    "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+    "checkout": "vendor/slime",
+    "upstream_modified": false
+  },
+  "target": {
+    "agent": "DSH",
+    "model": "Qwen/Qwen3.5-27B",
+    "model_revision": "fc05daec18b0a78c049392ed2e771dde82bdf654",
+    "dtype": "BF16",
+    "finetuning": "LoRA",
+    "max_h100_80gb": 2
+  },
+  "ownership": {
+    "resource_management": "slime / Ray",
+    "sampling": "slime / SGLang + router",
+    "trajectory_and_loss_masks": "slime.agent.trajectory",
+    "agent_http": "slime.agent.adapters.openai.OpenAIAdapter",
+    "policy_update_and_weight_sync": "slime / Megatron",
+    "task_orchestration": "examples.coding_agent_rl.generate.generate",
+    "task_preparation_and_scoring": "examples.coding_agent_rl.swe",
+    "dsh_lifecycle": "slime_dsh.harness.DshHarness; CPU-tested BaseHarness extension"
+  },
+  "execution": {
+    "upstream_training_entry": "vendor/slime/train.py",
+    "upstream_agent_hook": "examples.coding_agent_rl.generate.generate",
+    "upstream_builtin_agents": [
+      "claude_code",
+      "codex"
+    ],
+    "dsh_registered": true,
+    "environment_provider": "upstream E2B-compatible; project-local execution backend not connected",
+    "gpu_dependencies_installed": false,
+    "launch_ready": false,
+    "custom_generate_function_path": "slime_dsh.generate.generate",
+    "dsh_registration_scope": "Project hook binds upstream example classes; upstream source unchanged, no external DSH registry API."
+  },
+  "cpu_environment": {
+    "path": ".venv-slime-cpu",
+    "python": "3.12.12",
+    "requirements": "configs/slime/cpu-requirements.lock",
+    "requirements_sha256": "5fdf1543a2c7cab2b017034a2b699c69ce66952f795f15a5473c3802c5e4f858",
+    "dependency_basis": "vendor/slime/.github/workflows/pr-test.yml agent-test CPU install; independently resolved and frozen",
+    "torch_index": "https://download.pytorch.org/whl/cpu",
+    "upstream_ci_python": "3.10",
+    "local_python_difference": "3.12.12 uses native asyncio.timeout; CPU CI provides a 3.10 shim"
+  },
+  "lora": {
+    "mainline_recipe_verified": false,
+    "candidate_pr": "https://github.com/THUDM/slime/pull/1865",
+    "candidate_status_at_review": "open, unmerged",
+    "candidate_adopted": false,
+    "two_gpu_recipe_verified": false
+  },
+  "data": {
+    "slime_qualified_training_tasks": 0,
+    "historical_custom_qualified_tasks": 2,
+    "expanded_source_candidates": 24,
+    "expanded_qualified_tasks": 0,
+    "reserved_development_candidates": 6,
+    "old_benchmark_and_development_exclusions_remain": true
+  },
+  "first_gpu_smoke_proposal": {
+    "status": "proposal_only_not_authorized_or_configured",
+    "tasks": 2,
+    "trajectories_per_task": 2,
+    "max_lora_updates": 1
+  },
+  "scope": "Architecture migration and CPU protocol checks only. No real model rollout, benchmark, GPU worker or parameter update. No replacement training/evaluation pipeline."
+}
