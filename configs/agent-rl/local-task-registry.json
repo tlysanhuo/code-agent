@@ -1,1 +1,18 @@
-{}
+{
+ "facebookresearch__hydra-1905": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1/facebookresearch__hydra-1905",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/51a15701e623/bin/python"
+ },
+ "dask__dask-8253": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1/dask__dask-8253",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python"
+ },
+ "dask__dask-8785": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1/dask__dask-8785",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python"
+ },
+ "dask__dask-8185": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1/dask__dask-8185",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python"
+ }
+}
