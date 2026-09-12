@@ -1,11 +1,13 @@
 # Code-Agent 项目进度文档
 
 > 本文档是项目进度的单一入口，每次会话结束或有状态变化时更新。
-> 依据：docs/research-log.md（调研与决策记录）、configs/loop-agent/plan.json（机器可读状态）。
+> 依据：docs/research-log.md（调研流水）、configs/loop-agent/plan.json（机器可读状态）。
+> **讲解主线看 [docs/decision-log.md](docs/decision-log.md)**（2026-09-12 起：D1-D14 决策
+> 叙事，从项目起点记录每个选择的备选/裁决/依据/验证，PPT 按此展开）。
 > 新建理由（2026-09-12）：用户明确要求独立进度文档；README 已承载大量调研内容，
 > 进度状态不再与之混排。本文件与 docs/research-log.md 互补：本文件管进度，research-log 管调研全文。
 
-- **当前时间**：2026-09-12 ~05:10 UTC
+- **当前时间**：2026-09-12 ~09:15 UTC
 - **项目定位**：简历面试项目。dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
   LoopLM 循环层为限额加分臂（≤8 GPU·h，恢复 <50% dense 参照即止损封存）。
 
@@ -123,14 +125,76 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 
 ## 挂起 / 等用户
 
-1. **阶段②启动指令**（先做 Sandbox 本地后端调研）。
+1. ~~奖励设计过目~~ **已锁定（2026-09-12 用户批准）**：分级方案执行（v1=二值核+原生动态采样；格式罚带退场；部分分挂重访；过程正奖归阶段③）。下一步=slime_dsh 实现（带单测）+smoke 超参单。
 2. Polar B' 数据集：上游 401（gated），需用户 HF 账号接受条款+token 或等公开
    （确切段址 `nvidia/polar-swegym-pi-qwen35-122b-a10b-trajectories`）。
-3. iter_249/439 清理确认；cudnn/torchaudio 升级时机。
-4. 阶段②③ GPU 使用照旧逐次授权。
+3. iter_249/439 清理已随 2026-09-12T08:59Z 清理执行完毕（见变更日志）；cudnn/torchaudio 升级时机。
+4. 阶段②③ GPU 使用照旧逐次授权；GRPO smoke 超参单（组大小/T_max/c_* 等）呈批。
+
+## 在飞
+
+- **全量 291 任务 qualification 批**（nohup，PID 4078403，logs/prepare-rl-round1-full.log；
+  产出 configs/agent-rl/local-task-registry.json + data/agent-rl/rl-round1-prompts.parquet；
+  截至 09:02 UTC 约 153/291；日志见大量 infrastructure_startup_failure，与试点合格率
+  20-24% 一致；结束后统计合格数定首轮规模）。
 
 ## 变更日志
 
+- 2026-09-12T11:34:38Z — 全量 qualification 完成：87/291（29.9%）合格（pydantic 32/dask 29/bokeh 15/hydra 11），registry + 87 行 prompt parquet 落盘；首轮 GRPO 规模足够。
+- 2026-09-12 ~10:55 UTC — 用户三项裁定落档：①奖励设计锁定（分级方案，reward-design
+  文档状态改已锁定）；②难度筛选 GPU 批准（全量，1×H100，前置=qual 收尾+脚本 CPU 验证）；
+  ③KAT-Coder-V2.5 纳入权威集（六家）。decision-log D11f/D12 状态同步。
+- 2026-09-12 ~11:1x UTC — 应用户要求新建决策叙事文档 docs/decision-log.md（D1-D14，
+  四段式：背景/备选/裁决依据/验证，含两次奖励调研自我纠错的如实保留+PPT 骨架映射）；
+  TR 分析文档降为参照附录角色；PROGRESS 顶部挂决策文档单入口。
+
+- 2026-09-12 ~11:0x UTC — 第八轮：2026-04+ code-agent TR 综合分析文档成文（用户指令：
+  4 月红线+落文档供 PPT）。research/code-agent-tr-analysis-202604plus.md：6 份入选 TR
+  （KAT-V2.5/DSV4/M2/OT-Agent/AgenticQwen/LEGO-RL）分析卡+三横向对比表+共识分歧+项目
+  映射+PPT 素材索引；Devstral 2(2025-12)/Qwen3.5(无文本 TR)/闭源新贵出局核查记录。
+  research-log 挂指针。
+
+- 2026-09-12 ~10:35 UTC — 第五轮调研：code-agent 项目对照（用户指令「看我们到底怎么做」）。
+  发现 2026H2 harness-native RL 脉络（OpenForgeRL/LEGO-RL/EvoHarness-RL/ClawGym II），最同源
+  = LEGO-RL（arXiv 2608.17393：Qwen3.5-35B 在未修改 harness 内训，任务漏斗以 27B rollout
+  难度筛选收 2,699 题、未筛 72.7% 从未解出；二值奖励+GSPO；Pearson≥0.998 token 保真）；
+  OpenThoughts 全开源配方（GLM-4.6 teacher 比 GPT 系好 2 倍；RL 任务 1 万筛 700）；
+  DSH 训练先例核实=空（差异化成立）。**裁决：qualification 后接难度带筛选（先于奖励塑形）；
+  estimator 选项扩为 grpo/cispo/gspo**。research-log 第五轮段落入档。
+- 2026-09-12 ~12:0x UTC — 奖励调研三轮收敛（用户指令：只要有时效性的大厂一手内容）：
+  权威证据链定稿为五家基模 TR+一篇实证标尺——新增 Kimi K2.5 TR（2602.02276：规则 outcome+
+  budget-control token 效率奖+GRM 多 rubric；Toggle −25~30% token；PARL）、MiniMax M2 TR+
+  M2.1 第一方博客（复合奖励含工具格式罚；CISPO；MIS+轨迹过滤治噪声；FP32 head）、Meta
+  ScaleRL（2510.13786：CISPO+DAPO 动态采样+自适应 prompt 过滤在获胜配方）。时效核查：GLM-5.3/
+  K2.6/Qwen3.8-Max 无训练披露；DSV4.1-Flash=配方沿用。设计文档 §1.4-1.6 逐字引文入档、
+  §4.6/§5 收敛（塑形四档、噪声治理三机制、grpo/cispo 双选项）；research-log 同步（含修复
+  一处编辑事故：二轮标题被吞已还原）。
+- 2026-09-12 ~11:0x UTC — 奖励调研二轮修正（用户驳回「smoke 纯二值」，指出样本不足）：
+  核实**基模大厂 TR 无一纯二值**——MiniMax M2 TR（arXiv 2605.26494 §6.1.5 复合奖励：过程
+  奖励含工具格式错误罚+墙钟时间奖励+reward-to-go）；Meta SWE-RL（arXiv 2502.18449，代码
+  开源）：补丁相似度奖励+格式罚 −1，完全不用测试；澄清 R2E-Gym「Hybrid Verifier」为推理期
+  重排序非 RL 奖励、DeepSWE 博志+本地代码双重确认稀疏 0/1；补学术对照（2605.02944 pass-rate
+  部分分不可靠更优；2605.05112 二值信号 ~50% 通过率最强）。设计文档 §4.1 重写为「大厂 TR
+  塑形阵营 vs 开源小算力二值阵营」、§5.1 决策点改为核+塑形分级起步（a-d 选项，先测量
+  格式错误率/轮数/崩溃率）；research-log 同步修正并保留首轮有效事实（slime 原生 DAPO 动态
+  采样等）。
+- 2026-09-12 ~10:0x UTC — 业界方案调研（用户指令「你去调研业界的方案」，校准奖励设计）：
+  本地快照精读 slime 官方 coding_agent_rl（纯二值、崩溃 reward=0+remove、超时不扣分）、
+  Agent Lightning swe_smith（已解轮数惩罚 t0=80/λ=0.1、prompt 膨胀惩罚、防作弊四通道+
+  网络层 default-deny 立场、格式错误反馈修正）、SkyRL（二值）；Web 核实 DAPO（arXiv
+  2503.14476：动态采样+软超长惩罚，verl overlong_buffer 落地）、NeMo-RL 两段 SWE 指南
+  （Stage-1 pivot=单步参数匹配奖励教格式，PivotRL arXiv 2603.21383；Stage-2 纯二值；
+  G=8/LR 1e-6/clip 0.2/0.28）、Klear 无公开 RL 代码。**最大发现：slime 原生 DAPO 动态采样**
+  （over-sampling + dynamic-sampling-filter，vendor 可查）。设计文档新增 §4 业界对照+
+  §5 决策点校准；research-log 同步。qualification 批继续在飞。
+- 2026-09-12 ~09:15 UTC — 阶段②奖励设计推进（handoff 指定最高优先）：完成三份 TR 奖励
+  章节精读（tmp/{qwen3cn,glm5,dsv4}_tr.txt）与钉住 slime 挂载点核对
+  （remove_sample→零 loss_mask @ slime/ray/rollout.py:351；custom-rm/post-process/
+  sample-filter/all-samples-process/custom-advantage/custom-loss 全查实带行号；关键发现：
+  remove_sample 不影响 advantage 归一化参与 → GLM-5 组填充/丢弃语义需经
+  all-samples-process/custom-reward-post-process 自写）；综合设计文档成文
+  research/reward-design-stage2-grpo.md（引文+映射表+实现计划+4 决策点），research-log
+  挂指针。未写任何实现代码（等用户过目）。
 - 2026-09-12T08:59:01Z — 项目清理（用户指令）：删除被取代的检查点（smoke 117G、iter_249/439 270G，钉住的 iter_499+hf-iter500 保留）、smoke-hf-dryrun 17G、重复 wheel、/tmp/ray-sft-smoke 362M（项目外，训练 RAY_TMPDIR 所致；后续 RL 运行改项目内 tmp）、陈旧 DSH socket 与测试残留；models/dense-9B-sft 538G→152G。保留：27B teacher、9B base、loop-qwen（E1 资产）、四个被 configs 引用的旧 venv、cache（环境缓存）。机器级副作用（非文件）：agent 用户+/home/agent（上游 chown 需要）、root git config 的项目路径条目。
 - 2026-09-12 ~07:2x UTC — A/B 完成：SFT 价值判定成立（resolved 3/20→6/20、提交率 10%→100%、格式错误 18→3、步数 −44%）；本地协议冻结评估集确立；用户决定 bench 全本地跑（不走 Docker/远端），SV 行以本地协议判分替代。
 - 2026-09-12 ~05:10 UTC — 阶段①验收完成：HumanEvalPlus 96.88% 持平基线（同题失败）；

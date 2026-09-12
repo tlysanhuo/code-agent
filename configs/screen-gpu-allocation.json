@@ -1,0 +1,12 @@
+{
+ "gpu_uuids": [
+  "GPU-2e106654-3f26-8440-e5de-e9eb3b87f38f"
+ ],
+ "gpu_indices": [
+  2
+ ],
+ "allocated_utc": "2026-09-12T11:32:37Z",
+ "allocated_by": "User approved 2026-09-12: difficulty screening full batch, 1x idle H100 (GPU 2 or 5)",
+ "purpose": "27B teacher difficulty screening rollouts (DSH, k=4, LEGO-RL band)",
+ "service": "vLLM Qwen3.5-27B BF16 port 18095 + screen_rl_tasks.py"
+}

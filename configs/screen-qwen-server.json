@@ -1,0 +1,15 @@
+{
+  "model_revision": "fc05daec18b0a78c049392ed2e773dde82bdf654",
+  "served_model_name": "Qwen3.5-27B",
+  "host": "127.0.0.1",
+  "port": 18095,
+  "dtype": "bfloat16",
+  "max_model_len": 32768,
+  "max_num_seqs": 4,
+  "max_num_batched_tokens": 16384,
+  "gpu_memory_utilization": 0.85,
+  "enable_thinking": false,
+  "reasoning_parser": "qwen3",
+  "tool_call_parser": "qwen3_coder",
+  "gdn_prefill_backend": "triton"
+}

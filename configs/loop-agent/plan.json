@@ -355,7 +355,7 @@
     "per-step GPU authorization unchanged (UUID record -> configs/gpu-allocation.json)"
    ]
   },
-  "updated_utc": "2026-09-12T05:44:58Z",
+  "updated_utc": "2026-09-12T11:34:38Z",
   "gpu_env_2026_09_11": {
    "status": "BUILT and VERIFIED end-to-end (user choice b: local deps)",
    "env": ".venv-train-rl + TE 2.16.1 (prebuilt cu12 wheel from tuna mirror, sha256 verified vs PyPI; torch-ext sdist compiled sm90-only in 1.5min - TE 2.16.1 CUDA-12 build target IS 12.3 = system nvcc) + fla 0.5.2 + numpy 1.26.4 + scripts/env-train-gpu.sh (venv nvidia lib dirs first in LD_LIBRARY_PATH; system /usr/local/cuda-12.3 cudart otherwise shadows torch cu129's)",
@@ -543,6 +543,22 @@
     "env qualification batch for round-1 tasks",
     "GRPO config + smoke"
    ]
+  },
+  "stage2_qualification_2026_09_12": {
+   "status": "COMPLETE",
+   "result": "87/291 curated-repo SWE-Gym tasks qualified (29.9%; gold patch fully resolves F2P+P2P in our local envs)",
+   "distribution": {
+    "pydantic": 32,
+    "dask": 29,
+    "bokeh": 15,
+    "hydra": 11
+   },
+   "outputs": [
+    "configs/agent-rl/local-task-registry.json",
+    "data/agent-rl/rl-round1-prompts.parquet (87 rows, local_backend metadata contract)"
+   ],
+   "note": "unqualified tasks = env recipe version drift (documented); enough for round-1 GRPO smoke + first rounds",
+   "evidence": "logs/prepare-rl-round1-full.log + runtime/agent-rl/round1/qual/*"
   }
  },
  "exploratory_arch_menu": {
