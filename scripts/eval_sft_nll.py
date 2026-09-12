@@ -28,8 +28,6 @@ import random
 import sys
 from pathlib import Path
 
-import pyarrow.parquet as pq
-
 ROOT = Path(__file__).resolve().parents[1]
 MASK_UTILS = ROOT / "vendor/slime/slime/utils/mask_utils.py"
 
@@ -42,6 +40,8 @@ def load_mask_generator(tokenizer):
 
 
 def iter_rows(paths, limit, seed):
+    import pyarrow.parquet as pq
+
     rng = random.Random(seed)
     for path in paths:
         tbl = pq.read_table(path, columns=["messages", "metadata"])
@@ -125,13 +125,20 @@ def run_score(args):
     rows = [json.loads(l) for l in args.score.open()]
     from vllm import LLM, SamplingParams
 
+    # prompt_logprobs materializes per-chunk logits of the 248,320 vocab:
+    # a 16k chunk is ~7.6GB on its own, so cap chunks at 4k and leave real
+    # headroom next to the KV cache (0.9 util OOM'd on the first 30k prompt).
+    # language_model_only: converted ckpt keeps the multimodal config.json but
+    # carries language weights only; without this vLLM builds the visual tower
+    # and dies on missing weights (phase A server passed --language-model-only).
     llm = LLM(model=args.model_dir, max_model_len=args.max_tokens,
-              gpu_memory_utilization=0.9, enforce_eager=False)
+              gpu_memory_utilization=0.75, enforce_eager=True,
+              max_num_batched_tokens=4096, language_model_only=True)
     sp = SamplingParams(max_tokens=1, prompt_logprobs=0, temperature=0)
 
     per_row = []
-    for start in range(0, len(rows), 32):
-        batch = rows[start:start + 32]
+    for start in range(0, len(rows), 16):
+        batch = rows[start:start + 16]
         outs = llm.generate([p["token_ids"] for p in batch], sp)
         for p, out in zip(batch, outs):
             plp = out.prompt_logprobs
