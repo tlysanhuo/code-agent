@@ -1,9 +1,9 @@
 # Code-Agent 项目进度文档
 
 > 本文档是项目进度的单一入口，每次会话结束或有状态变化时更新。
-> 依据：README.md（调研与决策记录）、configs/loop-agent/plan.json（机器可读状态）。
+> 依据：docs/research-log.md（调研与决策记录）、configs/loop-agent/plan.json（机器可读状态）。
 > 新建理由（2026-09-12）：用户明确要求独立进度文档；README 已承载大量调研内容，
-> 进度状态不再与之混排。README 顶部保留指针至此。
+> 进度状态不再与之混排。本文件与 docs/research-log.md 互补：本文件管进度，research-log 管调研全文。
 
 - **当前时间**：2026-09-12 ~05:10 UTC
 - **项目定位**：简历面试项目。dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
