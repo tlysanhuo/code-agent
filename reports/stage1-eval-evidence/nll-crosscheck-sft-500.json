@@ -1,0 +1,58 @@
+{
+  "tag": "sft-500",
+  "model_dir": "models/dense-9B-sft/formal-2card/hf-iter500",
+  "rows_checked": 8,
+  "max_abs_diff": 0.0004657419023679221,
+  "mean_abs_diff": 0.00017338993106382275,
+  "verdict": "AGREE",
+  "rows": [
+    {
+      "split": "klear-long",
+      "instance": "stanfordnlp__dspy.651a4c71.func_pm_remove_assign__w51vg35s",
+      "hf": 0.16603222692064543,
+      "vllm": 0.166184304609739
+    },
+    {
+      "split": "klear-long",
+      "instance": "marshmallow-code__webargs.dbde72fe.func_basic__y5cve7c8",
+      "hf": 0.17217640719164598,
+      "vllm": 0.17231447393816848
+    },
+    {
+      "split": "klear-long",
+      "instance": "seperman__deepdiff.ed252022.lm_rewrite__m64bzcxl",
+      "hf": 0.18984441344365288,
+      "vllm": 0.18972979068572438
+    },
+    {
+      "split": "klear-long",
+      "instance": "encode__starlette.db5063c2.func_basic__0c6c0m9s",
+      "hf": 0.20460247398372414,
+      "vllm": 0.20462569262786326
+    },
+    {
+      "split": "klear-long",
+      "instance": "pdfminer__pdfminer.six.1a8bd2f7.pr_887",
+      "hf": 0.2867099155149778,
+      "vllm": 0.28704444040347377
+    },
+    {
+      "split": "klear-long",
+      "instance": "stanfordnlp__dspy.651a4c71.func_pm_ctrl_shuffle__1fod6nqb",
+      "hf": 0.20535767985919093,
+      "vllm": 0.20544332783666527
+    },
+    {
+      "split": "klear-long",
+      "instance": "jsvine__pdfplumber.02ff4313.lm_rewrite__jfgevnw1",
+      "hf": 0.22849195100694436,
+      "vllm": 0.22802620910457644
+    },
+    {
+      "split": "klear-long",
+      "instance": "tox-dev__pipdeptree.c31b6418.pr_248",
+      "hf": 0.2478780072346722,
+      "vllm": 0.24780478839218353
+    }
+  ]
+}

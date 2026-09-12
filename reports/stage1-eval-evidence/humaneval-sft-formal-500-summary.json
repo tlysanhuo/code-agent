@@ -1,0 +1,15 @@
+{
+  "tag": "sft-formal-500",
+  "model": "DenseQwen-9B-SFT",
+  "endpoint": "http://127.0.0.1:18092/v1",
+  "protocol": "HumanEvalPlus base-check, first N problems, greedy, identical template",
+  "limit": 32,
+  "passed": 31,
+  "pass_rate": 0.9688,
+  "counts": {
+    "pass": 31,
+    "fail": 1
+  },
+  "wall_seconds": 54.3,
+  "detail": "runtime/loop-agent/humaneval-sft-formal-500.jsonl"
+}

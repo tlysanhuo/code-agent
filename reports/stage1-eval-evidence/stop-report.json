@@ -1,0 +1,17 @@
+{
+  "status": "STOPPED_AT_500",
+  "utc": "2026-09-12T03:20:59Z",
+  "checkpoint": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/models/dense-9B-sft/formal-2card/iter_0000499",
+  "hf_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/models/dense-9B-sft/formal-2card/hf-iter500",
+  "conversion": null,
+  "gpu_after": [
+    "0, GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf, 0 MiB",
+    "1, GPU-6046be75-1ef0-750c-9156-add069f43217, 76137 MiB",
+    "2, GPU-2e106654-3f26-8440-e5de-e9eb3b87f38f, 0 MiB",
+    "3, GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062, 72581 MiB",
+    "4, GPU-204352f6-1086-4f94-1350-65b3540752e5, 77301 MiB",
+    "5, GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8, 0 MiB",
+    "6, GPU-469b3d58-7a10-61ee-57a7-fbbcbf61447b, 31201 MiB",
+    "7, GPU-e0f05c12-b5e0-2f1c-4651-bea0e470e783, 0 MiB"
+  ]
+}
