@@ -17,9 +17,7 @@ source scripts/env.sh 后再跑任何东西。
 - slime 原生机制已核实：remove_sample→零 loss_mask（=GLM-5 剔除/Klear 掩码通道）、
   token 级 loss_mask 原生、advantage 支持 grpo/gspo/cispo+custom 钩子
 
-【在飞】全量 291 任务 qualification 批后台跑（nohup，logs/prepare-rl-round1-full.log，
-产出 configs/agent-rl/local-task-registry.json + data/agent-rl/rl-round1-prompts.parquet；
-试点合格率 20-24%）。
+【已完成】qualification：87/291 合格（registry + 87 行 parquet 已落盘），首轮 GRPO 规模足够。
 
 【已完成待续】阶段① SFT 验收全过（HumanEvalPlus 96.88% 持平基线、NLL 交叉验证、
 A/B 解决率 15%→30%，见 reports/）；阶段②接线：LocalProcessSandbox（9/9 测试）、
