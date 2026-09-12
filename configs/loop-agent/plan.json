@@ -355,7 +355,7 @@
     "per-step GPU authorization unchanged (UUID record -> configs/gpu-allocation.json)"
    ]
   },
-  "updated_utc": "2026-09-12T05:39:11Z",
+  "updated_utc": "2026-09-12T05:44:58Z",
   "gpu_env_2026_09_11": {
    "status": "BUILT and VERIFIED end-to-end (user choice b: local deps)",
    "env": ".venv-train-rl + TE 2.16.1 (prebuilt cu12 wheel from tuna mirror, sha256 verified vs PyPI; torch-ext sdist compiled sm90-only in 1.5min - TE 2.16.1 CUDA-12 build target IS 12.3 = system nvcc) + fla 0.5.2 + numpy 1.26.4 + scripts/env-train-gpu.sh (venv nvidia lib dirs first in LD_LIBRARY_PATH; system /usr/local/cuda-12.3 cudart otherwise shadows torch cu129's)",
@@ -532,6 +532,16 @@
     "HumanEvalPlus: upgrade to official evalplus CLI protocol (official, no Docker, local) - replaces base-check guardrail with an official score",
     "SWE agentic rows: local venv envs + frozen gym evaluator, labeled self-built dev protocol (already proven by the running A/B)",
     "SWE-bench Verified official harness: stays gated on local Docker platform fix (ticket path only); not blocked by this decision since dev rows carry the project"
+   ]
+  },
+  "stage2_decision_2026_09_12": {
+   "decision": "USER DECIDED: stage-2 RL rollout goes DIRECTLY on DSH format (no Klear-format intermediate). DSH is the resume differentiator.",
+   "accepted_risk": "model has no DSH-format training -> low initial solve rate; mitigations per research: NeMo-RL-style pivot (cheap format teaching) can be layered later if reward variance is too low",
+   "work_order": [
+    "research existing local sandbox backends for slime (upstream/issues/other users)",
+    "implement in-project local backend for slime Sandbox protocol (vendor untouched)",
+    "env qualification batch for round-1 tasks",
+    "GRPO config + smoke"
    ]
   }
  },
