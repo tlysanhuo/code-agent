@@ -355,7 +355,7 @@
     "per-step GPU authorization unchanged (UUID record -> configs/gpu-allocation.json)"
    ]
   },
-  "updated_utc": "2026-09-12T04:26:26Z",
+  "updated_utc": "2026-09-12T05:39:11Z",
   "gpu_env_2026_09_11": {
    "status": "BUILT and VERIFIED end-to-end (user choice b: local deps)",
    "env": ".venv-train-rl + TE 2.16.1 (prebuilt cu12 wheel from tuna mirror, sha256 verified vs PyPI; torch-ext sdist compiled sm90-only in 1.5min - TE 2.16.1 CUDA-12 build target IS 12.3 = system nvcc) + fla 0.5.2 + numpy 1.26.4 + scripts/env-train-gpu.sh (venv nvidia lib dirs first in LD_LIBRARY_PATH; system /usr/local/cuda-12.3 cudart otherwise shadows torch cu129's)",
@@ -400,7 +400,7 @@
    "frontier_landscape": "GLM-5.3 (newest open coding SOTA, post-training-only gains on 5.2 base), GLM-5.2 753B/1M, Qwen3.8-Max (no full TR yet), Kimi-K2.5/K2.6, DSV4.1-Flash"
   },
   "formal_sft_run": {
-   "status": "STAGE-1 COMPLETE & ACCEPTED (2026-09-12)",
+   "status": "STAGE-1 COMPLETE, ACCEPTED, VALUE-CONFIRMED (A/B done 2026-09-12)",
    "run": "formal stage-1 SFT, 2xH100 TP2/DP1 (GPUs 0+5, UUIDs in configs/gpu-allocation.json), launcher scripts/run_sft_formal.sh, detached (setsid) so it survives conversations",
    "data": "data/sft-pool/sft-klear-filtered-16k.parquet (28,208 rows, Qwen3CN-rule filtered; stats runtime/prompt-pool/sft-klear-filtered-16k.json)",
    "config": "1 EPOCH DECIDED by user; job configured with num-epoch 2 (882 steps) but STOP at the step-500 checkpoint (epoch1=441; first checkpoint past it is 500; stop right after its save lands, then scoped-ray cleanup + GPU release verification)",
@@ -480,6 +480,25 @@
      "language_model_only=True needed for converted multimodal-config ckpt",
      "248k-vocab x 16k-chunk logits = 7.6GB OOM -> 4096 chunks + 0.75 util + eager"
     ]
+   },
+   "ab_experiment_2026_09_12": {
+    "verdict": "SFT VALUE CONFIRMED",
+    "protocol": "Klear mini-swe-agent format replay (verbatim from training parquet) on 20 held-out SWE-Gym tasks, local envs + frozen gym evaluator, identical budgets, self-built protocol label",
+    "base": {
+     "resolved": "3/20",
+     "submitted": "2/20",
+     "format_errors": 18,
+     "mean_steps": 33.3,
+     "note": "5 bokeh grading git-timeouts from un-submitted junk workspaces (~11k files each, near-certain unresolved)"
+    },
+    "sft_500": {
+     "resolved": "6/20",
+     "submitted": "20/20",
+     "format_errors": 3,
+     "mean_steps": 18.8
+    },
+    "consequence": "RL stage-2 starts from hf-iter500; the 20-task set becomes the frozen local-protocol eval table for all future checkpoints",
+    "evidence": "reports/sft-ab-20260912.md + runtime/sft-ab/*"
    }
   },
   "stage2_cpu_prep_2026_09_11": {
@@ -506,6 +525,14 @@
     "detail": "HF direct connectivity restored 2026-09-11 (proxy still fails); dataset nvidia/polar-swegym-pi-qwen35-122b-a10b-trajectories (exact id verified against arXiv 2605.24220 paper snapshot) returns 401 on both API and page without auth; ProRL-Agent-Server GitHub README does not link it either. Needs user HF account acceptance + token, or upstream public release. Paper facts remain snapshot-backed.",
     "retry_hint": ".venv-download/bin/python; metadata capture pattern ready (data/metadata/nvidia__*.json)"
    }
+  },
+  "bench_decision_2026_09_12": {
+   "decision": "USER DECIDED: run all benchmarks locally; no remote/cloud VM options",
+   "implication": [
+    "HumanEvalPlus: upgrade to official evalplus CLI protocol (official, no Docker, local) - replaces base-check guardrail with an official score",
+    "SWE agentic rows: local venv envs + frozen gym evaluator, labeled self-built dev protocol (already proven by the running A/B)",
+    "SWE-bench Verified official harness: stays gated on local Docker platform fix (ticket path only); not blocked by this decision since dev rows carry the project"
+   ]
   }
  },
  "exploratory_arch_menu": {

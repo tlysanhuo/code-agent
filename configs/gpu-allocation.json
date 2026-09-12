@@ -5,102 +5,113 @@
     "gpu_indices": [
         0
     ],
-    "allocated_by": "post-stop eval chain pinned by user (stop at step-500 ckpt -> convert -> HumanEvalPlus + held-out NLL); assistant-run runbook, idle verified at allocation",
-    "allocated_utc": "2026-09-12T03:30:49.530937+00:00",
-    "purpose": "stage-1 SFT checkpoint eval: HumanEvalPlus first-32 base-check (P1 protocol) vs 96.9% baseline + held-out NLL (base vs SFT)",
+    "allocated_by": "SFT value A/B experiment (user ordered 2026-09-12): base vs SFT zero-shot trajectories on 20 held-out tasks",
+    "allocated_utc": "2026-09-12T04:39:22.313471+00:00",
+    "purpose": "stage-1 SFT decisive eval: trajectory capability A/B",
     "previous_records": {
         "gpu_uuids": [
-            "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf",
-            "GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8"
+            "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf"
         ],
         "gpu_indices": [
-            0,
-            5
+            0
         ],
-        "allocated_by": "User revised to try 2 cards first (2026-09-11); both idle at allocation. GPU 6 (GPU-469b3d58) NOT used under this allocation.",
-        "allocated_utc": "2026-09-11T09:21:10.456476+00:00",
-        "purpose": "formal stage-1 SFT attempt on 2 cards: TP2/DP1 + cpu-offloaded optimizer, filtered klear <=16k pool, 2 epochs, official retool hyperparams, wandb online; TP2 must pass the 16k OOM validation in first steps; scoped ray cleanup only.",
+        "allocated_by": "post-stop eval chain pinned by user (stop at step-500 ckpt -> convert -> HumanEvalPlus + held-out NLL); assistant-run runbook, idle verified at allocation",
+        "allocated_utc": "2026-09-12T03:30:49.530937+00:00",
+        "purpose": "stage-1 SFT checkpoint eval: HumanEvalPlus first-32 base-check (P1 protocol) vs 96.9% baseline + held-out NLL (base vs SFT)",
         "previous_records": {
             "gpu_uuids": [
                 "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf",
-                "GPU-469b3d58-7a10-61ee-57a7-fbbcbf61447b"
+                "GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8"
             ],
             "gpu_indices": [
                 0,
-                6
+                5
             ],
-            "allocated_by": "User authorized SFT cold-start smoke and provided WANDB_API_KEY (2026-09-11); both cards idle (0 MiB) at allocation.",
-            "allocated_utc": "2026-09-11T05:20:35.320730+00:00",
-            "purpose": "dense-mainline stage-1 SFT smoke: 2xH100 TP1/DP2, klear-only 256-row slice, 4 steps + 1 checkpoint save, wandb online (project code-agent-dense-mainline); stopped and verified released after use.",
+            "allocated_by": "User revised to try 2 cards first (2026-09-11); both idle at allocation. GPU 6 (GPU-469b3d58) NOT used under this allocation.",
+            "allocated_utc": "2026-09-11T09:21:10.456476+00:00",
+            "purpose": "formal stage-1 SFT attempt on 2 cards: TP2/DP1 + cpu-offloaded optimizer, filtered klear <=16k pool, 2 epochs, official retool hyperparams, wandb online; TP2 must pass the 16k OOM validation in first steps; scoped ray cleanup only.",
             "previous_records": {
                 "gpu_uuids": [
-                    "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf"
+                    "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf",
+                    "GPU-469b3d58-7a10-61ee-57a7-fbbcbf61447b"
                 ],
                 "gpu_indices": [
-                    0
+                    0,
+                    6
                 ],
-                "allocated_by": "User chose local GPU dependency build (option b) and asked for free cards; GPU 0 idle (0 MiB) at allocation time.",
-                "allocated_utc": "2026-09-11T04:17:52.472915+00:00",
-                "purpose": "dense-mainline GPU step 0: 9B HF->mcore conversion with locally built training deps (TE 2.16.1 prebuilt cu12 core + sm90 torch ext, fla, patched megatron); single card, stopped and verified released after use.",
+                "allocated_by": "User authorized SFT cold-start smoke and provided WANDB_API_KEY (2026-09-11); both cards idle (0 MiB) at allocation.",
+                "allocated_utc": "2026-09-11T05:20:35.320730+00:00",
+                "purpose": "dense-mainline stage-1 SFT smoke: 2xH100 TP1/DP2, klear-only 256-row slice, 4 steps + 1 checkpoint save, wandb online (project code-agent-dense-mainline); stopped and verified released after use.",
                 "previous_records": {
                     "gpu_uuids": [
-                        "GPU-6046be75-1ef0-750c-9156-add069f43217"
+                        "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf"
                     ],
                     "gpu_indices": [
-                        1
+                        0
                     ],
-                    "allocated_by": "User said '\u5f00\u59cb\u63a8\u8fdb\u5427' in this task after being asked to authorize the P1 finishing GPU steps; continues the standing at-most-2-idle-H100 pattern in this file.",
-                    "allocated_utc": "2026-09-10T05:20:00Z",
-                    "purpose": "loop-agent P1: vLLM serving smoke of models/loop-qwen/expanded and zero-shot degradation measurement vs original Qwen3.5-9B; single card, sequential services, stopped after use.",
+                    "allocated_by": "User chose local GPU dependency build (option b) and asked for free cards; GPU 0 idle (0 MiB) at allocation time.",
+                    "allocated_utc": "2026-09-11T04:17:52.472915+00:00",
+                    "purpose": "dense-mainline GPU step 0: 9B HF->mcore conversion with locally built training deps (TE 2.16.1 prebuilt cu12 core + sm90 torch ext, fla, patched megatron); single card, stopped and verified released after use.",
                     "previous_records": {
                         "gpu_uuids": [
-                            "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062"
+                            "GPU-6046be75-1ef0-750c-9156-add069f43217"
                         ],
                         "gpu_indices": [
-                            3
+                            1
                         ],
-                        "allocated_by": "User in this task: 1-2\u4f18\u5148\u7a7a\u95f2\u7684; interpreted as authorization to select 1\u20132 idle H100 cards, preferring two.",
-                        "allocated_utc": "2026-09-09T07:19:18.480492+00:00",
-                        "note": "Use one currently idle H100 GPU3 under user 1-2 idle-card authorization; reduce resource contention. BF16 weights ~51.75 GiB fit within one 80GB card; existing memory admission check remains enabled.",
-                        "swe_goal_authorized_utc": "2026-09-09T07:11:26.126222+00:00",
-                        "previous_allocation": {
+                        "allocated_by": "User said '\u5f00\u59cb\u63a8\u8fdb\u5427' in this task after being asked to authorize the P1 finishing GPU steps; continues the standing at-most-2-idle-H100 pattern in this file.",
+                        "allocated_utc": "2026-09-10T05:20:00Z",
+                        "purpose": "loop-agent P1: vLLM serving smoke of models/loop-qwen/expanded and zero-shot degradation measurement vs original Qwen3.5-9B; single card, sequential services, stopped after use.",
+                        "previous_records": {
                             "gpu_uuids": [
-                                "GPU-2e106654-3f26-8440-e5de-e9eb3b87f38f",
                                 "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062"
                             ],
                             "gpu_indices": [
-                                2,
                                 3
                             ],
-                            "released_utc": "2026-09-09T06:32:53Z",
-                            "release_evidence": "runtime/metadata/gpu-tool-acceptance.json"
-                        },
-                        "swe_allocation_history": [
-                            {
-                                "gpu_indices": [
-                                    3,
-                                    5
-                                ],
+                            "allocated_by": "User in this task: 1-2\u4f18\u5148\u7a7a\u95f2\u7684; interpreted as authorization to select 1\u20132 idle H100 cards, preferring two.",
+                            "allocated_utc": "2026-09-09T07:19:18.480492+00:00",
+                            "note": "Use one currently idle H100 GPU3 under user 1-2 idle-card authorization; reduce resource contention. BF16 weights ~51.75 GiB fit within one 80GB card; existing memory admission check remains enabled.",
+                            "swe_goal_authorized_utc": "2026-09-09T07:11:26.126222+00:00",
+                            "previous_allocation": {
                                 "gpu_uuids": [
-                                    "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062",
-                                    "GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8"
+                                    "GPU-2e106654-3f26-8440-e5de-e9eb3b87f38f",
+                                    "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062"
                                 ],
-                                "reason_released": "GPU5 acquired by another task during startup; owned service stopped; no model requests."
-                            }
-                        ],
-                        "service_released_utc": "2026-09-09T07:25:15Z",
-                        "release_evidence": "runtime/swe-smoke/runs/20260909T071918Z-19d82c/summary.json"
+                                "gpu_indices": [
+                                    2,
+                                    3
+                                ],
+                                "released_utc": "2026-09-09T06:32:53Z",
+                                "release_evidence": "runtime/metadata/gpu-tool-acceptance.json"
+                            },
+                            "swe_allocation_history": [
+                                {
+                                    "gpu_indices": [
+                                        3,
+                                        5
+                                    ],
+                                    "gpu_uuids": [
+                                        "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062",
+                                        "GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8"
+                                    ],
+                                    "reason_released": "GPU5 acquired by another task during startup; owned service stopped; no model requests."
+                                }
+                            ],
+                            "service_released_utc": "2026-09-09T07:25:15Z",
+                            "release_evidence": "runtime/swe-smoke/runs/20260909T071918Z-19d82c/summary.json"
+                        },
+                        "released_utc": "2026-09-10T05:11:04Z",
+                        "release_evidence": "runtime/loop-agent/p1-degradation.json; nvidia-smi 0 MiB on GPU 1, no vllm processes"
                     },
-                    "released_utc": "2026-09-10T05:11:04Z",
-                    "release_evidence": "runtime/loop-agent/p1-degradation.json; nvidia-smi 0 MiB on GPU 1, no vllm processes"
+                    "released_utc": "2026-09-11T04:30:20.185726+00:00",
+                    "release_verified": "nvidia-smi GPU 0 (GPU-8c4bac00) shows 0 MiB after process exit; conversion completed exit 0",
+                    "outcome": "9B torch_dist release checkpoint written (17G): models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a/torch_dist; DCP metadata verified: 477 keys, 8 qkv fused norms (full-attn layers), 24 plugin input_layernorm + 216 GDN params (linear-attn layers), 32 fc1 fused norms - TE training layout confirmed"
                 },
-                "released_utc": "2026-09-11T04:30:20.185726+00:00",
-                "release_verified": "nvidia-smi GPU 0 (GPU-8c4bac00) shows 0 MiB after process exit; conversion completed exit 0",
-                "outcome": "9B torch_dist release checkpoint written (17G): models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a/torch_dist; DCP metadata verified: 477 keys, 8 qkv fused norms (full-attn layers), 24 plugin input_layernorm + 216 GDN params (linear-attn layers), 32 fc1 fused norms - TE training layout confirmed"
-            },
-            "released_utc": "2026-09-11T08:44:38.072222+00:00",
-            "release_verified": "nvidia-smi GPU 0 (GPU-8c4bac00) and GPU 6 (GPU-469b3d58) both 0 MiB; my ray processes removed by scoped PID kill (session-dir match); other users' ray clusters untouched (142 procs alive)",
-            "outcome": "SFT SMOKE COMPLETE: 3 optimizer steps on 256-row klear-only 8k slice, loss 0.296->0.196, torch_dist checkpoint saved (iter 3, 117G incl optimizer state) at models/dense-9B-sft/smoke, wandb online project code-agent-dense-mainline group dense-9b-sft-smoke"
+                "released_utc": "2026-09-11T08:44:38.072222+00:00",
+                "release_verified": "nvidia-smi GPU 0 (GPU-8c4bac00) and GPU 6 (GPU-469b3d58) both 0 MiB; my ray processes removed by scoped PID kill (session-dir match); other users' ray clusters untouched (142 procs alive)",
+                "outcome": "SFT SMOKE COMPLETE: 3 optimizer steps on 256-row klear-only 8k slice, loss 0.296->0.196, torch_dist checkpoint saved (iter 3, 117G incl optimizer state) at models/dense-9B-sft/smoke, wandb online project code-agent-dense-mainline group dense-9b-sft-smoke"
+            }
         }
     }
 }
