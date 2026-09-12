@@ -131,6 +131,7 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 
 ## 变更日志
 
+- 2026-09-12T08:59:01Z — 项目清理（用户指令）：删除被取代的检查点（smoke 117G、iter_249/439 270G，钉住的 iter_499+hf-iter500 保留）、smoke-hf-dryrun 17G、重复 wheel、/tmp/ray-sft-smoke 362M（项目外，训练 RAY_TMPDIR 所致；后续 RL 运行改项目内 tmp）、陈旧 DSH socket 与测试残留；models/dense-9B-sft 538G→152G。保留：27B teacher、9B base、loop-qwen（E1 资产）、四个被 configs 引用的旧 venv、cache（环境缓存）。机器级副作用（非文件）：agent 用户+/home/agent（上游 chown 需要）、root git config 的项目路径条目。
 - 2026-09-12 ~07:2x UTC — A/B 完成：SFT 价值判定成立（resolved 3/20→6/20、提交率 10%→100%、格式错误 18→3、步数 −44%）；本地协议冻结评估集确立；用户决定 bench 全本地跑（不走 Docker/远端），SV 行以本地协议判分替代。
 - 2026-09-12 ~05:10 UTC — 阶段①验收完成：HumanEvalPlus 96.88% 持平基线（同题失败）；
   held-out NLL 同格式 −33%/训练集 −59%/跨格式 −6%/−2%（HF 前向交叉验证通过）；
