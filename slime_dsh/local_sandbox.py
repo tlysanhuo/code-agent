@@ -58,9 +58,13 @@ class LocalProcessSandbox:
     """One task = one root dir. Workspace = root/workspace; commands run there."""
 
     def __init__(self, root: Path, python_dir: Path | None = None,
-                 extra_env: dict[str, str] | None = None):
+                 extra_env: dict[str, str] | None = None,
+                 workspace: Path | None = None):
         self.root = Path(root).resolve()
-        self.workspace = self.root / "workspace"
+        # gym-case layout keeps the agent workspace at case/sandbox/workspace so
+        # the frozen evaluator reads the same tree the agent worked in
+        self.workspace = (Path(workspace).resolve() if workspace
+                          else self.root / "workspace")
         self.tmp = self.root / "tmp"
         self.home = self.root / "home"
         self.sandbox_id = f"local-{self.root.name}"
@@ -71,6 +75,12 @@ class LocalProcessSandbox:
     async def __aenter__(self) -> "LocalProcessSandbox":
         for d in (self.root, self.workspace, self.tmp, self.home):
             d.mkdir(parents=True, exist_ok=True)
+        # git in the sandbox reads $HOME/.gitconfig (HOME is sandbox-scoped);
+        # workspaces are chowned to the agent user, so root-run git needs the
+        # ownership exception here rather than on the host-global config
+        gc = self.home / ".gitconfig"
+        if not gc.exists():
+            gc.write_text("[safe]\n\tdirectory = *\n")
         return self
 
     async def __aexit__(self, exc_type, exc, tb) -> None:

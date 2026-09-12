@@ -31,6 +31,8 @@ def bind_upstream():
     upstream.HARNESS_CLS = DshHarness
     upstream.ADAPTER_CLS = OpenAIAdapter
     upstream.AGENT_NAME = "dsh"
+    from slime_dsh import local_backend
+    local_backend.bind(upstream.swe)
     return upstream.generate
 
 
