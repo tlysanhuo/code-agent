@@ -1,0 +1,113 @@
+{
+  "date": "2026-09-09",
+  "purpose": "reference only; no installation or training",
+  "repositories": [
+    {
+      "repo": "Kwai-Klear/mini-swe-agent-plus",
+      "commit": "3dfa5e26831306978ff3cfa2da15b49113ded0e6",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "1dc503c83afd926ab87979a4bd9417633a2506292607690558853077ea4164d8",
+          "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/README.md"
+        },
+        {
+          "path": "src/minisweagent/config/extra/swebench_add_edit_tool.yaml",
+          "sha256": "a53d2a59e6891a2200f91034302ac000c6818a65e7bea6179ff79653bec72662",
+          "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/config/extra/swebench_add_edit_tool.yaml"
+        }
+      ]
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "files": [
+        {
+          "path": "examples/train/mini_swe_agent/README.md",
+          "sha256": "a95e59ba6100ed84defd4f39cf727d95a619b02ff89434ca99a6f1388b74bc6d",
+          "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/README.md"
+        }
+      ]
+    },
+    {
+      "repo": "R2E-Gym/R2E-Gym",
+      "commit": "0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+      "files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/README.md",
+          "sha256": "d8726b70e8e05e375120f481bb2fd0e565f3ede43d1662f3d3aa029282ca2218"
+        },
+        {
+          "path": "train/train_r2egym_32B_agent.yaml",
+          "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/train/train_r2egym_32B_agent.yaml",
+          "sha256": "55fe50f01203803ae1de57e16a0ff437a63692381c3839ee0043e0f8d0c1276c"
+        },
+        {
+          "path": "train/dataset_info.json",
+          "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/train/dataset_info.json",
+          "sha256": "e733afcd1e5d4f0ff8e321d01f8090f9e09287dbd8f751c4e95cc6b9d988c835"
+        }
+      ]
+    },
+    {
+      "repo": "SWE-Gym/SWE-Gym",
+      "commit": "b681068ca20628c6987b7416cc4cf03f06b77ba5",
+      "files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/README.md",
+          "sha256": "97df54c2ecfe311fc1b8e4eed345fdeffbbb1d93dc4adf82a8252e1145bc825a"
+        },
+        {
+          "path": "docs/OpenHands.md",
+          "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/docs/OpenHands.md",
+          "sha256": "3544e15b90b59e1deca587f43218c3297f03e0e419d9958a0cf77078621c2a92"
+        },
+        {
+          "path": "scripts/training/openhands/configs/policy/1116-sonnet-4o-491i-32k-qwen25_coder_32b_full-lr1e-4.yaml",
+          "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/scripts/training/openhands/configs/policy/1116-sonnet-4o-491i-32k-qwen25_coder_32b_full-lr1e-4.yaml",
+          "sha256": "773801af555bfb48f55f5a885e9b7a3d93ccec81249eb748400bdc5f610893e4"
+        }
+      ]
+    },
+    {
+      "repo": "facebookresearch/swe-rl",
+      "commit": "5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "f948bda1fdbc6e70dd8cdb7ce4cc46fa0d43d1ec05a914594abfee7cb664d7cd",
+          "url": "https://raw.githubusercontent.com/facebookresearch/swe-rl/5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9/README.md"
+        },
+        {
+          "path": "src/swerl/core/reward.py",
+          "sha256": "d74ee99342d8b43a086ff765646c0cb254a408e9c25b7af297d67eb7cceb5797",
+          "url": "https://raw.githubusercontent.com/facebookresearch/swe-rl/5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9/src/swerl/core/reward.py"
+        }
+      ]
+    },
+    {
+      "repo": "modelscope/ms-swift",
+      "commit": "ddd16cb15ec90d2b122fbf1e57d7fd2a259427fc",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "7866f920c22e0c978ec5d3e633decd6c7817771695bc1f08b49a32682aaae4df",
+          "url": "https://raw.githubusercontent.com/modelscope/ms-swift/ddd16cb15ec90d2b122fbf1e57d7fd2a259427fc/README.md"
+        },
+        {
+          "path": "docs/source_en/BestPractices/Qwen3_5-Best-Practice.md",
+          "status": 404
+        }
+      ]
+    }
+  ],
+  "documentation": [
+    {
+      "url": "https://swift.readthedocs.io/en/v4.0/BestPractices/Qwen3_5-Best-Practice.html",
+      "path": "ms-swift-qwen35-v4.0.html",
+      "sha256": "39309bee7c545a06d31bb46dbce7bd60e91cc700322dbd4d5dedb0d1db02770b"
+    }
+  ]
+}

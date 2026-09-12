@@ -1,0 +1,78 @@
+{
+  "repo": "SWE-bench/SWE-bench",
+  "commit": "02e7a74ffd0b707aab73d203fe87bdc7c76afc8e",
+  "retrieved_utc": "2026-09-09T11:01:00.812977+00:00",
+  "purpose": "Read-only research snapshot; not installed or executed",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/README.md",
+      "sha256": "06841624d7b5130dfe3cc6714642e9a8fd2a608c95c66ae0180e409f12b73aaa",
+      "bytes": 13302
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/pyproject.toml",
+      "sha256": "58c4f4f283c6f214166376f83dad8b18bc85f9a7c2c66216343de0498fd9fe19",
+      "bytes": 2816
+    },
+    {
+      "path": "swebench/__init__.py",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/__init__.py",
+      "sha256": "39f6961d946aefd41c0ceb23ea4f910e5c3cf4a28a415efc1d9fd958f96efd8c",
+      "bytes": 2490
+    },
+    {
+      "path": "swebench/cli/evaluate.py",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/cli/evaluate.py",
+      "sha256": "0f076f6d3b173ab0b7ca4ee334646ba39364da220864475a81f9d3a0d4c6a83b",
+      "bytes": 4629
+    },
+    {
+      "path": "swebench/harness/run_evaluation.py",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/harness/run_evaluation.py",
+      "sha256": "04b5dab584fbe62ae9d1ff025edf52d714e584102d587c7e647805d1efb37d84",
+      "bytes": 31442
+    },
+    {
+      "path": "swebench/harness/grading.py",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/harness/grading.py",
+      "sha256": "a095273010175001a6779e365b3b77abb8657c7ac2e4f80b4bc360faa6f09483",
+      "bytes": 14144
+    },
+    {
+      "path": "swebench/harness/test_spec/test_spec.py",
+      "http_status": 404
+    },
+    {
+      "path": "swebench/harness/utils.py",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/harness/utils.py",
+      "sha256": "c22f38fdd4ffd34301da7f837b82926cf261d81ca0387d92dd2990b393517c79",
+      "bytes": 9794
+    },
+    {
+      "path": "docs/guides/evaluation.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/docs/guides/evaluation.md",
+      "sha256": "770c8d6c45d507cd40a74297c2c7d779a5ab1f4f82da8a1a9dfae4d6bb03ff6e",
+      "bytes": 6869
+    },
+    {
+      "path": "docs/guides/docker_setup.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/docs/guides/docker_setup.md",
+      "sha256": "976d9fbe421574dc28135960fab0c371a47293f242ee087a6c65d2c5f7e53c0e",
+      "bytes": 5440
+    },
+    {
+      "path": "docs/guides/datasets.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/docs/guides/datasets.md",
+      "sha256": "d44632cc0689197dab526b3850d387d907f1cbba6b39b3c69b91237646279a5e",
+      "bytes": 3210
+    },
+    {
+      "path": "docs/reference/harness.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/SWE-bench/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/docs/reference/harness.md",
+      "sha256": "8c20f664af1ee8dfc0c6cb8f6a0f4e5ca8c6c48c1be796c01837b9867b0aa80b",
+      "bytes": 7806
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "repo": "NovaSky-AI/SkyRL",
+  "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+  "files": [
+    {
+      "path": "examples/train/mini_swe_agent/README.md",
+      "sha256": "a95e59ba6100ed84defd4f39cf727d95a619b02ff89434ca99a6f1388b74bc6d",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/README.md"
+    }
+  ]
+}

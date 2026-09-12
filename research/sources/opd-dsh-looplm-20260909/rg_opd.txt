@@ -1,0 +1,712 @@
+Reward-Gated On-Policy Distillation
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1 Introduction
+2 Related Work
+3 Reward-Gated On-Policy Distillation
+4 Experiments
+5 Conclusion
+References
+A Implementation Details
+A.1 Setup
+A.2 Top-KK Reverse-KL Approximation.
+B Additional Results
+Likelihood-Based Tasks
+License: arXiv.org perpetual non-exclusive license
+arXiv:2607.04037v1 [cs.LG] 04 Jul 2026
+Reward-Gated On-Policy Distillation
+Mohammad Sadegh Akhondzadeh
+Affiliation: University of Cologne
+Email: ms.akhondzadeh@gmail.com
+Vijay Lingam
+Affiliation: AWS AI
+Email: vijaylingam0810@gmail.com
+Atula Tejaswi
+Affiliation: UT Austin
+Chanakya Ekbote
+Affiliation: MIT
+Sujay Sanghavi
+Affiliation: UT Austin
+Aleksandar Bojchevski
+Affiliation: University of Cologne
+Abstract
+On-policy distillation is a powerful way to transfer reasoning ability from a
+strong teacher to a smaller student: the student samples trajectories from its
+own policy, and the teacher provides dense token-level supervision on the states
+the student actually visits. However, this supervision is not always reliable: a teacher can assign high likelihood to plausible but incorrect
+solutions, or low likelihood to correct student solutions that follow different
+reasoning paths. Unconditionally distilling the teacher can therefore reinforce
+bad modes or erase useful student behavior. To address these limitations, we introduce RG-OPD: Reward-Gated On-Policy Distillation that uses verifier feedback to decide when teacher logits should be trusted. RG-OPD bridges sparse verifier rewards and dense teacher logits,
+preserving token-level supervision while filtering misleading teacher signals.
+Across reasoning and coding benchmarks, RG-OPD produces stronger distilled
+students, outperforming both vanilla reverse-KL distillation and the recent
+TSD-KD baseline. At 1K generation length, RG-OPD improves over reverse-KL by
+2.9 points and over TSD-KD by 4.9 points; in the
+long-generation setting, it improves over the untuned student by 8.2
+points. Our code is available at https://github.com/UoC-tail/RG-OPD.
+1 Introduction
+On-policy distillation (OPD) is an effective way to transfer reasoning ability from a strong teacher model to a smaller student. In OPD, the student samples trajectories from its own policy, and the teacher provides dense token-level supervision on the states the student actually visits (Agarwal et al., 2024). This makes OPD especially attractive for reasoning post-training: verifier rewards from RLVR provide only sparse trajectory-level feedback, while teacher logits provide a learning signal at every token. In its standard form, OPD applies this supervision unconditionally, treating the teacher as a reliable oracle for all rollouts. However, a teacher may assign high likelihood to a plausible but incorrect solution, or low likelihood to a correct student solution that follows a different reasoning path. Unconditional distillation can therefore reinforce incorrect modes or suppress useful student behaviors.
+Based on these observations, we introduce RG-OPD: Reward-Gated On-Policy Distillation, which addresses the following question: When does teacher supervision help rather than hurt during on-policy distillation? At each training step, the student samples trajectories on policy, a verifier assigns each trajectory a scalar reward or
+advantage, and a fixed teacher provides token-level distributions over the
+student’s sampled states. Instead of applying the distillation loss to every
+trajectory, RG-OPD keeps only trajectories for which the verifier reward
+and the teacher–student likelihood gap agree. For reward-positive trajectories,
+we distill only when the teacher assigns higher likelihood than the student; for
+reward-negative trajectories, we distill only when the teacher assigns lower
+likelihood than the student.
+This simple gate preserves the main advantage of logit-level distillation: dense token-level supervision from a stronger model. At the same time, it avoids the central failure mode of unconditional distillation: treating the teacher as reliable even when its likelihoods conflict with observed correctness. Thus, RG-OPD provides a direct bridge between sparse verifier rewards and dense teacher logits. Unlike RLVR (Shao et al., 2024; Liu et al., 2025; Ekbote et al., 2025), it does not rely solely on terminal rewards; unlike standard on-policy distillation (Gu et al., 2024; Agarwal et al., 2024), it does not assume the teacher is always
+correct; and unlike joint RL–KD objectives (Xu et al., 2025; Hübotter et al., 2026; Zhang et al., 2026), it explicitly conditions each
+distillation update on trajectory-level reliability.
+Main Contributions. (i) We identify a reliability mismatch in on-policy distillation for reasoning: teacher likelihoods and verifier rewards can disagree on student-generated trajectories, making unconditional distillation harmful. (ii) We introduce RG-OPD, a reward-gated likelihood filter that distills from the teacher only when the verifier reward and teacher–student likelihood gap are directionally aligned. (iii) Empirically, RG-OPD produces stronger distilled students, outperforming vanilla reverse-KL distillation by 2.9 points at 1K generation length and 2.8 points at 8K, while improving over the untuned student by 8.2 points in the long-generation setting.
+2 Related Work
+Reinforcement learning with verifiable rewards (RLVR) has become a practical
+post-training paradigm for reasoning tasks with automatically scored outputs
+(Shao et al., 2024; Guo et al., 2025). PPO, GRPO, and related variants
+optimize student-generated rollouts from sparse outcome rewards
+(Schulman et al., 2017; Shao et al., 2024; Zheng et al., 2025; Liu et al., 2025; Ekbote et al., 2025), but terminal feedback provides limited token-level credit
+assignment, especially when correct samples are rare. Knowledge distillation
+offers a complementary signal by transferring dense token-level supervision from
+a stronger teacher (Hinton et al., 2015); on-policy distillation further
+reduces exposure bias by querying the teacher on student-generated trajectories.
+GKD formalizes on-policy distillation for autoregressive language models,
+querying the teacher on student-generated outputs with divergences such as
+reverse KL or Jensen–Shannon divergence (Agarwal et al., 2024). TSD-KD builds on this
+student-centric perspective with preference-based and token-selective
+distillation (Kim and Baek, 2026). However, TSD-KD applies teacher
+supervision broadly and does not test whether the teacher is reliable on a given
+trajectory. Recent and concurrent work also combines verifier rewards with
+teacher-like supervision: KDRL adds teacher reverse-KL regularization to
+GRPO-style optimization (Xu et al., 2025); RL-aware distillation anchors the
+policy ratio to a mixture of the old student and teacher policies
+(Zhang et al., 2026); Self-Distilled RLVR uses a privileged variant of the same
+policy for token-level guidance (Yang et al., 2026); and related
+self-distillation methods derive dense guidance from privileged or
+feedback-conditioned student variants (Zhao et al., 2026; Hübotter et al., 2026).
+These methods show that dense teacher-like signals can improve reward-based
+reasoning post-training, but they either apply distillation as a broad auxiliary
+signal, modify the RL objective, or focus on self-distillation. In contrast,
+RG-OPD studies external-teacher on-policy distillation and gates each
+trajectory-level distillation update based on agreement between verifier reward
+and the teacher–student likelihood gap.
+3 Reward-Gated On-Policy Distillation
+On-policy distillation. We consider on-policy distillation of a student policy πθ\pi_{\theta} from a fixed teacher πT\pi_{T}. At each iteration, for each prompt xx, the student samples NN trajectories from its own policy: {y(i)}i=1N∼πθ(⋅|x)\{y^{(i)}\}_{i=1}^{N}\sim\pi_{\theta}(\cdot\,|\,x), and a verifier returns a scalar reward rir_{i} for each trajectory. For every sampled token yt(i)y_{t}^{(i)} we have access to three log-probabilities evaluated at the sampled action: the current student log⁡πθ​(yt(i)|st(i))\log\pi_{\theta}(y_{t}^{(i)}\,|\,s_{t}^{(i)}), the behavior policy at sampling time log⁡πθold​(yt(i)|st(i))\log\pi_{\theta_{\mathrm{old}}}(y_{t}^{(i)}\,|\,s_{t}^{(i)}), and the teacher log⁡πT​(yt(i)|st(i))\log\pi_{T}(y_{t}^{(i)}\,|\,s_{t}^{(i)}). We follow (Hübotter et al., 2026; Shenfeld et al., 2026) and apply the top-k reverse-KL (Appendix A.2) distillation loss i.e.
+ℒKL(i)=∑tmt(i)KL(πθ(⋅|st(i))∥πT(⋅|st(i)))\mathcal{L}_{\mathrm{KL}}^{(i)}\;=\;\sum_{t}m_{t}^{(i)}\,\mathrm{KL}\!\left(\pi_{\theta}(\cdot\,|\,s_{t}^{(i)})\,\|\,\pi_{T}(\cdot\,|\,s_{t}^{(i)})\right),
+where mt(i)m_{t}^{(i)} is the response mask. This loss is applied uniformly across sampled trajectories, regardless of whether the trajectory was successful and regardless of whether the teacher actually provides useful information at it.
+When the teacher and the reward disagree. In the RLVR context, vanilla on-policy distillation can lead to two failure modes:
+(i) Teacher disagrees with a student success: the student samples a correct continuation that the teacher would have been unlikely to produce. Pulling the student toward the teacher in this case unlearns a behavior the reward signal certifies as good.
+(ii) Teacher endorses a student failure: The student samples a wrong trajectory to which the teacher also assigns high probability. Reverse-KL has nothing to push against here, the teacher’s mode coincides with the bad mode.
+A reward signal alone resolves neither case (it cannot tell the student what to do differently), and a teacher signal alone resolves neither (it has no information about correctness on a freshly sampled trajectory). The resolution is to use them jointly: the reward decides whether the trajectory is good, and the teacher–student likelihood gap decides whether the teacher is informative about the cause.
+Figure 1: Overview of RG-OPD. The student samples trajectories and receives verifier rewards AiA_{i}. The reward–teacher gate keeps a trajectory (gi=1g_{i}{=}1) only when the teacher–student likelihood gap is directionally consistent with the reward: LT>LSL_{T}>L_{S} for correct trajectories and LT<LSL_{T}<L_{S} for incorrect ones. The reverse-KL distillation loss is computed exclusively over kept trajectories.
+Reward-Teacher Likelihood Gate. For each sampled trajectory ii, define the trajectory-level teacher and student log-likelihoods evaluated on the sampled tokens,
+LT(i)=∑tmt(i)​log⁡πT​(yt(i)|st(i)),LS(i)=∑tmt(i)​log⁡πθ​(yt(i)|st(i)),L_{T}^{(i)}\;=\;\sum_{t}m_{t}^{(i)}\log\pi_{T}\!\left(y_{t}^{(i)}\,|\,s_{t}^{(i)}\right),\qquad L_{S}^{(i)}\;=\;\sum_{t}m_{t}^{(i)}\log\pi_{\theta}\!\left(y_{t}^{(i)}\,|\,s_{t}^{(i)}\right),
+(1)
+and let AiA_{i} denote the trajectory-level reward signal (we use the GRPO advantage of y(i)y^{(i)} in our experiments). We define the reward–teacher gate
+gi=[(Ai>0∧LT(i)>LS(i)+δ)∨(Ai≤0∧LT(i)<LS(i)−δ)],g_{i}\;=\;\mathbbm{1}\!\left[\,{\color[rgb]{0.4141,0.6016,0.3047}\big(A_{i}>0\,\wedge\,L_{T}^{(i)}>L_{S}^{(i)}+\delta\big)}\;\vee\;{\color[rgb]{0.7695,0.2695,0.2109}\big(A_{i}\leq 0\,\wedge\,L_{T}^{(i)}<L_{S}^{(i)}-\delta\big)}\,\right],
+(2)
+with an optional confidence margin δ≥0\delta\geq 0 (default δ=0\delta=0). The gated distillation loss is
+ℒRG​-​OPD=∑igi∑tmt(i)KL(πθ(⋅|st(i))∥πT(⋅|st(i)))∑igi​∑tmt(i).\mathcal{L}_{\mathrm{RG\text{-}OPD}}\;=\;\frac{\sum_{i}g_{i}\sum_{t}m_{t}^{(i)}\,\mathrm{KL}\!\left(\pi_{\theta}(\cdot\,|\,s_{t}^{(i)})\,\|\,\pi_{T}(\cdot\,|\,s_{t}^{(i)})\right)}{\sum_{i}g_{i}\sum_{t}m_{t}^{(i)}}.
+(3)
+The student is updated only on trajectories for which the teacher gives a directionally useful signal relative to the observed reward; all other trajectories are dropped from the distillation loss. The same reverse-KL objective is used in both kept regimes; only the set of trajectories contributing to the loss changes.
+4 Experiments
+Following (Kim and Baek, 2026), we use Qwen2.5-1.5B/14B-Instruct models as the student-teacher pair and train on a subset of the UltraInteract (Yuan et al., 2024) for 3 epochs. We provide implementation details in Appendix A.
+Results. In Table 1, we evaluate all methods with the default maximum generation length of 1024 tokens.
+RG-OPD achieves the best average score (46.94) among all distilled models, outperforming the vanilla Reverse-KL baseline (44.02) by 2.9 points and TSD-KD (42.03).
+Gains are consistent across math and coding tasks. An exception is IFEval, where TSD-KD achieves the best score (54.68) and RG-OPD scores 48.60. We attribute this to TSD-KD’s student-centric design: rather than enforcing the teacher distribution uniformly, it combines preference-based indirect feedback, token-selective distillation, and entropy regularization, which may better preserve the student’s instruction-following behavior while still providing teacher guidance.
+Table 1:
+Performance of knowledge distillation methods on generation-based benchmarks under
+1K and 8K maximum generation lengths. Δ\Delta is relative to the corresponding
+Q​w​e​n​2.5​(1.5​B)S{Qwen2.5(1.5B)_{S}} student baseline within each generation-length block
+(green/red = gain/drop). Avg. Rank↓\downarrow is the mean rank across
+benchmarks among student and distillation methods, excluding the teacher reference.
+TSD-KD∗ numbers are borrowed from (Kim and Baek, 2026) and are shown for reference
+only; they are excluded from Avg. Rank.
+Method
+GSM8K
+Δ\Delta
+GSM+
+Δ\Delta
+MATH
+Δ\Delta
+MPMath
+Δ\Delta
+MBPP
+Δ\Delta
+IFEval
+Δ\Delta
+Avg. Rank↓\downarrow
+Generation Length 1024
+Q​w​e​n​2.5​(14​B)T{Qwen2.5(14B)_{T}}
+76.83±0.6176.83_{\pm 0.61}
+–
+57.18±0.4157.18_{\pm 0.41}
+–
+30.33±0.8130.33_{\pm 0.81}
+–
+78.86±0.7978.86_{\pm 0.79}
+–
+53.13±3.1153.13_{\pm 3.11}
+–
+84.17±1.0284.17_{\pm 1.02}
+–
+–
+Q​w​e​n​2.5​(1.5​B)S{Qwen2.5(1.5B)_{S}}
+56.89±1.9256.89_{\pm 1.92}
+0.00
+38.69±1.0938.69_{\pm 1.09}
+0.00
+27.47±2.0927.47_{\pm 2.09}
+0.00
+37.33±1.3737.33_{\pm 1.37}
+0.00
+43.73±1.8643.73_{\pm 1.86}
+0.00
+52.12±1.6452.12_{\pm 1.64}
+0.00
+2.7
+Reverse KL (Agarwal et al., 2024)
+65.91±1.1565.91_{\pm 1.15}
+↑\uparrow +9.02
+42.97±0.8042.97_{\pm 0.80}
+↑\uparrow +4.28
+25.08±1.1025.08_{\pm 1.10}
+↓\downarrow -2.39
+37.26±0.9337.26_{\pm 0.93}
+↓\downarrow -0.07
+46.60±0.6046.60_{\pm 0.60}
+↑\uparrow +2.87
+46.28±1.5046.28_{\pm 1.50}
+↓\downarrow -5.84
+3.0
+TSD-KD (Kim and Baek, 2026)
+54.21±0.5554.21_{\pm 0.55}
+↓\downarrow -2.68
+35.10±0.6135.10_{\pm 0.61}
+↓\downarrow -3.59
+27.10±0.5827.10_{\pm 0.58}
+↓\downarrow -0.37
+38.91±1.2738.91_{\pm 1.27}
+↑\uparrow +1.58
+42.20±1.0442.20_{\pm 1.04}
+↓\downarrow -1.53
+54.68±0.9854.68_{\pm 0.98}
+↑\uparrow +2.56
+3.0
+TSD-KD (Kim and Baek, 2026)∗
+60.1060.10
+↑\uparrow +3.21
+40.5040.50
+↑\uparrow +1.81
+26.1026.10
+↓\downarrow -1.37
+36.9036.90
+↓\downarrow -0.43
+42.1042.10
+↓\downarrow -1.63
+55.20\mathbf{55.20}
+↑\uparrow +3.08
+–
+RG-OPD (ours)
+66.69±0.56\mathbf{66.69}_{\pm 0.56}
+↑\uparrow +9.80
+45.47±0.31\mathbf{45.47}_{\pm 0.31}
+↑\uparrow +6.78
+28.63±1.27\mathbf{28.63}_{\pm 1.27}
+↑\uparrow +1.16
+42.91±0.83\mathbf{42.91}_{\pm 0.83}
+↑\uparrow +5.58
+49.33±0.76\mathbf{49.33}_{\pm 0.76}
+↑\uparrow +5.60
+48.60±0.8748.60_{\pm 0.87}
+↓\downarrow -3.52
+1.3
+Generation Length 8096
+Q​w​e​n​2.5​(14​B)T{Qwen2.5(14B)_{T}}
+83.88±0.3183.88_{\pm 0.31}
+–
+67.44±0.2367.44_{\pm 0.23}
+–
+76.12±0.1876.12_{\pm 0.18}
+–
+79.77±0.5979.77_{\pm 0.59}
+–
+72.47±2.5372.47_{\pm 2.53}
+–
+84.53±0.4384.53_{\pm 0.43}
+–
+–
+Q​w​e​n​2.5​(1.5​B)S{Qwen2.5(1.5B)_{S}}
+58.20±2.1458.20_{\pm 2.14}
+0.00
+40.63±0.7840.63_{\pm 0.78}
+0.00
+41.09±3.5141.09_{\pm 3.51}
+0.00
+37.38±1.4137.38_{\pm 1.41}
+0.00
+44.00±1.9344.00_{\pm 1.93}
+0.00
+52.24±1.7652.24_{\pm 1.76}
+0.00
+2.8
+Reverse KL (Agarwal et al., 2024)
+72.63±1.4572.63_{\pm 1.45}
+↑\uparrow +14.43
+52.33±0.5952.33_{\pm 0.59}
+↑\uparrow +11.70
+49.80±0.8349.80_{\pm 0.83}
+↑\uparrow +8.71
+37.28±0.9637.28_{\pm 0.96}
+↓\downarrow -0.10
+47.27±0.8147.27_{\pm 0.81}
+↑\uparrow +3.27
+46.08±1.8746.08_{\pm 1.87}
+↓\downarrow -6.16
+2.7
+TSD-KD (Kim and Baek, 2026)
+54.59±0.6254.59_{\pm 0.62}
+↓\downarrow -3.61
+35.35±0.5635.35_{\pm 0.56}
+↓\downarrow -5.28
+27.89±0.6527.89_{\pm 0.65}
+↓\downarrow -13.20
+38.91±1.2738.91_{\pm 1.27}
+↑\uparrow +1.53
+42.33±0.9942.33_{\pm 0.99}
+↓\downarrow -1.67
+54.80±0.55\mathbf{54.80}_{\pm 0.55}
+↑\uparrow +2.56
+3.2
+RG-OPD (ours)
+73.77±0.80\mathbf{73.77}_{\pm 0.80}
+↑\uparrow +15.57
+54.50±0.19\mathbf{54.50}_{\pm 0.19}
+↑\uparrow +13.87
+52.60±0.61\mathbf{52.60}_{\pm 0.61}
+↑\uparrow +11.51
+42.88±0.86\mathbf{42.88}_{\pm 0.86}
+↑\uparrow +5.50
+50.00±1.04\mathbf{50.00}_{\pm 1.04}
+↑\uparrow +6.00
+48.68±0.8448.68_{\pm 0.84}
+↓\downarrow -3.56
+1.3
+As shown in Figure 2 [Center], distilled models tend to become more verbose over training, generating longer chains of thought on average.
+We therefore repeat the evaluation with a generous generation budget of 8096 tokens.
+With more room to reason, RG-OPD improves its average to 53.74, a 6.8-point gain over long-context Reverse-KL (50.90) and an 8.2-point improvement over the untuned student (45.59).
+The gains are especially pronounced on MATH, where RG-OPD reaches 52.60 vs. 49.80.
+Training Dynamics. Figure 2 tracks three quantities over the course of RG-OPD training.
+Kept Token Fraction (left): the fraction of tokens admitted by the gate decreases over training, from roughly 0.9 to 0.7. This indicates that the teacher–student likelihood gap gradually shrinks, and fewer trajectories satisfy the alignment condition that triggers the gate. The gate therefore becomes more selective as training progresses, naturally reducing the distillation signal on trajectories where the teacher has little remaining information to offer.
+Response Length (center): the average number of generated tokens grows steadily throughout training; a consequence of imitating a teacher whose reasoning traces are more verbose.
+RG-OPD Loss (right): the gated reverse-KL loss decreases, confirming that the student is approaching the teacher’s distribution on the gated trajectories.
+01000Step0.70.80.9Kept Token Fraction01000Step400500Response Length01000Step0.51.01.5RG-OPD Loss
+Figure 2: Training dynamics of RG-OPD. Left: the fraction of tokens retained by the reward–teacher gate decreases over training. Center: mean response length grows throughout training. Right: the gated reverse-KL distillation loss decreases over training.
+5 Conclusion
+We present RG-OPD, an on-policy distillation method that conditions teacher supervision on the agreement between verifier feedback and the teacher–student likelihood gap. The key insight is that dense teacher logits and sparse verifier rewards answer different questions. The reward certifies whether a trajectory is good, while the likelihood gap reveals whether the teacher is directionally informative for the student. By applying distillation only when these two signals are aligned, RG-OPD avoids the two failure modes of unconditional distillation:
+(i) reinforcing bad modes that the teacher endorses,
+(ii) erasing correct student behaviors that the teacher would not have produced.
+Experimental results show that RG-OPD outperforms both reverse-KL distillation and the TSD-KD baseline.
+Our results support the view that the value of a teacher signal on any given trajectory depends on the reward, and that a simple scalar gate is sufficient to exploit this structure.
+References
+[1]
+R. Agarwal, N. Vieillard, Y. Zhou, P. Stanczyk, S. R. Garea, M. Geist, and O. Bachem (2024)
+On-policy distillation of language models: learning from self-generated mistakes.
+In The Twelfth International Conference on Learning Representations,
+External Links: Link
+Cited by: §1,
+§1,
+§2,
+Table 1,
+Table 1.
+[2]
+J. Austin, A. Odena, M. Nye, M. Bosma, H. Michalewski, D. Dohan, E. Jiang, C. Cai, M. Terry, Q. Le, and C. Sutton (2021)
+Program synthesis with large language models.
+External Links: 2108.07732,
+Link
+Cited by: §A.1.
+[3]
+K. Cobbe, V. Kosaraju, M. Bavarian, M. Chen, H. Jun, L. Kaiser, M. Plappert, J. Tworek, J. Hilton, R. Nakano, C. Hesse, and J. Schulman (2021)
+Training verifiers to solve math word problems.
+External Links: 2110.14168,
+Link
+Cited by: §A.1.
+[4]
+C. Ekbote, V. Lingam, B. O. Tehrani, J. Huan, sujay sanghavi, A. Deoras, and S. Soatto (2025)
+Murphy: reflective multi-turn reinforcement learning for self-correcting code generation in large language.
+In First Workshop on Foundations of Reasoning in Language Models,
+External Links: Link
+Cited by: §1,
+§2.
+[5]
+Y. Gu, L. Dong, F. Wei, and M. Huang (2024)
+MiniLLM: knowledge distillation of large language models.
+In The Twelfth International Conference on Learning Representations,
+External Links: Link
+Cited by: §1.
+[6]
+D. Guo, D. Yang, and H. et. al. Zhang (2025)
+DeepSeek-r1 incentivizes reasoning in llms through reinforcement learning.
+Nature 645 (8081), pp. 633–638.
+External Links: ISSN 1476-4687,
+Link,
+Document
+Cited by: §2.
+[7]
+D. Hendrycks, C. Burns, S. Kadavath, A. Arora, S. Basart, E. Tang, D. Song, and J. Steinhardt (2021)
+Measuring mathematical problem solving with the math dataset.
+External Links: 2103.03874,
+Link
+Cited by: §A.1.
+[8]
+G. E. Hinton, O. Vinyals, and J. Dean (2015)
+Distilling the knowledge in a neural network.
+ArXiv abs/1503.02531.
+External Links: Link
+Cited by: §2.
+[9]
+J. Hübotter, F. Lübeck, L. Behric, A. Baumann, M. Bagatella, D. Marta, I. Hakimi, I. Shenfeld, T. Kleine Buening, C. Guestrin, and A. Krause (2026)
+Reinforcement learning via self-distillation.
+arXiv preprint arXiv:2601.20802.
+Cited by: §A.2,
+§1,
+§2,
+§3.
+[10]
+M. Kim and S. J. Baek (2026)
+Explain in your own words: improving reasoning via token-selective dual knowledge distillation.
+In The Fourteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §A.1,
+Appendix B,
+§2,
+Table 1,
+Table 1,
+Table 1,
+Table 1,
+§4.
+[11]
+Q. Li, L. Cui, X. Zhao, L. Kong, and W. Bi (2024)
+GSM-plus: a comprehensive benchmark for evaluating the robustness of llms as mathematical problem solvers.
+External Links: 2402.19255,
+Link
+Cited by: §A.1.
+[12]
+Z. Liu, C. Chen, W. Li, P. Qi, T. Pang, C. Du, W. S. Lee, and M. Lin (2025)
+Understanding r1-zero-like training: a critical perspective.
+In Second Conference on Language Modeling,
+External Links: Link
+Cited by: §1,
+§2.
+[13]
+J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov (2017)
+Proximal policy optimization algorithms.
+External Links: 1707.06347,
+Link
+Cited by: §2.
+[14]
+Z. Shao, P. Wang, Q. Zhu, R. Xu, J. Song, X. Bi, H. Zhang, M. Zhang, Y. K. Li, Y. Wu, and D. Guo (2024)
+DeepSeekMath: pushing the limits of mathematical reasoning in open language models.
+External Links: 2402.03300,
+Link
+Cited by: §1,
+§2.
+[15]
+I. Shenfeld, M. Damani, J. Hübotter, and P. Agrawal (2026)
+Self-distillation enables continual learning.
+arXiv preprint arXiv:2601.19897.
+Cited by: §A.2,
+§3.
+[16]
+Z. Sprague, X. Ye, K. Bostrom, S. Chaudhuri, and G. Durrett (2024)
+MuSR: testing the limits of chain-of-thought with multistep soft reasoning.
+External Links: 2310.16049,
+Link
+Cited by: §A.1.
+[17]
+M. Suzgun, N. Scales, N. Schärli, S. Gehrmann, Y. Tay, H. W. Chung, A. Chowdhery, Q. V. Le, E. H. Chi, D. Zhou, and J. Wei (2022)
+Challenging big-bench tasks and whether chain-of-thought can solve them.
+External Links: 2210.09261,
+Link
+Cited by: §A.1.
+[18]
+Y. Wang, X. Ma, G. Zhang, Y. Ni, A. Chandra, S. Guo, W. Ren, A. Arulraj, X. He, Z. Jiang, T. Li, M. Ku, K. Wang, A. Zhuang, R. Fan, X. Yue, and W. Chen (2024)
+MMLU-pro: a more robust and challenging multi-task language understanding benchmark.
+External Links: 2406.01574,
+Link
+Cited by: §A.1.
+[19]
+J. Welbl, N. F. Liu, and M. Gardner (2017)
+Crowdsourcing multiple choice science questions.
+External Links: 1707.06209,
+Link
+Cited by: §A.1.
+[20]
+H. Xu, Q. Zhu, H. Deng, J. Li, L. Hou, Y. Wang, L. Shang, R. Xu, and F. Mi (2025)
+KDRL: post-training reasoning llms via unified knowledge distillation and reinforcement learning.
+External Links: 2506.02208,
+Link
+Cited by: §1,
+§2.
+[21]
+C. Yang, C. Qin, Q. Si, M. Chen, N. Gu, D. Yao, Z. Lin, W. Wang, J. Wang, and N. Duan (2026)
+Self-distilled rlvr.
+External Links: 2604.03128,
+Link
+Cited by: §2.
+[22]
+L. Yuan, G. Cui, H. Wang, N. Ding, X. Wang, J. Deng, B. Shan, H. Chen, R. Xie, Y. Lin, Z. Liu, B. Zhou, H. Peng, Z. Liu, and M. Sun (2024)
+Advancing llm reasoning generalists with preference trees.
+External Links: 2404.02078
+Cited by: §A.1,
+§4.
+[23]
+Z. Zhang, S. Jiang, Y. Shen, Y. Zhang, D. Ram, S. Yang, Z. Tu, W. Xia, and S. Soatto (2026)
+Reinforcement-aware knowledge distillation for llm reasoning.
+External Links: 2602.22495,
+Link
+Cited by: §1,
+§2.
+[24]
+S. Zhao, Z. Xie, M. Liu, J. Huang, G. Pang, F. Chen, and A. Grover (2026)
+Self-distilled reasoner: on-policy self-distillation for large language models.
+arXiv preprint arXiv:2601.18734.
+Cited by: §2.
+[25]
+C. Zheng, S. Liu, M. Li, X. Chen, B. Yu, C. Gao, K. Dang, Y. Liu, R. Men, A. Yang, J. Zhou, and J. Lin (2025)
+Group sequence policy optimization.
+External Links: 2507.18071,
+Link
+Cited by: §2.
+[26]
+J. Zhou, T. Lu, S. Mishra, S. Brahma, S. Basu, Y. Luan, D. Zhou, and L. Hou (2023)
+Instruction-following evaluation for large language models.
+External Links: 2311.07911,
+Link
+Cited by: §A.1.
+Appendix A Implementation Details
+A.1 Setup
+We adopt the setup from [10]; we distill a Qwen2.5-1.5B-Instruct student from a frozen Qwen2.5-14B-Instruct teacher. The student is trained end-to-end with FSDP across 2 GPUs; the teacher is served via a dedicated vLLM endpoint (tensor-parallel =2=2). At each training step, the teacher receives the student’s rollouts and returns the top-KK log-probabilities at every position for KL distillation. Our training data is a subset of the UltraInteract [22]. We train for 3 epochs with AdamW (lr =×10−6=5\!\times\!10^{-6}, cosine schedule, 50-step warmup). Top-KK logit distillation uses K=50K=50 with tail correction ( Equation 4) as default. Our evaluations are performed on lm-eval-harness11
+1
+https://github.com/EleutherAI/lm-evaluation-harness, following [10].
+Finally for the evaluation, we evaluate on 10 benchmarks spanning math (GSM8K [3], GSM-Plus [11], MATH [7], MMLU-Pro-Math [18] denoted as MPMath in our tables), code (MBPP [2]), knowledge (SciQ [19], MMLU-STEM [18]), reasoning (BBH [17], MuSR [16]), and instruction-following (IFEval [26]), using lm-evaluation-harness with vLLM as the inference backend. All models are evaluated with temperature=0.6 over 3 seeds.
+Table 2: Ablation on the truncation parameter kk for top-kk knowledge distillation. The no-tail variant omits the tail-redistribution step.
+Generation-based
+Method
+GSM8K
+GSM+
+MATH
+MPMath
+MBPP
+IFEval
+Avg.
+Top-kk (k=20k{=}20, no-tail)
+67.53±0.5067.53_{\pm 0.50}
+45.45±0.1245.45_{\pm 0.12}
+27.49±1.3427.49_{\pm 1.34}
+38.44±1.0738.44_{\pm 1.07}
+46.80±3.0346.80_{\pm 3.03}
+47.28±0.4847.28_{\pm 0.48}
+45.50
+Top-kk (k=20k{=}20)
+67.58±0.7667.58_{\pm 0.76}
+45.60±0.5745.60_{\pm 0.57}
+28.33±1.6428.33_{\pm 1.64}
+42.36±0.8742.36_{\pm 0.87}
+47.67±1.5347.67_{\pm 1.53}
+47.36±0.6747.36_{\pm 0.67}
+46.48
+Top-kk (k=30k{=}30)
+67.93±0.80\mathbf{67.93}_{\pm 0.80}
+46.06±0.24\mathbf{46.06}_{\pm 0.24}
+28.57±1.1228.57_{\pm 1.12}
+43.38±1.19\mathbf{43.38}_{\pm 1.19}
+49.27±0.7649.27_{\pm 0.76}
+47.36±0.4347.36_{\pm 0.43}
+47.10
+Top-kk (k=50k{=}50)
+66.69±0.5666.69_{\pm 0.56}
+45.47±0.3145.47_{\pm 0.31}
+28.63±1.27\mathbf{28.63}_{\pm 1.27}
+42.91±0.8342.91_{\pm 0.83}
+49.33±0.76\mathbf{49.33}_{\pm 0.76}
+48.60±0.87\mathbf{48.60}_{\pm 0.87}
+46.94
+A.2 Top-KK Reverse-KL Approximation.
+Computing KL(πθ∥πT)\mathrm{KL}(\pi_{\theta}\|\pi_{T}) naively requires storing the full vocabulary logits of both the student and the teacher simultaneously. To avoid this, similar to [9, 15], we use only the top-KK teacher logits indexed by the student’s top-KK tokens and approximate the full-vocabulary reverse-KL as a top-KK explicit sum plus a tail correction that aggregates the remaining probability mass into a single bucket:
+KL(πθ(⋅|st(i))∥πT(⋅|st(i)))\displaystyle\mathrm{KL}\!\left(\pi_{\theta}(\cdot\,|\,s_{t}^{(i)})\,\|\,\pi_{T}(\cdot\,|\,s_{t}^{(i)})\right)
+≈∑y^t∈topK​(πθ)πθ​(y^t|st(i))⋅log⁡πθ​(y^t|st(i))πT​(y^t|st(i))\displaystyle\approx{\color[rgb]{0.1211,0.4648,0.707}\sum_{\hat{y}_{t}\,\in\,\mathrm{top}_{K}(\pi_{\theta})}\pi_{\theta}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)\cdot\log\frac{\pi_{\theta}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)}{\pi_{T}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)}}
++(1−∑y^t∈topK​(πθ)πθ(y^t|st(i)))⋅log1−∑y^t∈topK​(πθ)πθ​(y^t|st(i))1−∑y^t∈topK​(πθ)πT​(y^t|st(i)),\displaystyle\quad+{\color[rgb]{0.8398,0.3516,0}\Bigl(1-\!\!\!\sum_{\hat{y}_{t}\,\in\,\mathrm{top}_{K}(\pi_{\theta})}\!\!\!\pi_{\theta}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)\Bigr)\cdot\log\frac{1-\sum_{\hat{y}_{t}\,\in\,\mathrm{top}_{K}(\pi_{\theta})}\pi_{\theta}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)}{1-\sum_{\hat{y}_{t}\,\in\,\mathrm{top}_{K}(\pi_{\theta})}\pi_{T}\!\left(\hat{y}_{t}\,|\,s_{t}^{(i)}\right)}},
+(4)
+where topK​(πθ)\mathrm{top}_{K}(\pi_{\theta}) denotes the KK tokens with highest probability under the current student πθ\pi_{\theta}. The blue term accumulates the per-token KL contribution over the top-KK support and carries the primary gradient signal for the student. The orange tail term handles the residual mass: it collapses all out-of-top-KK tokens into a single aggregate token then forms a binary KL between the student’s and teacher’s residual probabilities. The tail term also remains differentiable and gradients flow through it during backpropagation. Table 2 ablates the effect of KK and the tail correction. Removing the tail term (i.e., dropping the residual-mass bucket) degrades performance, confirming that the tail gradient is a non-trivial part of the learning signal even though its contribution to the total KL is small. Varying KK shows diminishing returns beyond a moderate value, indicating that the student’s probability mass is already well concentrated in the top-KK tokens.
+Appendix B Additional Results
+Likelihood-Based Tasks
+We evaluate on tasks scored by log-likelihood ranking (SciQ, MMLU-STEM, MuSR, BBH), where the model assigns log-probabilities to a fixed set of answer choices and the highest-scoring option is selected as the prediction, following [10]. We note, however, that log-likelihood ranking is not the most natural evaluation protocol for instruction fine-tuned models.
+As shown in Table 3, RG-OPD does not consistently improve over the baseline under this protocol.
+These models are optimized to generate free-form responses and are not calibrated for pairwise answer scoring.
+This is evident from the teacher itself: despite being a 14B model that scores 80.01 on generation-based benchmarks, it achieves only 63.77 under likelihood-based evaluation and on SciQ, the 1.5B student baseline actually outscores the teacher (89.50 vs. 86.80).
+Finally, when we evaluate the models through text generation and extract the final answers, we observe that RG-OPD again outperforms the previous methods.
+Table 3: Comparison of knowledge distillation methods under generation-based and likelihood-based evaluation on the same four benchmarks. Δ\Delta is relative to the student baseline Q​w​e​n​2.5​(1.5​B)S{Qwen2.5(1.5B)_{S}} (green/red = gain/drop), and Avg. Rank↓\downarrow is the mean rank across the eight benchmark metrics among student and distillation methods, excluding the teacher reference.
+Generation-based
+Likelihood-based
+Avg. Rank↓\downarrow
+Method
+SciQ
+Δ\Delta
+MSTEM
+Δ\Delta
+MuSR
+Δ\Delta
+BBH
+Δ\Delta
+SciQ
+Δ\Delta
+MSTEM
+Δ\Delta
+MuSR
+Δ\Delta
+BBH
+Δ\Delta
+Q​w​e​n​2.5​(14​B)T{Qwen2.5(14B)_{T}}
+98.53±0.3298.53_{\pm 0.32}
+–
+84.91±0.6284.91_{\pm 0.62}
+–
+56.48±0.8356.48_{\pm 0.83}
+–
+80.10±0.1380.10_{\pm 0.13}
+–
+86.80
+–
+75.55
+–
+41.01
+–
+51.71
+–
+–
+Q​w​e​n​2.5​(1.5​B)S{Qwen2.5(1.5B)_{S}}
+96.73±0.7096.73_{\pm 0.70}
+0.00
+56.71±1.0356.71_{\pm 1.03}
+0.00
+43.08±1.4143.08_{\pm 1.41}
+0.00
+47.09±17.17\mathbf{47.09}_{\pm 17.17}
+0.00
+89.50
+0.00
+53.57
+0.00
+36.90
+0.00
+36.19
+0.00
+2.4
+Reverse KL
+97.37±0.2597.37_{\pm 0.25}
+↑\uparrow +0.64
+56.30±1.4356.30_{\pm 1.43}
+↓\downarrow -0.41
+44.66±0.6844.66_{\pm 0.68}
+↑\uparrow +1.58
+44.52±0.4044.52_{\pm 0.40}
+↓\downarrow -2.57
+80.00
+↓\downarrow -9.50
+52.17
+↓\downarrow -1.40
+35.85
+↓\downarrow -1.05
+32.70
+↓\downarrow -3.49
+3.0
+TSD-KD
+97.20±0.5697.20_{\pm 0.56}
+↑\uparrow +0.47
+52.55±2.0152.55_{\pm 2.01}
+↓\downarrow -4.16
+42.46±2.2042.46_{\pm 2.20}
+↓\downarrow -0.62
+37.08±1.5537.08_{\pm 1.55}
+↓\downarrow -10.01
+93.60\mathbf{93.60}
+↑\uparrow +4.10
+53.44
+↓\downarrow -0.13
+39.81\mathbf{39.81}
+↑\uparrow +2.91
+37.96\mathbf{37.96}
+↑\uparrow +1.77
+2.6
+RG-OPD (ours)
+97.80±0.20\mathbf{97.80}_{\pm 0.20}
+↑\uparrow +1.07
+59.46±0.48\mathbf{59.46}_{\pm 0.48}
+↑\uparrow +2.75
+44.89±1.45\mathbf{44.89}_{\pm 1.45}
+↑\uparrow +1.81
+44.04±0.3144.04_{\pm 0.31}
+↓\downarrow -3.05
+79.00
+↓\downarrow -10.50
+53.85\mathbf{53.85}
+↑\uparrow +0.28
+37.83
+↑\uparrow +0.93
+34.40
+↓\downarrow -1.79
+2.0
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue" (
+) button, located in the page header.
+Tip: You can select the relevant text first, to include it in your report.
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+Major funding support from

@@ -1,0 +1,204 @@
+{
+  "_id": "6a328367438e87c5cd19ae11",
+  "id": "Multilingual-Multimodal-NLP/LoopCoder-V2",
+  "private": false,
+  "pipeline_tag": "text-generation",
+  "library_name": "transformers",
+  "tags": [
+    "transformers",
+    "safetensors",
+    "iquestpltcoder",
+    "text-generation",
+    "code",
+    "code-generation",
+    "code-reasoning",
+    "agentic-coding",
+    "tool-use",
+    "instruction-tuned",
+    "looped-transformer",
+    "parallel-loop-transformer",
+    "plt",
+    "conversational",
+    "custom_code",
+    "arxiv:2606.18023",
+    "license:apache-2.0",
+    "endpoints_compatible",
+    "region:us"
+  ],
+  "downloads": 154,
+  "likes": 49,
+  "modelId": "Multilingual-Multimodal-NLP/LoopCoder-V2",
+  "author": "Multilingual-Multimodal-NLP",
+  "sha": "b87cf3aa2186937b0d0362a684d7d30f234543e3",
+  "lastModified": "2026-06-22T16:09:23.000Z",
+  "gated": false,
+  "disabled": false,
+  "widgetData": [
+    {
+      "text": "Hi, what can you help me with?"
+    },
+    {
+      "text": "What is 84 * 3 / 2?"
+    },
+    {
+      "text": "Tell me an interesting fact about the universe!"
+    },
+    {
+      "text": "Explain quantum computing in simple terms."
+    }
+  ],
+  "model-index": null,
+  "config": {
+    "architectures": [
+      "IQuestPLTCoderForCausalLM"
+    ],
+    "auto_map": {
+      "AutoConfig": "configuration_iquestpltcoder.IQuestPLTCoderConfig"
+    },
+    "model_type": "iquestpltcoder",
+    "tokenizer_config": {
+      "bos_token": "<s>",
+      "eos_token": "<|im_end|>",
+      "pad_token": "<|endoftext|>",
+      "unk_token": "<unk>",
+      "use_default_system_prompt": false
+    },
+    "chat_template_jinja": "{% macro render_extra_keys(json_dict, handled_keys) %}\n    {%- if json_dict is mapping %}\n        {%- for json_key in json_dict if json_key not in handled_keys %}\n            {%- if json_dict[json_key] is mapping or (json_dict[json_key] is sequence and json_dict[json_key] is not string) %}\n                {{- '\\n<' ~ json_key ~ '>' ~ (json_dict[json_key] | tojson | safe) ~ '</' ~ json_key ~ '>' }}\n            {%- else %}\n                {{-'\\n<' ~ json_key ~ '>' ~ (json_dict[json_key] | string) ~ '</' ~ json_key ~ '>' }}\n            {%- endif %}\n        {%- endfor %}\n    {%- endif %}\n{% endmacro %}\n\n{%- if messages[0][\"role\"] == \"system\" %}\n    {%- set system_message = messages[0][\"content\"] %}\n    {%- set loop_messages = messages[1:] %}\n{%- else %}\n    {%- set loop_messages = messages %}\n{%- endif %}\n\n{%- if not tools is defined %}\n    {%- set tools = [] %}\n{%- endif %}\n\n{%- if system_message is defined %}\n    {{- \"<|im_start|>system\\n\" + system_message }}\n{%- else %}\n    {%- if tools is iterable and tools | length > 0 %}\n        {{- \"<|im_start|>system\\nYou are a helpful AI assistant.\" }}\n    {%- endif %}\n{%- endif %}\n{%- if tools is iterable and tools | length > 0 %}\n    {{- \"\\n\\n# Tools\\n\\nYou have access to the following functions:\\n\\n\" }}\n    {{- \"<tools>\" }}\n    {%- for tool in tools %}\n        {%- if tool.function is defined %}\n            {%- set tool = tool.function %}\n        {%- endif %}\n        {{- \"\\n<function>\\n<name>\" ~ tool.name ~ \"</name>\" }}\n        {%- if tool.description is defined %}\n            {{- '\\n<description>' ~ (tool.description | trim) ~ '</description>' }}\n        {%- endif %}\n        {{- '\\n<parameters>' }}\n        {%- if tool.parameters is defined and tool.parameters is mapping and tool.parameters.properties is defined and tool.parameters.properties is mapping %}\n            {%- for param_name, param_fields in tool.parameters.properties|items %}\n                {{- '\\n<parameter>' }}\n                {{- '\\n<name>' ~ param_name ~ '</name>' }}\n                {%- if param_fields.type is defined %}\n                    {{- '\\n<type>' ~ (param_fields.type | string) ~ '</type>' }}\n                {%- endif %}\n                {%- if param_fields.description is defined %}\n                    {{- '\\n<description>' ~ (param_fields.description | trim) ~ '</description>' }}\n                {%- endif %}\n                {%- set handled_keys = ['name', 'type', 'description'] %}\n                {{- render_extra_keys(param_fields, handled_keys) }}\n                {{- '\\n</parameter>' }}\n            {%- endfor %}\n        {%- endif %}\n        {% set handled_keys = ['type', 'properties'] %}\n        {{- render_extra_keys(tool.parameters, handled_keys) }}\n        {{- '\\n</parameters>' }}\n        {%- set handled_keys = ['type', 'name', 'description', 'parameters'] %}\n        {{- render_extra_keys(tool, handled_keys) }}\n        {{- '\\n</function>' }}\n    {%- endfor %}\n    {{- \"\\n</tools>\" }}\n    {{- '\\n\\nIf you choose to call a function ONLY reply in the following format with NO suffix:\\n\\n<tool_call>\\n<function=example_function_name>\\n<parameter=example_parameter_1>\\nvalue_1\\n</parameter>\\n<parameter=example_parameter_2>\\nThis is the value for the second parameter\\nthat can span\\nmultiple lines\\n</parameter>\\n</function>\\n</tool_call>\\n\\n<IMPORTANT>\\nReminder:\\n- Function calls MUST follow the specified format: an inner <function=...></function> block must be nested within <tool_call></tool_call> XML tags\\n- Required parameters MUST be specified\\n- You may provide optional reasoning for your function call in natural language BEFORE the function call, but NOT after\\n- If there is no function call available, answer the question like normal with your current knowledge and do not tell the user about function calls\\n</IMPORTANT>' }}\n{%- endif %}\n{%- if system_message is defined %}\n    {{- '<|im_end|>\\n' }}\n{%- else %}\n    {%- if tools is iterable and tools | length > 0 %}\n        {{- '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- for message in loop_messages %}\n    {%- if message.role == \"assistant\" and message.tool_calls is defined and message.tool_calls is iterable and message.tool_calls | length > 0 %}\n        {{- '<|im_start|>' + message.role }}\n        {%- if (message.content_mask is not defined) or not message.content_mask %}{%- generation %}\n        {%- if message.content is defined and message.content is string and message.content | trim | length > 0 %}\n            {{- '\\n' + message.content | trim + '\\n' }}\n        {%- endif %}\n        {%- for tool_call in message.tool_calls %}\n            {%- if tool_call.function is defined %}\n                {%- set tool_call = tool_call.function %}\n            {%- endif %}\n            {{- '\\n<tool_call>\\n<function=' + tool_call.name + '>\\n' }}\n            {%- if tool_call.arguments is defined %}\n                {%- for args_name, args_value in tool_call.arguments|items %}\n                    {{- '<parameter=' + args_name + '>\\n' }}\n                    {%- set args_value = args_value | tojson | safe if args_value is mapping or (args_value is sequence and args_value is not string) else args_value | string %}\n                    {{- args_value }}\n                    {{- '\\n</parameter>\\n' }}\n                {%- endfor %}\n            {%- endif %}\n            {{- '</function>\\n</tool_call>' }}\n        {%- endfor %}\n        {{- '<|im_end|>\\n' }}\n        {%- endgeneration %}{%- else %}\n        {%- if message.content is defined and message.content is string and message.content | trim | length > 0 %}\n            {{- '\\n' + message.content | trim + '\\n' }}\n        {%- endif %}\n        {%- for tool_call in message.tool_calls %}\n            {%- if tool_call.function is defined %}\n                {%- set tool_call = tool_call.function %}\n            {%- endif %}\n            {{- '\\n<tool_call>\\n<function=' + tool_call.name + '>\\n' }}\n            {%- if tool_call.arguments is defined %}\n                {%- for args_name, args_value in tool_call.arguments|items %}\n                    {{- '<parameter=' + args_name + '>\\n' }}\n                    {%- set args_value = args_value | tojson | safe if args_value is mapping or (args_value is sequence and args_value is not string) else args_value | string %}\n                    {{- args_value }}\n                    {{- '\\n</parameter>\\n' }}\n                {%- endfor %}\n            {%- endif %}\n            {{- '</function>\\n</tool_call>' }}\n        {%- endfor %}\n        {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- elif message.role == \"user\" or message.role == \"system\" %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {{- '<|im_start|>' + message.role + '\\n' }}\n        {%- if (message.content_mask is not defined) or not message.content_mask %}{%- generation %}{{- message.content + '<|im_end|>' }}{%- endgeneration %}{%- else %}{{- message.content + '<|im_end|>' }}{%- endif %}\n        {{- '\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.previtem and loop.previtem.role != \"tool\" %}\n            {{- '<|im_start|>user\\n' }}\n        {%- endif %}\n        {{- '<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>\\n' }}\n        {%- if not loop.last and loop.nextitem.role != \"tool\" %}\n            {{- '<|im_end|>\\n' }}\n        {%- elif loop.last %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- else %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n{%- endif %}"
+  },
+  "cardData": {
+    "library_name": "transformers",
+    "license": "apache-2.0",
+    "pipeline_tag": "text-generation",
+    "tags": [
+      "code",
+      "code-generation",
+      "code-reasoning",
+      "agentic-coding",
+      "tool-use",
+      "instruction-tuned",
+      "looped-transformer",
+      "parallel-loop-transformer",
+      "plt"
+    ]
+  },
+  "transformersInfo": {
+    "auto_model": "AutoModelForCausalLM",
+    "pipeline_tag": "text-generation"
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "a6344aac8c09253b3b630fb776ae94478aa0275b",
+      "size": 1519
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "8d04b1160dcd4e420a5f2b06c61430d7248e57fb",
+      "size": 5386
+    },
+    {
+      "rfilename": "added_tokens.json",
+      "blobId": "795caeb98a429e7aaf679d1909226b8dfdf4a1ed",
+      "size": 613
+    },
+    {
+      "rfilename": "chat_template.jinja",
+      "blobId": "b3d5162d71e86d0ec33f5b957ee6ccacade96eee",
+      "size": 7678
+    },
+    {
+      "rfilename": "config.json",
+      "blobId": "6c7fd872f6b8e552977afe3156f5ac929be8941e",
+      "size": 949
+    },
+    {
+      "rfilename": "configuration_iquestcoder.py",
+      "blobId": "be375ba1cbf62e2397378d836817eb4ebd2b8848",
+      "size": 8984
+    },
+    {
+      "rfilename": "configuration_iquestpltcoder.py",
+      "blobId": "86cb680114225ea63811238036b423f5ad00ee5a",
+      "size": 9136
+    },
+    {
+      "rfilename": "generation_config.json",
+      "blobId": "e038950580bdda1e2a9de7605482900d4d22ffa6",
+      "size": 216
+    },
+    {
+      "rfilename": "model-00001-of-00003.safetensors",
+      "blobId": "750471db4d90babb5829865129117359588e19e5",
+      "size": 5349504488,
+      "lfs": {
+        "sha256": "e59b0f4976e5cfd528cf131c0b91438ab76650c39ed84a970b5446792f8e7eec",
+        "size": 5349504488,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "model-00002-of-00003.safetensors",
+      "blobId": "be7c56f89e4ffadc009af02f769cc503bcdf3c67",
+      "size": 5287053272,
+      "lfs": {
+        "sha256": "f5ae74ba4eabc60dda9b4977508459876c4651a089d5be537781b564a53cde14",
+        "size": 5287053272,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "model-00003-of-00003.safetensors",
+      "blobId": "016dfe30852b9e13ae0562605531508a5c8f21eb",
+      "size": 4594961384,
+      "lfs": {
+        "sha256": "59d6feb64f8cdff68b6da8a4cbcea16855a0f671ac7f7b97082c945d2ba5e040",
+        "size": 4594961384,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "model.safetensors.index.json",
+      "blobId": "b29e6b9cc15d8f37782e535ba683e1b43fd0b878",
+      "size": 14227
+    },
+    {
+      "rfilename": "special_tokens_map.json",
+      "blobId": "f2b2a793a5b8ea3c0de3d7a452646a2e45b8ff32",
+      "size": 861
+    },
+    {
+      "rfilename": "tokenization_iquestcoder.py",
+      "blobId": "2cae82d153505c672138975dd82c3e90ae135cdc",
+      "size": 22571
+    },
+    {
+      "rfilename": "tokenizer.json",
+      "blobId": "618f4fcc7f4e5980fe222335d8e267554d2e7879",
+      "size": 8126044
+    },
+    {
+      "rfilename": "tokenizer.model",
+      "blobId": "c5da580a272417e860fb920c677fbf4d52d80f68",
+      "size": 1345108,
+      "lfs": {
+        "sha256": "7d3be68e090a927f31e0e378d7599b15c206dd47e4a73933775a746cc9c1cd91",
+        "size": 1345108,
+        "pointerSize": 132
+      }
+    },
+    {
+      "rfilename": "tokenizer_config.json",
+      "blobId": "1b5c0b467b155e025d3d35bb7b1d9fe4f65a60a9",
+      "size": 6215
+    }
+  ],
+  "spaces": [],
+  "createdAt": "2026-06-17T11:22:15.000Z",
+  "safetensors": {
+    "parameters": {
+      "BF16": 7615749680
+    },
+    "total": 7615749680
+  },
+  "usedStorage": 15232864252
+}

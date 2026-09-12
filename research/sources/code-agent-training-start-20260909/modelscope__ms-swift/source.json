@@ -1,0 +1,15 @@
+{
+  "repo": "modelscope/ms-swift",
+  "commit": "ddd16cb15ec90d2b122fbf1e57d7fd2a259427fc",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "7866f920c22e0c978ec5d3e633decd6c7817771695bc1f08b49a32682aaae4df",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/ddd16cb15ec90d2b122fbf1e57d7fd2a259427fc/README.md"
+    },
+    {
+      "path": "docs/source_en/BestPractices/Qwen3_5-Best-Practice.md",
+      "status": 404
+    }
+  ]
+}

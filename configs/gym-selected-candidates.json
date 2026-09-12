@@ -1,0 +1,334 @@
+{
+  "selected_before_model_utc": "2026-09-09T08:51:17.763369+00:00",
+  "policy_sha256": "fb160b7152764f138f7e6516876b5f772129b6ff90d8b5bb397615f6c30fafd6",
+  "tasks": [
+    {
+      "instance_id": "dask__dask-6683",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-6683-1788946804417173391",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/0bcab4e63e0b/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.384239174891263,
+      "gold_seconds": 3.89223852311261
+    },
+    {
+      "instance_id": "dask__dask-10380",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-10380-1788946815886400033",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/254b898f723e/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.890409528044984,
+      "gold_seconds": 5.8815561009105295
+    },
+    {
+      "instance_id": "dask__dask-8501",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-8501-1788946835559093058",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.4082065229304135,
+      "gold_seconds": 5.891876267036423
+    },
+    {
+      "instance_id": "dask__dask-8954",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-8954-1788946852465495918",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.393976304214448,
+      "gold_seconds": 5.895862070843577
+    },
+    {
+      "instance_id": "dask__dask-6815",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-6815-1788946868766035986",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/0bcab4e63e0b/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.386022038059309,
+      "gold_seconds": 3.887344299815595
+    },
+    {
+      "instance_id": "pydantic__pydantic-5529",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5529-1788946880497312326",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/e0a0370a75f5/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.8943512809928507,
+      "gold_seconds": 3.4147682629991323
+    },
+    {
+      "instance_id": "pydantic__pydantic-9082",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-9082-1788946890265986443",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/ef23086bc62f/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 5.898854831932113,
+      "gold_seconds": 5.398184187011793
+    },
+    {
+      "instance_id": "pydantic__pydantic-4920",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-4920-1788946906970881450",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/637dc1ee35f5/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.894843462854624,
+      "gold_seconds": 3.3859216710552573
+    },
+    {
+      "instance_id": "pydantic__pydantic-5272",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5272-1788946916948733225",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/dc61e81cb77e/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.392126450082287,
+      "gold_seconds": 3.389153502881527
+    },
+    {
+      "instance_id": "pydantic__pydantic-5138",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5138-1788946927646680873",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/ff176a23f7e0/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.9102436369284987,
+      "gold_seconds": 3.39261093782261
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1560",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-1560-1788946937733816380",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/9e002a0545d6/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.894582784967497,
+      "gold_seconds": 7.898835852043703
+    },
+    {
+      "instance_id": "facebookresearch__hydra-677",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-677-1788946963805175980",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/e6c761d940d9/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.388855945784599,
+      "gold_seconds": 6.895100998925045
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1741",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-1741-1788946983748755943",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/51a15701e623/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.3857496690470725,
+      "gold_seconds": 2.8880015260074288
+    },
+    {
+      "instance_id": "facebookresearch__hydra-2011",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-2011-1788947000638231231",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/6cdad8981d3c/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.392999915871769,
+      "gold_seconds": 2.892878691898659
+    },
+    {
+      "instance_id": "facebookresearch__hydra-2062",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-2062-1788947018973192509",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/51a15701e623/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 2.8865375861059874,
+      "gold_seconds": 2.882393325911835
+    },
+    {
+      "instance_id": "bokeh__bokeh-13636",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13636-1788947036561815535",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.392347092973068,
+      "gold_seconds": 4.440205376828089
+    },
+    {
+      "instance_id": "bokeh__bokeh-13422",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13422-1788947084409484437",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.89971281401813,
+      "gold_seconds": 6.391087274998426
+    },
+    {
+      "instance_id": "bokeh__bokeh-13757",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13757-1788947134333732479",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 12.750799233093858,
+      "gold_seconds": 5.889109035022557
+    },
+    {
+      "instance_id": "bokeh__bokeh-13370",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13370-1788947191721806619",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.8870858021546155,
+      "gold_seconds": 6.394390634028241
+    },
+    {
+      "instance_id": "bokeh__bokeh-13198",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13198-1788947241115005880",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 5.888761630980298,
+      "gold_seconds": 5.895466255955398
+    }
+  ],
+  "excluded_candidates": [
+    {
+      "instance_id": "pydantic__pydantic-9023",
+      "reason": "Dataset gold patch does not apply to the specified pristine base commit; missing source context includes _needs_apply_discriminated_union/_has_invalid_schema. No model attempt."
+    }
+  ],
+  "final_harness_frozen": false,
+  "default_config_requalified_utc": "2026-09-09T09:48:16.366910+00:00"
+}

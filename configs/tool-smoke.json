@@ -1,0 +1,9 @@
+{
+  "max_rounds": 10,
+  "case_timeout_seconds": 300,
+  "cases": {
+    "read": {"max_output_tokens_per_round": 128},
+    "shell": {"max_output_tokens_per_round": 128},
+    "repair": {"max_output_tokens_per_round": 256}
+  }
+}

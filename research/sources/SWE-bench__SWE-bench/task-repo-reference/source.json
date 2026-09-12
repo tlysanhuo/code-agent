@@ -1,0 +1,27 @@
+{
+  "repo": "SWE-bench/swe-bench-tasks",
+  "commit": "3d07b464b7b311a0cbfb5ed5b2d8a3b96f84a33d",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/SWE-bench/swe-bench-tasks/3d07b464b7b311a0cbfb5ed5b2d8a3b96f84a33d/README.md",
+      "sha256": "b4d7119d879c7356e58dec4b66e60b8fc13e67c9e5d47a84c4cbe23ff7f50fa0"
+    },
+    {
+      "path": "tasks/sympy__sympy-20590/task.yaml",
+      "url": "https://raw.githubusercontent.com/SWE-bench/swe-bench-tasks/3d07b464b7b311a0cbfb5ed5b2d8a3b96f84a33d/tasks/sympy__sympy-20590/task.yaml",
+      "sha256": "061781d79ad364b1a499155b377a4ae1d354a40c56fb0e549f664caf6cd06665"
+    },
+    {
+      "path": "tasks/sympy__sympy-20590/Dockerfile",
+      "url": "https://raw.githubusercontent.com/SWE-bench/swe-bench-tasks/3d07b464b7b311a0cbfb5ed5b2d8a3b96f84a33d/tasks/sympy__sympy-20590/Dockerfile",
+      "sha256": "bc2f7a8cdaa697696225d732dfb091c20c3fa6ab0cee09bbf058b23f029d7c28"
+    },
+    {
+      "path": "tasks/sympy__sympy-20590/eval.sh",
+      "url": "https://raw.githubusercontent.com/SWE-bench/swe-bench-tasks/3d07b464b7b311a0cbfb5ed5b2d8a3b96f84a33d/tasks/sympy__sympy-20590/eval.sh",
+      "sha256": "035a9b5db713e7f4635e4d338eb74438b26ae3e5ccb3c81312fedf6d12207224"
+    }
+  ],
+  "note": "Reference-only snapshot; no images built or tests executed."
+}

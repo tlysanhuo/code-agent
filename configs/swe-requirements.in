@@ -1,0 +1,7 @@
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pytest==8.3.5
+python-dateutil==2.9.0.post0
+pytz==2025.2
+six==1.17.0

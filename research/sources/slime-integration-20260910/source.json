@@ -1,0 +1,25 @@
+{
+  "retrieved_utc": "2026-09-10T01:24:50.009113+00:00",
+  "files": [
+    {
+      "url": "https://api.github.com/repos/THUDM/slime/pulls/1865",
+      "path": "research/sources/slime-integration-20260910/lora-pr.json",
+      "sha256": "b52fdda367ae3e550d343d95ac689c8cf618030f494bc68cafbc48b5deb31865"
+    },
+    {
+      "url": "https://api.github.com/repos/THUDM/slime/pulls/1865/files?per_page=100",
+      "path": "research/sources/slime-integration-20260910/lora-files.json",
+      "sha256": "afece314880398f4e215c70450c35b7ce88e6731f3c66754adf7ee9e97929bd9"
+    },
+    {
+      "url": "https://github.com/THUDM/slime/pull/1865.diff",
+      "path": "research/sources/slime-integration-20260910/lora-pr.diff",
+      "sha256": "4ed379a03e6428c4f74ce9b0113b41ccb487f5519b5386706504b45aec7143aa"
+    },
+    {
+      "url": "https://api.github.com/search/issues?q=repo:THUDM/slime+LoRA+is:pr&sort=updated&order=desc&per_page=30",
+      "path": "research/sources/slime-integration-20260910/lora-pr-search.json",
+      "sha256": "303bd8ff26e5d0d9b447f2dc6f52bea1f7b1aed2796a5c06809276b687f8b0c5"
+    }
+  ]
+}

@@ -1,0 +1,423 @@
+{
+  "reviewed_utc": "2026-09-09T13:16:43.281007+00:00",
+  "scope": "read-only upstream source review; no dependency installs, services or runs",
+  "files": [
+    {
+      "repository": "OpenHands/software-agent-sdk",
+      "commit": "7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4",
+      "path": "research/sources/code-agent-implementation-20260909/OpenHands__software-agent-sdk/README.md",
+      "upstream_path": "README.md",
+      "url": "https://raw.githubusercontent.com/OpenHands/software-agent-sdk/7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4/README.md",
+      "bytes": 10835,
+      "sha256": "95094c9745c7cc58136d4eaa1688fb6038aafefec2be05344293f6df7e55dbf8"
+    },
+    {
+      "repository": "OpenHands/software-agent-sdk",
+      "commit": "7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4",
+      "path": "research/sources/code-agent-implementation-20260909/OpenHands__software-agent-sdk/openhands-sdk/openhands/sdk/workspace/workspace.py",
+      "upstream_path": "openhands-sdk/openhands/sdk/workspace/workspace.py",
+      "url": "https://raw.githubusercontent.com/OpenHands/software-agent-sdk/7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4/openhands-sdk/openhands/sdk/workspace/workspace.py",
+      "bytes": 1296,
+      "sha256": "39fd6bdb3dd6fe95d2815f2ed74b1443cec286d680e64843e8727f3ed273e9a6"
+    },
+    {
+      "repository": "OpenHands/software-agent-sdk",
+      "commit": "7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4",
+      "path": "research/sources/code-agent-implementation-20260909/OpenHands__software-agent-sdk/openhands-sdk/openhands/sdk/workspace/remote/remote_workspace_mixin.py",
+      "upstream_path": "openhands-sdk/openhands/sdk/workspace/remote/remote_workspace_mixin.py",
+      "url": "https://raw.githubusercontent.com/OpenHands/software-agent-sdk/7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4/openhands-sdk/openhands/sdk/workspace/remote/remote_workspace_mixin.py",
+      "bytes": 13398,
+      "sha256": "f61001d92d7a2bcc744b58e483961560f76d5b37f8643ded2f34a4259bcd1351"
+    },
+    {
+      "repository": "OpenHands/software-agent-sdk",
+      "commit": "7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4",
+      "path": "research/sources/code-agent-implementation-20260909/OpenHands__software-agent-sdk/examples/02_remote_agent_server/02_convo_with_docker_sandboxed_server.py",
+      "upstream_path": "examples/02_remote_agent_server/02_convo_with_docker_sandboxed_server.py",
+      "url": "https://raw.githubusercontent.com/OpenHands/software-agent-sdk/7a018907c9b6cac2ee7b205a1b4a5e3e0228e8e4/examples/02_remote_agent_server/02_convo_with_docker_sandboxed_server.py",
+      "bytes": 4206,
+      "sha256": "1fa794be75812976bc6bdfb81231f49d21c4fe953f0160adf8324fb6a92bc8c9"
+    },
+    {
+      "repository": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/code-agent-implementation-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/mini_swe_generator.py",
+      "upstream_path": "examples/train/mini_swe_agent/mini_swe_generator.py",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/mini_swe_generator.py",
+      "bytes": 11376,
+      "sha256": "dbfabbe212e8f7ef9bef6f9a8f9fc0e8085d7ca734ec4beaeac0289d12da3173"
+    },
+    {
+      "repository": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/code-agent-implementation-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/mini_swe_utils.py",
+      "upstream_path": "examples/train/mini_swe_agent/mini_swe_utils.py",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/mini_swe_utils.py",
+      "bytes": 3791,
+      "sha256": "0c682607ee410ac51b1e6eb4c71b4cb1a75a6f64441c038681bbe7e3b45ede82"
+    },
+    {
+      "repository": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/code-agent-implementation-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/main_mini_swe.py",
+      "upstream_path": "examples/train/mini_swe_agent/main_mini_swe.py",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/main_mini_swe.py",
+      "bytes": 1154,
+      "sha256": "5c991d088768d59f51140e3db86081c13120c2d2aa14654b1fbbd448894a2a7f"
+    },
+    {
+      "repository": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/code-agent-implementation-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/swebench.yaml",
+      "upstream_path": "examples/train/mini_swe_agent/swebench.yaml",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/swebench.yaml",
+      "bytes": 7735,
+      "sha256": "ce000d89b2a118d5a6b3f55f9f15acc90472e8afcccdf533ce4bfdede0cc2387"
+    },
+    {
+      "repository": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/code-agent-implementation-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/README.md",
+      "upstream_path": "examples/train/mini_swe_agent/README.md",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/README.md",
+      "bytes": 3926,
+      "sha256": "a95e59ba6100ed84defd4f39cf727d95a619b02ff89434ca99a6f1388b74bc6d"
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "commit": "5dda764ed3aa172535a7967b06ff95d9cbfe536a",
+      "upstream_path": "packages/llm/llm-deepseek/src/types.ts",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/5dda764ed3aa172535a7967b06ff95d9cbfe536a/packages/llm/llm-deepseek/src/types.ts",
+      "path": "research/sources/code-agent-implementation-20260909/deepseek-ai__deepseek-harness/packages/llm/llm-deepseek/src/types.ts",
+      "sha256": "aa481d7bdf68e1f22f36286ae64ef6eb522afe3010545872d1d05899d825ad1e",
+      "bytes": 5968,
+      "existing_snapshot_path": "vendor/deepseek-harness/packages/llm/llm-deepseek/src/types.ts",
+      "existing_snapshot_sha256": "7477c3c4d05ef66831b9da04eb1069e36ad0db8876f7ce78b1dfc7de326a3df9",
+      "matches_existing": false
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "commit": "5dda764ed3aa172535a7967b06ff95d9cbfe536a",
+      "upstream_path": "packages/e2b/fs-e2b/src/index.ts",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/5dda764ed3aa172535a7967b06ff95d9cbfe536a/packages/e2b/fs-e2b/src/index.ts",
+      "path": "research/sources/code-agent-implementation-20260909/deepseek-ai__deepseek-harness/packages/e2b/fs-e2b/src/index.ts",
+      "sha256": "a70d741248d1fe8440853dab0b46d7ccbeb6a6f396a583681396a49767121f05",
+      "bytes": 25535,
+      "existing_snapshot_path": "vendor/deepseek-harness/packages/e2b/fs-e2b/src/index.ts",
+      "existing_snapshot_sha256": "c75aa3789bc00957a59b5f7a9758a9399fe058e6f7bb27f80dbf3224df7cadfc",
+      "matches_existing": false
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "commit": "5dda764ed3aa172535a7967b06ff95d9cbfe536a",
+      "upstream_path": "packages/e2b/subprocess-e2b/src/index.ts",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/5dda764ed3aa172535a7967b06ff95d9cbfe536a/packages/e2b/subprocess-e2b/src/index.ts",
+      "path": "research/sources/code-agent-implementation-20260909/deepseek-ai__deepseek-harness/packages/e2b/subprocess-e2b/src/index.ts",
+      "sha256": "a65d20b9572820bc0f990e6a979a1d9234d54966be6b764a0b4303df7e69444e",
+      "bytes": 9302,
+      "existing_snapshot_path": "vendor/deepseek-harness/packages/e2b/subprocess-e2b/src/index.ts",
+      "existing_snapshot_sha256": "800eaef40bf3139c5f12d9fcab5462190ab944c8b7066f1a077ca29e46854c1f",
+      "matches_existing": false
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "commit": "5dda764ed3aa172535a7967b06ff95d9cbfe536a",
+      "upstream_path": "docs/subsystems/sandbox.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/5dda764ed3aa172535a7967b06ff95d9cbfe536a/docs/subsystems/sandbox.md",
+      "path": "research/sources/code-agent-implementation-20260909/deepseek-ai__deepseek-harness/docs/subsystems/sandbox.md",
+      "sha256": "f682eae7cc2b64c4eb2b35dcb7c3a7759f84c1c1da99fed900fd57ff5c346c95",
+      "bytes": 12621,
+      "existing_snapshot_path": "vendor/deepseek-harness/docs/subsystems/sandbox.md",
+      "existing_snapshot_sha256": "f682eae7cc2b64c4eb2b35dcb7c3a7759f84c1c1da99fed900fd57ff5c346c95",
+      "matches_existing": true
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "commit": "5dda764ed3aa172535a7967b06ff95d9cbfe536a",
+      "upstream_path": "docs/cookbook/adding-an-llm-adapter.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/5dda764ed3aa172535a7967b06ff95d9cbfe536a/docs/cookbook/adding-an-llm-adapter.md",
+      "path": "research/sources/code-agent-implementation-20260909/deepseek-ai__deepseek-harness/docs/cookbook/adding-an-llm-adapter.md",
+      "sha256": "37868b77439921a0867e748c3205c06a1669c893c65975f278b4557c282c1368",
+      "bytes": 3979,
+      "existing_snapshot_path": "vendor/deepseek-harness/docs/cookbook/adding-an-llm-adapter.md",
+      "existing_snapshot_sha256": "37868b77439921a0867e748c3205c06a1669c893c65975f278b4557c282c1368",
+      "matches_existing": true
+    }
+  ],
+  "inspected_existing_files": [
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/pyproject.toml",
+      "upstream_path": "rllm-model-gateway/pyproject.toml",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/pyproject.toml",
+      "bytes": 769,
+      "sha256": "eebf620160f87e660fd7d7833a7563af5ff5d63c198d429d2d2d566990c83a81",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/README.md",
+      "upstream_path": "rllm-model-gateway/README.md",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/README.md",
+      "bytes": 4191,
+      "sha256": "1bf03a91d447b910b8a244ec825dcce0819c3b046eb829db6b58360876f6d615",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/proxy.py",
+      "upstream_path": "rllm-model-gateway/src/rllm_model_gateway/proxy.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/src/rllm_model_gateway/proxy.py",
+      "bytes": 32790,
+      "sha256": "9afc1db087987402798a84352886a431f657e5650e7916f19900c8c86b5002d3",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/token_accumulator.py",
+      "upstream_path": "rllm-model-gateway/src/rllm_model_gateway/token_accumulator.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/src/rllm_model_gateway/token_accumulator.py",
+      "bytes": 6394,
+      "sha256": "a971697789eec4caf9ee4f5391f70cc97251cd34ffacf72213136740410b6dcc",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/data_process.py",
+      "upstream_path": "rllm-model-gateway/src/rllm_model_gateway/data_process.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/src/rllm_model_gateway/data_process.py",
+      "bytes": 10428,
+      "sha256": "50b9ad5d46ba91f422c26fb479250f9238a319d80df1880327f09dd598938416",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/middleware.py",
+      "upstream_path": "rllm-model-gateway/src/rllm_model_gateway/middleware.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm-model-gateway/src/rllm_model_gateway/middleware.py",
+      "bytes": 5733,
+      "sha256": "220f0dbc43b5bbecec11f3f3dfc3023adc80d8ce1eb42439587fb3d274695efd",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm/harnesses/mini_swe_agent.py",
+      "upstream_path": "rllm/harnesses/mini_swe_agent.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/harnesses/mini_swe_agent.py",
+      "bytes": 7294,
+      "sha256": "c6954dcac39df35da74b7f5f510b763f3e0b9c9758d505d3276cd680060c2256",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "vendor/rllm-agent-rl/rllm/engine/rollout/verl_engine.py",
+      "upstream_path": "rllm/engine/rollout/verl_engine.py",
+      "url": "https://github.com/rllm-org/rllm/blob/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/engine/rollout/verl_engine.py",
+      "bytes": 8257,
+      "sha256": "923b081e68af0187bdd1f14b5f5f9ea0d8eefd94bd9db3053e1fb81373689f84",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "verl-project/verl",
+      "commit": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+      "path": "vendor/verl-agent-rl/verl/experimental/agent_loop/agent_loop.py",
+      "upstream_path": "verl/experimental/agent_loop/agent_loop.py",
+      "url": "https://github.com/verl-project/verl/blob/1252cc71aa5bd82e5604322064d69bfe6454c660/verl/experimental/agent_loop/agent_loop.py",
+      "bytes": 59678,
+      "sha256": "1cfcc45ce5eba2be4e2ff43f803c8aeb2a48d64dc4d6c807bb2f72be1ac9dee8",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "verl-project/verl",
+      "commit": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+      "path": "vendor/verl-agent-rl/verl/experimental/agent_loop/tool_agent_loop.py",
+      "upstream_path": "verl/experimental/agent_loop/tool_agent_loop.py",
+      "url": "https://github.com/verl-project/verl/blob/1252cc71aa5bd82e5604322064d69bfe6454c660/verl/experimental/agent_loop/tool_agent_loop.py",
+      "bytes": 23949,
+      "sha256": "d21377bc9e6b6a5b727240a0b68d25b516c350e2a296ce0cf94d08fbe457b7a5",
+      "provenance": "verified clean git checkout"
+    },
+    {
+      "repository": "SWE-agent/mini-swe-agent",
+      "commit": "04d809ceab9df28f9adaed044884180159172930",
+      "path": "research/sources/SWE-agent__mini-swe-agent/src/minisweagent/agents/default.py",
+      "upstream_path": "src/minisweagent/agents/default.py",
+      "url": "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/agents/default.py",
+      "bytes": 8043,
+      "sha256": "e8ef8aa365942d739c2ec5cb0879f60f377d2dc2de8ec670aaedf3bafb45a4c2",
+      "provenance": "existing source snapshot; declared revision, current file hash",
+      "matches_pinned_upstream": true
+    },
+    {
+      "repository": "SWE-agent/mini-swe-agent",
+      "commit": "04d809ceab9df28f9adaed044884180159172930",
+      "path": "research/sources/SWE-agent__mini-swe-agent/src/minisweagent/environments/docker.py",
+      "upstream_path": "src/minisweagent/environments/docker.py",
+      "url": "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/environments/docker.py",
+      "bytes": 6427,
+      "sha256": "21d389122b008e7b743d1e640207fda0b08d9010cf6323ddd02f0742b33b96a6",
+      "provenance": "existing source snapshot; declared revision, current file hash",
+      "matches_pinned_upstream": true
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "6458960c2478dc348c10b23e67f2789d7c1745d1",
+      "path": "research/sources/deepswe-coldstart-20260909/rllm-release-20250703/examples/swe/train_deepswe_agent.py",
+      "upstream_path": "examples/swe/train_deepswe_agent.py",
+      "url": "https://github.com/rllm-org/rllm/blob/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/train_deepswe_agent.py",
+      "bytes": 771,
+      "sha256": "183af1dafa42842ca8869dbd8b27fa33dfca3a1b66238524be781dfeb72fec5f",
+      "provenance": "existing source snapshot; declared revision, current file hash"
+    },
+    {
+      "repository": "rllm-org/rllm",
+      "commit": "6458960c2478dc348c10b23e67f2789d7c1745d1",
+      "path": "research/sources/deepswe-coldstart-20260909/rllm-release-20250703/rllm/environments/swe/swe.py",
+      "upstream_path": "rllm/environments/swe/swe.py",
+      "url": "https://github.com/rllm-org/rllm/blob/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/environments/swe/swe.py",
+      "bytes": 6799,
+      "sha256": "bc633b8ee9166e10b692f67b0d01139c25aa20be2094bce531355d92d4ae9192",
+      "provenance": "existing source snapshot; declared revision, current file hash"
+    }
+  ],
+  "provenance_findings": [
+    {
+      "scope": "5 selected DSH source files checked against recorded revision, not an audit of installed executable",
+      "mismatches": [
+        "vendor/deepseek-harness/packages/llm/llm-deepseek/src/types.ts",
+        "vendor/deepseek-harness/packages/e2b/fs-e2b/src/index.ts",
+        "vendor/deepseek-harness/packages/e2b/subprocess-e2b/src/index.ts"
+      ],
+      "action": "Pinned copies saved separately for review; vendor and installed runtime unchanged.",
+      "interpretation": "Superseded: cross-version comparison, not a mismatch with the actual release recorded in runtime/metadata/dsh-source.json."
+    }
+  ],
+  "completed_utc": "2026-09-09T13:21:36.163007+00:00",
+  "readme_sha256": "9b96e865bee76ecdf7a64f94571a37038a3251f6de52b9e75d05f0451b336227",
+  "validation": {
+    "source_file_hashes_pass": true,
+    "prior_delivery_changes": [
+      "README.md",
+      "configs/agent-rl/readiness.json",
+      "configs/agent-rl/dsh-interface.json",
+      "scripts/agent_rl.sh"
+    ],
+    "training_launch_ready": false,
+    "runtime_tests": "CPU native interface check passed; see separate acceptance"
+  },
+  "provenance_correction": {
+    "checked_utc": "2026-09-09T13:58:44.809127+00:00",
+    "actual_vendor_source": {
+      "repo": "deepseek-ai/deepseek-harness",
+      "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+      "tag": "dsh-v0.1.2-rc.1",
+      "acquisition": "official GitHub commit tarball (git transport failed)",
+      "path": "vendor/deepseek-harness",
+      "archive": "runtime/downloads/deepseek-harness-a66e4702047846cdaa10c66c9d3df3951f5ea70d.tar.gz",
+      "sha256": "adf32f642610e52294ffd823b3ad38b86355d05e4c48280bc77912458df56552",
+      "url": "https://codeload.github.com/deepseek-ai/deepseek-harness/tar.gz/a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+      "symlinks": "All targets verified within the source tree and preserved.",
+      "upstream_git_blobs_verified": 8854
+    },
+    "explanation": "Previous mismatch compared release a66e4702 with main reference 5dda764e; normal cross-version differences, not evidence of source drift. The agent-rl interface metadata had the wrong commit.",
+    "active_adapter": "llm-pi-ai via configs/dsh-qwen.patch.yml; llm-deepseek disabled",
+    "release_checks": [
+      {
+        "path": "vendor/deepseek-harness/packages/llm/llm-deepseek/src/types.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/llm/llm-deepseek/src/types.ts",
+        "sha256": "7477c3c4d05ef66831b9da04eb1069e36ad0db8876f7ce78b1dfc7de326a3df9",
+        "upstream_sha256": "7477c3c4d05ef66831b9da04eb1069e36ad0db8876f7ce78b1dfc7de326a3df9",
+        "matches": true
+      },
+      {
+        "path": "vendor/deepseek-harness/packages/e2b/fs-e2b/src/index.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/e2b/fs-e2b/src/index.ts",
+        "sha256": "c75aa3789bc00957a59b5f7a9758a9399fe058e6f7bb27f80dbf3224df7cadfc",
+        "upstream_sha256": "c75aa3789bc00957a59b5f7a9758a9399fe058e6f7bb27f80dbf3224df7cadfc",
+        "matches": true
+      },
+      {
+        "path": "vendor/deepseek-harness/packages/e2b/subprocess-e2b/src/index.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/e2b/subprocess-e2b/src/index.ts",
+        "sha256": "800eaef40bf3139c5f12d9fcab5462190ab944c8b7066f1a077ca29e46854c1f",
+        "upstream_sha256": "800eaef40bf3139c5f12d9fcab5462190ab944c8b7066f1a077ca29e46854c1f",
+        "matches": true
+      },
+      {
+        "path": "vendor/deepseek-harness/packages/llm/llm-pi-ai/src/adapter.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/llm/llm-pi-ai/src/adapter.ts",
+        "sha256": "c642278f425462b6252c2c6216a447ab1e8798d4815c25a71df94949ae68a4f3",
+        "upstream_sha256": "c642278f425462b6252c2c6216a447ab1e8798d4815c25a71df94949ae68a4f3",
+        "matches": true
+      },
+      {
+        "path": "vendor/deepseek-harness/packages/llm/llm-pi-ai/src/context.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/llm/llm-pi-ai/src/context.ts",
+        "sha256": "53c9eff08151a29183bb8bb0ee86ba8c8c404d6e14c1de8617e97fd0e81cf3ce",
+        "upstream_sha256": "53c9eff08151a29183bb8bb0ee86ba8c8c404d6e14c1de8617e97fd0e81cf3ce",
+        "matches": true
+      },
+      {
+        "path": "vendor/deepseek-harness/packages/llm/llm-pi-ai/src/stream.ts",
+        "commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+        "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/a66e4702047846cdaa10c66c9d3df3951f5ea70d/packages/llm/llm-pi-ai/src/stream.ts",
+        "sha256": "24dcdd27a58b7b864973ba50dfeed57b7c25c86f040d66010fa6e69ee184362b",
+        "upstream_sha256": "24dcdd27a58b7b864973ba50dfeed57b7c25c86f040d66010fa6e69ee184362b",
+        "matches": true
+      }
+    ]
+  },
+  "modification_design_artifacts": [
+    {
+      "path": "configs/agent-rl/dsh-interface.json",
+      "sha256": "b95749cdbca24d7563886147ccfb5e47dd0926813266c5dd9acf21009ca788ef"
+    },
+    {
+      "path": "runtime/agent-rl/parser-interface-check.json",
+      "sha256": "0c34ad82fe67402bad9c056abc98043d8c52746f5631cecba7827e16483bdedf"
+    }
+  ],
+  "updated_utc": "2026-09-09T15:05:11.326518+00:00",
+  "vllm_latest_lookup": {
+    "github_latest": {
+      "url": "https://api.github.com/repos/vllm-project/vllm/releases/latest",
+      "tag": "v0.29.0",
+      "published_at": "2026-09-09T08:54:49Z",
+      "html_url": "https://github.com/vllm-project/vllm/releases/tag/v0.29.0"
+    },
+    "pypi": {
+      "url": "https://pypi.org/pypi/vllm/json",
+      "version": "0.29.0",
+      "requires_python": "<3.15,>=3.10"
+    },
+    "checked_utc": "2026-09-09T14:02:32.140392+00:00"
+  },
+  "compatibility_sources": [
+    "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/providers.md",
+    "https://docs.vllm.ai/en/latest/serving/online_serving/",
+    "https://docs.vllm.ai/en/latest/features/tool_calling/",
+    "https://github.com/vllm-project/vllm/releases/tag/v0.29.0"
+  ],
+  "native_interface_reuse": {
+    "manifest": "configs/agent-rl/native-interfaces.json",
+    "sha256": "21eccdc207836dfeadafcb201000296a16795d0fceb69467cee1e2835917e68b"
+  },
+  "training_engineering": {
+    "manifest": "configs/agent-rl/training-engineering.json",
+    "sha256": "b57a50b6c91f674164f61ace983f4a1b3cbc3fe446a3b23ed22a5daa64755507",
+    "scope": "Real DSH scripted CPU integration and two custom training task qualifications; no real model rollout/updates"
+  }
+}

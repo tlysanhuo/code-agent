@@ -1,0 +1,25 @@
+{
+  "repo": "LiveCodeBench/LiveCodeBench",
+  "revision": "28fef95ea8c9f7a547c8329f2cd3d32b92c1fa24",
+  "retrieved_at": "2026-09-09T07:51:37.354726+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/LiveCodeBench/LiveCodeBench/28fef95ea8c9f7a547c8329f2cd3d32b92c1fa24/README.md",
+      "sha256": "ee0029cddc1d9051f35818f3348a4327819a3e35a9e597732519245605195cf6",
+      "bytes": 12825
+    },
+    {
+      "path": "lcb_runner/benchmarks/code_generation.py",
+      "url": "https://raw.githubusercontent.com/LiveCodeBench/LiveCodeBench/28fef95ea8c9f7a547c8329f2cd3d32b92c1fa24/lcb_runner/benchmarks/code_generation.py",
+      "sha256": "0bc93f5a650b55d6a1b54d3db852d80ae64891ece4ff085b2e6b469eb89f8846",
+      "bytes": 4688
+    },
+    {
+      "path": "lcb_runner/runner/parser.py",
+      "url": "https://raw.githubusercontent.com/LiveCodeBench/LiveCodeBench/28fef95ea8c9f7a547c8329f2cd3d32b92c1fa24/lcb_runner/runner/parser.py",
+      "sha256": "e9641729a6030164e712b9de465dea03dae95c3fdf036aac87abbbfab9fd7f33",
+      "bytes": 4807
+    }
+  ]
+}

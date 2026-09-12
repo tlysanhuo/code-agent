@@ -1,0 +1,64 @@
+{
+  "dask/dask": {
+    "python": ".venv-train-dask/bin/python",
+    "dependency_lock": "runtime/agent-rl/training-environments/dask-dependencies.lock",
+    "pytest_options": [
+      "-p",
+      "pytest_cov",
+      "-p",
+      "pytest_mock",
+      "-p",
+      "pytest_timeout"
+    ],
+    "task_env": {
+      "OMP_NUM_THREADS": "2",
+      "OPENBLAS_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "DASK_NUM_WORKERS": "2"
+    }
+  },
+  "bokeh/bokeh": {
+    "python": ".venv-train-bokeh/bin/python",
+    "dependency_lock": "runtime/agent-rl/training-environments/bokeh-dependencies.lock",
+    "pytest_options": [
+      "-p",
+      "pytest_cov",
+      "-p",
+      "pytest_mock",
+      "-p",
+      "pytest_timeout",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "task_env": {
+      "OMP_NUM_THREADS": "2",
+      "OPENBLAS_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "DASK_NUM_WORKERS": "2",
+      "PYTHONPATH": "src:."
+    }
+  },
+  "facebookresearch/hydra": {
+    "python": ".venv-train-hydra/bin/python",
+    "dependency_lock": "runtime/agent-rl/training-environments/hydra-dependencies.lock",
+    "pytest_options": [
+      "-p",
+      "pytest_mock",
+      "-p",
+      "pytest_timeout",
+      "-p",
+      "pytest_benchmark.plugin",
+      "-p",
+      "pytest_snail.plugin",
+      "-p",
+      "hydra.extra.pytest_plugin"
+    ],
+    "task_env": {
+      "OMP_NUM_THREADS": "2",
+      "OPENBLAS_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "DASK_NUM_WORKERS": "2",
+      "PYTHONPATH": "."
+    }
+  }
+}

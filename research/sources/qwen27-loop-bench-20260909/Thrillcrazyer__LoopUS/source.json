@@ -1,0 +1,139 @@
+{
+  "repo": "Thrillcrazyer/LoopUS",
+  "revision": "dd655b77861d9edf8fb981e90763436b95b1f3ff",
+  "retrieved_at": "2026-09-09T07:51:47.742530+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/README.md",
+      "sha256": "add2528a4034fccb3d9039c0326b39b6f9fb2320e14950225774923457b606ac",
+      "bytes": 6575
+    },
+    {
+      "path": "chat.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/chat.py",
+      "sha256": "b64ef6c3f48aa49c81f6921774c3a44788cc754564c705e1eb7da39411f4c007",
+      "bytes": 35109
+    },
+    {
+      "path": "ds_configs/accelerate_ds_zero2.yaml",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/ds_configs/accelerate_ds_zero2.yaml",
+      "sha256": "8541cd882bbd81f2cba6a9110c14671afbf2ac98201990e3b42765121584b1c5",
+      "bytes": 467
+    },
+    {
+      "path": "ds_configs/accelerate_ds_zero3.yaml",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/ds_configs/accelerate_ds_zero3.yaml",
+      "sha256": "9689dee1c8146e0ae1f2cd2c9692aa40c8a065dc8241a77b68dacd4b73c8267f",
+      "bytes": 475
+    },
+    {
+      "path": "ds_configs/fsdp_config.yaml",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/ds_configs/fsdp_config.yaml",
+      "sha256": "d951487fdc89c5a68ff677022ef122c5c0bceaca9289a1b630ae2e3bc6d89ce2",
+      "bytes": 678
+    },
+    {
+      "path": "evaluate.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/evaluate.py",
+      "sha256": "bb73b764318f71310850b547631b46cfbe1e1da8409bbbc203771d1b034003e6",
+      "bytes": 11277
+    },
+    {
+      "path": "generate.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/generate.py",
+      "sha256": "069917227d7f3020178ebb8f09793c6ed9510501f95b7a26fb252cbebd85c283",
+      "bytes": 4737
+    },
+    {
+      "path": "models/__init__.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/models/__init__.py",
+      "sha256": "8c908fa91ac2d90f5199e84fdb9f4cdc9d2021195ed1dfde5d6839e102f3e20d",
+      "bytes": 263
+    },
+    {
+      "path": "models/configuration_lds.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/models/configuration_lds.py",
+      "sha256": "d19f3b142d98736ee8109c5b6f77a821db5e0ae23fe4d2d1270c1dc74e9649f3",
+      "bytes": 5639
+    },
+    {
+      "path": "models/modeling_lds.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/models/modeling_lds.py",
+      "sha256": "6206078b5065b2d2869c6010385c37e37681b8a21d4c7a0d559590d397a2577f",
+      "bytes": 67208
+    },
+    {
+      "path": "test_model.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/test_model.py",
+      "sha256": "bd055072b9fca5ccc0e652e193ce7fac258c1fdc7bb7f6769c475c0bea5e5819",
+      "bytes": 142
+    },
+    {
+      "path": "train.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/train.py",
+      "sha256": "4f327e29bc0932d5d703651e11dcf53fc177bfba5846e40f52149883e6aa07d2",
+      "bytes": 1773
+    },
+    {
+      "path": "train_sft.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/train_sft.py",
+      "sha256": "584d12ecad75246ea1eec84f73a0a46e888ae925d07cdd2d58f3b20a7542d7d4",
+      "bytes": 1803
+    },
+    {
+      "path": "training_cli.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/training_cli.py",
+      "sha256": "29684b42f4791d37d1304ffb7657acc8146f0a7e7b994a3e6612ba4713cfa159",
+      "bytes": 8538
+    },
+    {
+      "path": "training_runtime.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/training_runtime.py",
+      "sha256": "41124cc797c4e005adb2c1b44cea240bd1886e49b00898418a51c12cdba41ae0",
+      "bytes": 50142
+    },
+    {
+      "path": "utils/__init__.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/__init__.py",
+      "sha256": "46fd9bf62015c5c69288c6e2e7d579a913c5fd1698ff77025d8436e4ab2b6f28",
+      "bytes": 581
+    },
+    {
+      "path": "utils/common.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/common.py",
+      "sha256": "6b1f2ebc371b533b0b164f9588492a55437b36688ae39d8ef239ac34f8ba1b04",
+      "bytes": 9285
+    },
+    {
+      "path": "utils/data.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/data.py",
+      "sha256": "a4433534680c8682549c9a403c0b42ef2cab888042d97b92c9b897fb0dbab248",
+      "bytes": 14823
+    },
+    {
+      "path": "utils/ddp_helper.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/ddp_helper.py",
+      "sha256": "a52d66757899821867cf248dcf54658d82543d07410b752856bbd2b7cb1340b3",
+      "bytes": 678
+    },
+    {
+      "path": "utils/inference.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/inference.py",
+      "sha256": "f40931345ccd64a8065089606cd44bd8e46d00ea7da12ea6ecfb713ab3bf4661",
+      "bytes": 4206
+    },
+    {
+      "path": "utils/lm_eval_harness.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/lm_eval_harness.py",
+      "sha256": "f93a22d6a34c74610e3f72b4df723cfe415eef972c22e53ccc45956997df5a1b",
+      "bytes": 34643
+    },
+    {
+      "path": "utils/metrics.py",
+      "url": "https://raw.githubusercontent.com/Thrillcrazyer/LoopUS/dd655b77861d9edf8fb981e90763436b95b1f3ff/utils/metrics.py",
+      "sha256": "a096b2bc1bf1a1809607bd745d4385cf002be921983fefbe5e16fdf6c724ec5e",
+      "bytes": 7047
+    }
+  ]
+}

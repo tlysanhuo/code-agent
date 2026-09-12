@@ -1,0 +1,61 @@
+{
+  "frozen_utc": "2026-09-11T14:35:29.443600+00:00",
+  "purpose": "stage-2 agentic RL (GRPO, tests-pass reward) candidate pools; env validation still required per task before any rollout",
+  "seed": 20260911,
+  "exclusion_inputs": {
+    "verified_500": 500,
+    "swebench_full_test": 2294,
+    "held_out_20": 20,
+    "smith_three": 3,
+    "old_audit_blocked": 81
+  },
+  "ledger": {
+    "swe_gym": {
+      "eligible": 2357,
+      "ex_old_audit": 61,
+      "ex_held_out_20": 20
+    },
+    "swe_smith": {
+      "eligible": 59133,
+      "ex_smith_three": 3
+    }
+  },
+  "sft_overlap_informational": {
+    "note": "SWE-smith tasks already SFT-trained via klear66k are retained: same-distribution RL curriculum is intentional, not contamination; all eval-side exclusions applied above",
+    "gym_eligible_in_klear_sft": 0,
+    "smith_eligible_in_klear_sft": 10894
+  },
+  "files": {
+    "rl-freeze-v1-gym-eligible.txt": {
+      "rows": 2357,
+      "sha256": "01a24a614bb59a9e779d2f312a53a734e8865749a06e12b636b1b52dcb7de954"
+    },
+    "rl-freeze-v1-smith-eligible.txt": {
+      "rows": 59133,
+      "sha256": "ba17802b0a1d8c73e879b2caec2d06a412319a3e888ddb3f72093bd9d0c02ccd"
+    },
+    "rl-freeze-v1-gym-order.txt": {
+      "rows": 2357,
+      "sha256": "c41872b9bd56286c6080e3c22d9106d76a903a1a773b884f013fe4876d06175e"
+    },
+    "rl-freeze-v1-smith-order.txt": {
+      "rows": 59133,
+      "sha256": "0aec3e1ba373c44e30bee9860f0b4eb3f7e97f893a3bc19dd0b41a6a7b4c5243"
+    }
+  },
+  "round_consumption_rule": "round-N takes the first unused prefix of the *-order.txt lists; consumed ids are recorded per round",
+  "repo_top": {
+    "swe_smith": {
+      "swesmith/scanny__python-pptx.278b47b1": 2389,
+      "swesmith/pandas-dev__pandas.95280573": 2354,
+      "swesmith/pylint-dev__astroid.b114f6b5": 1770,
+      "swesmith/python-openxml__python-docx.0cf6d71f": 1686,
+      "swesmith/cantools__cantools.0c6a7871": 1440,
+      "swesmith/pygments__pygments.27649ebb": 1430,
+      "swesmith/pydicom__pydicom.7d361b3d": 1328,
+      "swesmith/sqlfluff__sqlfluff.50a1c4b6": 1293,
+      "swesmith/conan-io__conan.86f29e13": 978,
+      "swesmith/seperman__deepdiff.ed252022": 964
+    }
+  }
+}

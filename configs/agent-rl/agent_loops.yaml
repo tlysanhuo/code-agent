@@ -1,0 +1,2 @@
+- name: dsh_agent
+  _target_: agent_rl_dsh_loop.DshAgentLoop

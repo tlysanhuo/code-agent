@@ -1,0 +1,95 @@
+{
+  "created_utc": "2026-09-09T14:18:47.280566+00:00",
+  "scope": "native HTTP configuration and upstream training-data interface reuse, CPU synthetic verification only",
+  "implementation": "scripts/agent_rl_native.py",
+  "registered_agent_loop": true,
+  "training_launch_ready": false,
+  "source_commits": {
+    "rllm": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+    "verl": "1252cc71aa5bd82e5604322064d69bfe6454c660"
+  },
+  "implementation_files": [
+    {
+      "path": "scripts/agent_rl_native.py",
+      "sha256": "0bd29f499b1449d738d5f81aace0e2f2900646858884d14dc0dd5e030d66927b"
+    },
+    {
+      "path": "scripts/check_agent_rl_native.py",
+      "sha256": "b00db0d3e0f883ff3353ebb296366f7e0e41f18f5920f319cbb200ca6685f48d"
+    },
+    {
+      "path": "scripts/agent_rl.sh",
+      "sha256": "a4647497fcd39d5b2a5b3aa1129fe6b0d3dbd605a38693ba70f6f4a992b83356"
+    },
+    {
+      "path": "configs/agent-rl/native_http/vllm.yaml",
+      "sha256": "00246ff79e969582848390245c9af898750cabe7c008adc34aa3c995882c0376"
+    }
+  ],
+  "upstream_files": [
+    {
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/server.py",
+      "sha256": "1e608d89d29fc58ab5a52934879fd2b6d6ec1adde2ca066e858141ed1ff8ae30"
+    },
+    {
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/proxy.py",
+      "sha256": "9afc1db087987402798a84352886a431f657e5650e7916f19900c8c86b5002d3"
+    },
+    {
+      "path": "vendor/rllm-agent-rl/rllm-model-gateway/src/rllm_model_gateway/data_process.py",
+      "sha256": "50b9ad5d46ba91f422c26fb479250f9238a319d80df1880327f09dd598938416"
+    },
+    {
+      "path": "vendor/rllm-agent-rl/rllm/engine/trace_converter.py",
+      "sha256": "9c0b16b94d6e00dc491b21e24d01eda7ed7da0993772ed0846be530e07656fc1"
+    },
+    {
+      "path": "vendor/rllm-agent-rl/rllm/trainer/verl/transform.py",
+      "sha256": "da846c3eb708c8e91c4175c288ecf1a2cd5581bbb5dd761115b7c4bfaadc1e65"
+    },
+    {
+      "path": "vendor/verl-agent-rl/verl/workers/rollout/llm_server.py",
+      "sha256": "275ef92bff49ead6929d55192464976d1676400681a2508eb5086143dff60bac"
+    },
+    {
+      "path": "vendor/verl-agent-rl/verl/workers/rollout/vllm_rollout/vllm_async_server.py",
+      "sha256": "aaaff55bb0238d2eabf07ed21c0f5e60f9a2dccb56ca03821822e22c8613075f"
+    },
+    {
+      "path": "vendor/verl-agent-rl/verl/experimental/agent_loop/agent_loop.py",
+      "sha256": "1cfcc45ce5eba2be4e2ff43f803c8aeb2a48d64dc4d6c807bb2f72be1ac9dee8"
+    },
+    {
+      "path": ".venv-train-rl/lib/python3.12/site-packages/vllm/entrypoints/openai/chat_completion/protocol.py",
+      "sha256": "1a2492bdb99e944ca177853496408a2a00d578bb2fa51c6e49241567d6601a82"
+    }
+  ],
+  "configuration_overlay": {
+    "hydra_argument": "+native_http=vllm",
+    "primary_config": "qwen35_27b_lora_2h100",
+    "path": "configs/agent-rl/native_http/vllm.yaml",
+    "fields": {
+      "served_model_name": "Qwen3.5-27B",
+      "enable_auto_tool_choice": true,
+      "tool_call_parser": "qwen3_coder",
+      "reasoning_parser": "qwen3"
+    },
+    "reason": "Use native vLLM Chat Completions with the existing DSH model alias, reasoning and tool calling",
+    "training_parameters_changed": false
+  },
+  "acceptance": "runtime/agent-rl/native-interface-check/acceptance.json",
+  "entrypoint_config_parse": "runtime/agent-rl/native-interface-check/entrypoint-config.yaml",
+  "failed_attempts": [
+    "runtime/agent-rl/native-interface-check/acceptance-attempt-1.json",
+    "runtime/agent-rl/native-interface-check/acceptance-attempt-2.json"
+  ],
+  "launch_guard_exit": 2,
+  "selected_source_imports": "Selected rLLM modules imported from pinned source using the existing isolated environment; no full rLLM installation or dependency upgrade",
+  "known_limits": [
+    "Native-interface unit check uses synthetic arrays; actual DSH CPU integration recorded separately in training-engineering.json.",
+    "Real Qwen training sampler/prefix, GPU weight synchronization and sleep/wake remain unverified.",
+    "Official benchmark environment/evaluator remain unconnected; custom training environments are separately qualified."
+  ],
+  "updated_utc": "2026-09-09T15:03:21.370760+00:00",
+  "training_engineering_manifest": "configs/agent-rl/training-engineering.json"
+}

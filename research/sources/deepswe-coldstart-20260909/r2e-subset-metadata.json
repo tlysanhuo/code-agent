@@ -1,0 +1,226 @@
+{
+  "_id": "67f8a8657e9b5111703f31fb",
+  "id": "R2E-Gym/R2E-Gym-Subset",
+  "author": "R2E-Gym",
+  "sha": "2e8108ff942f24fcb5686badfaf7f9a8808566d5",
+  "lastModified": "2026-07-23T22:28:07.000Z",
+  "private": false,
+  "gated": false,
+  "disabled": false,
+  "tags": [
+    "license:apache-2.0",
+    "size_categories:1K<n<10K",
+    "format:parquet",
+    "modality:tabular",
+    "modality:text",
+    "library:datasets",
+    "library:dask",
+    "library:polars",
+    "library:mlcroissant",
+    "region:us"
+  ],
+  "downloads": 14276,
+  "likes": 29,
+  "cardData": {
+    "license": "apache-2.0",
+    "dataset_info": {
+      "features": [
+        {
+          "name": "repo_name",
+          "dtype": "string"
+        },
+        {
+          "name": "docker_image",
+          "dtype": "string"
+        },
+        {
+          "name": "commit_hash",
+          "dtype": "string"
+        },
+        {
+          "name": "parsed_commit_content",
+          "dtype": "string"
+        },
+        {
+          "name": "execution_result_content",
+          "dtype": "string"
+        },
+        {
+          "name": "modified_files",
+          "sequence": "string"
+        },
+        {
+          "name": "modified_entity_summaries",
+          "list": [
+            {
+              "name": "ast_type_str",
+              "dtype": "string"
+            },
+            {
+              "name": "end_lineno",
+              "dtype": "int64"
+            },
+            {
+              "name": "file_name",
+              "dtype": "string"
+            },
+            {
+              "name": "name",
+              "dtype": "string"
+            },
+            {
+              "name": "start_lineno",
+              "dtype": "int64"
+            },
+            {
+              "name": "type",
+              "dtype": "string"
+            }
+          ]
+        },
+        {
+          "name": "relevant_files",
+          "sequence": "string"
+        },
+        {
+          "name": "num_non_test_files",
+          "dtype": "int64"
+        },
+        {
+          "name": "num_non_test_func_methods",
+          "dtype": "int64"
+        },
+        {
+          "name": "num_non_test_lines",
+          "dtype": "int64"
+        },
+        {
+          "name": "prompt",
+          "dtype": "string"
+        },
+        {
+          "name": "problem_statement",
+          "dtype": "string"
+        },
+        {
+          "name": "expected_output_json",
+          "dtype": "string"
+        }
+      ],
+      "splits": [
+        {
+          "name": "train",
+          "num_bytes": 3665788272,
+          "num_examples": 4578
+        }
+      ],
+      "download_size": 943928047,
+      "dataset_size": 3665788272
+    },
+    "configs": [
+      {
+        "config_name": "default",
+        "data_files": [
+          {
+            "split": "train",
+            "path": "data/train-*"
+          }
+        ]
+      }
+    ]
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "1ef325f1b111266a6b26e0196871bd78baa8c2f3",
+      "size": 2461
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "1a56db2562bdf61002c45ebe9dd65ca80b9b474f",
+      "size": 1151
+    },
+    {
+      "rfilename": "data/train-00000-of-00008.parquet",
+      "blobId": "50e0f90c54b58699a224c17836f288ac17c643ae",
+      "size": 54136363,
+      "lfs": {
+        "sha256": "09c44f9d70be1aeda517735d9ef1c7dcc4ffa8d701f403a7f5f6055eb158ea04",
+        "size": 54136363,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "data/train-00001-of-00008.parquet",
+      "blobId": "b3ac6d55d510da2a6b4560b55b13cd73c160afbb",
+      "size": 121057705,
+      "lfs": {
+        "sha256": "e7f64726f8707c05787d3238567d0c78f08dbd0ddc43f60638e8c75dd31ac1a8",
+        "size": 121057705,
+        "pointerSize": 134
+      }
+    },
+    {
+      "rfilename": "data/train-00002-of-00008.parquet",
+      "blobId": "aa714fa5c3e3c6225ff82b456424e50c71e2c67f",
+      "size": 96219824,
+      "lfs": {
+        "sha256": "9083b80453997fe855a5b8f59a3211bdcec092419a4bc79fab858b5607a09f7f",
+        "size": 96219824,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "data/train-00003-of-00008.parquet",
+      "blobId": "edbcc9ae365da15a38466cb1a68b767999611e5f",
+      "size": 44625354,
+      "lfs": {
+        "sha256": "e54f4199d6db5823fb3527297b1ee31f886a17a407f35646789952fceba3496b",
+        "size": 44625354,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "data/train-00004-of-00008.parquet",
+      "blobId": "1e711527ecc2969ce1e5bd5055edbb626028e6e6",
+      "size": 59361179,
+      "lfs": {
+        "sha256": "d7d045224a72f2ce9ed61de776f290c165de314bc65af44ff4fe88a96a31dbb8",
+        "size": 59361179,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "data/train-00005-of-00008.parquet",
+      "blobId": "88cf91fb361116e93ce42fba64f6b65e910fea7e",
+      "size": 130852242,
+      "lfs": {
+        "sha256": "24ad6911efeb05974ee533f05d07c609cce718fa25493e540bb0765dec845c2c",
+        "size": 130852242,
+        "pointerSize": 134
+      }
+    },
+    {
+      "rfilename": "data/train-00006-of-00008.parquet",
+      "blobId": "8e5714def46077ef98d7ffe20255db104f6f85ed",
+      "size": 221308596,
+      "lfs": {
+        "sha256": "ff510fe60b7789626be936d0a57965542b4336210fd87ac61ffd7bfd3f08f74e",
+        "size": 221308596,
+        "pointerSize": 134
+      }
+    },
+    {
+      "rfilename": "data/train-00007-of-00008.parquet",
+      "blobId": "c4b6bad771eaf92722d6193f672a66c26a040824",
+      "size": 216366784,
+      "lfs": {
+        "sha256": "5d7bbd6155f9d269331d32e4cc3783275db5f98e46ed8c1b8896a8e959931489",
+        "size": 216366784,
+        "pointerSize": 134
+      }
+    }
+  ],
+  "createdAt": "2025-04-11T05:28:05.000Z",
+  "usedStorage": 943928047
+}

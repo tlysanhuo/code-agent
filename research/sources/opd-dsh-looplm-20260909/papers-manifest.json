@@ -1,0 +1,90 @@
+[
+  {
+    "name": "rrt",
+    "url": "https://arxiv.org/html/2410.20672v3",
+    "retrieved_at": "2026-09-09T07:40:24.321656+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/rrt.html",
+    "sha256": "7ee2e7eba6eaa3cca6108a2ce8aeb889cabbb1758b14bf2b67a4c9dbfbebe371",
+    "bytes": 2522115
+  },
+  {
+    "name": "loopcoder_v2",
+    "url": "https://arxiv.org/html/2606.18023v1",
+    "retrieved_at": "2026-09-09T07:40:23.465636+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/loopcoder_v2.html",
+    "sha256": "4f9e408b40b1476a6d798d9502e12bd19d8528f96f34b0936878b9d21723af38",
+    "bytes": 292960
+  },
+  {
+    "name": "melt",
+    "url": "https://arxiv.org/html/2605.07721v1",
+    "retrieved_at": "2026-09-09T07:40:23.542362+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/melt.html",
+    "sha256": "d97aab8859f42fc9f82920220aabd10182a82696dd24051c9bb809e1a2e7dc79",
+    "bytes": 312354
+  },
+  {
+    "name": "looprpt",
+    "url": "https://arxiv.org/html/2603.19714v1",
+    "retrieved_at": "2026-09-09T07:40:23.701166+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/looprpt.html",
+    "sha256": "ce69915a5f2d41f090a7655a1e7718ec45782495029accfab4ebf5b8ade91c2b",
+    "bytes": 641064
+  },
+  {
+    "name": "sod",
+    "url": "https://arxiv.org/html/2605.07725v1",
+    "retrieved_at": "2026-09-09T07:40:23.806102+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/sod.html",
+    "sha256": "348bb20a7d53aa7edd0e474484b9479ecf30d398a9bc2793aee48fe8df12dc55",
+    "bytes": 708427
+  },
+  {
+    "name": "rg_opd",
+    "url": "https://arxiv.org/html/2607.04037v1",
+    "retrieved_at": "2026-09-09T07:40:23.860504+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/rg_opd.html",
+    "sha256": "7c976186091c98154be35eae19fa4506bf06f33ba915511ff7cdb0d8eef892e0",
+    "bytes": 383775
+  },
+  {
+    "name": "turnopd",
+    "url": "https://arxiv.org/html/2607.05804v1",
+    "retrieved_at": "2026-09-09T07:40:24.068176+00:00",
+    "path": "research/sources/opd-dsh-looplm-20260909/turnopd.html",
+    "sha256": "aea1f4aead93fa7526cd4feb7d16bed1b6a4691c5ed615b40f9219942d86a0e7",
+    "bytes": 541880
+  },
+  {
+    "name": "sod_v3",
+    "url": "https://arxiv.org/html/2605.07725v3",
+    "path": "research/sources/opd-dsh-looplm-20260909/sod_v3.html",
+    "bytes": 754099,
+    "sha256": "e55a5de6a06a58171664faec6421866c4fcc7fcd48c5c492e46c101a7e1bbfee",
+    "retrieved_at": "2026-09-09T07:42:41.708505+00:00"
+  },
+  {
+    "name": "shortopd_v2",
+    "url": "https://arxiv.org/abs/2607.13124v2",
+    "path": "research/sources/opd-dsh-looplm-20260909/shortopd_v2.html",
+    "bytes": 44338,
+    "sha256": "e1cdf67247ed851ec5a587e71571e97530dd4db0d763f013f40d17cebef71721",
+    "retrieved_at": "2026-09-09T07:42:41.882638+00:00"
+  },
+  {
+    "name": "ouro_paper",
+    "url": "https://arxiv.org/abs/2510.25741",
+    "path": "research/sources/opd-dsh-looplm-20260909/ouro_paper.html",
+    "bytes": 45673,
+    "sha256": "39c1953c9013554228af5c7bfa1cc372f6000b87813a329a0ca00ec3fa03c855",
+    "retrieved_at": "2026-09-09T07:42:41.701875+00:00"
+  },
+  {
+    "name": "loopcoder_branches",
+    "url": "https://api.github.com/repos/yxing-bj/vllm/branches?per_page=100",
+    "path": "research/sources/opd-dsh-looplm-20260909/loopcoder_branches.json",
+    "bytes": 1154,
+    "sha256": "83127c3554d408601438f5d5b67f666980f8a9fc2d18fee0a1cd06b036160b61",
+    "retrieved_at": "2026-09-09T07:42:41.942162+00:00"
+  }
+]

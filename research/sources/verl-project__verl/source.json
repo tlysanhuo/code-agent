@@ -1,0 +1,14 @@
+{
+  "repo": "verl-project/verl",
+  "sha": "7cb65014d3a6c84f59458367df768999e4f36c67",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/verl-project/verl/7cb65014d3a6c84f59458367df768999e4f36c67/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/verl-project/verl/7cb65014d3a6c84f59458367df768999e4f36c67/pyproject.toml"
+    }
+  ]
+}

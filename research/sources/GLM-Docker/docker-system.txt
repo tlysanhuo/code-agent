@@ -1,0 +1,58 @@
+系统信息部分
+​
+1. 系统详细信息
+​
+执行以下命令获取 Docker 系统的详细信息（包括内核版本、镜像 / 容器数量、存储驱动等）。
+shell
+docker
+system
+info
+docker
+info
+# 查看 DockerProxy 是否成功启用
+docker
+info
+|
+grep
+docker-proxy
+# 查看当前 DockerProxy 版本号
+# 格式为 版本号@构建时间
+docker
+info
+|
+grep
+"Server Version"
+2. 清理操作
+​
+通过以下命令清理无用资源。
+shell
+# 清理悬空镜像（无标签）、停止的容器、未使用的网络
+docker
+system
+prune
+# 强制清理，可添加 -f 或 --force 参数跳过确认（谨慎使用）：
+docker
+system
+prune
+-f
+# 彻底清理（包括非悬空镜像），可添加 -a 或 --all 参数：
+docker
+system
+prune
+-a
+# 清理已停止容器
+docker
+container
+prune
+WARNING
+docker images prune # （清理无用镜像）暂未支持
+3. 版本信息查询
+​
+执行该命令可获取版本相关信息。
+shell
+# 显示客户端和服务端版本
+docker
+version
+# 仅显示客户端版本
+docker
+--version

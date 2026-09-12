@@ -24,7 +24,7 @@
     "policy_update_and_weight_sync": "slime / Megatron",
     "task_orchestration": "examples.coding_agent_rl.generate.generate",
     "task_preparation_and_scoring": "examples.coding_agent_rl.swe",
-    "dsh_lifecycle": "slime_dsh.harness.DshHarness; CPU-tested BaseHarness extension"
+    "dsh_lifecycle": "slime BaseHarness extension pending"
   },
   "execution": {
     "upstream_training_entry": "vendor/slime/train.py",
@@ -33,12 +33,10 @@
       "claude_code",
       "codex"
     ],
-    "dsh_registered": true,
+    "dsh_registered": false,
     "environment_provider": "upstream E2B-compatible; project-local execution backend not connected",
     "gpu_dependencies_installed": false,
-    "launch_ready": false,
-    "custom_generate_function_path": "slime_dsh.generate.generate",
-    "dsh_registration_scope": "Project hook binds upstream example classes; upstream source unchanged, no external DSH registry API."
+    "launch_ready": false
   },
   "cpu_environment": {
     "path": ".venv-slime-cpu",
@@ -71,5 +69,6 @@
     "trajectories_per_task": 2,
     "max_lora_updates": 1
   },
+  "legacy_evidence": "runtime/slime/legacy",
   "scope": "Architecture migration and CPU protocol checks only. No real model rollout, benchmark, GPU worker or parameter update. No replacement training/evaluation pipeline."
 }

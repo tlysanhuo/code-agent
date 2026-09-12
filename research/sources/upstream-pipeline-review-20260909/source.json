@@ -1,0 +1,530 @@
+{
+  "scope": "source/documentation review only; no installation or execution",
+  "repositories": [
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "directory": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent",
+      "readme_sha256": "be83f567343253db954c5ecbcff3c62e4e661420b3ff8fc18122b23f37ebd0e8",
+      "checked_utc": "2026-09-09T16:19:55.441860+00:00"
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "directory": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning",
+      "readme_sha256": "7079f300af1634079c36060a0e6dab74f938ffc94c1791d7fc4dc227451543a5",
+      "checked_utc": "2026-09-09T16:19:56.930410+00:00"
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "directory": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm",
+      "readme_sha256": "1fda5daf4b4cabf593b2c1364133ff44380f5332c320e8cf3025083844e3d50b",
+      "checked_utc": "2026-09-09T16:19:58.178761+00:00"
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "directory": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL",
+      "readme_sha256": "ff5ba16bf7e4f7ab8e28bba9c038d082038c41d2a7997920a3a813a51ffce328",
+      "checked_utc": "2026-09-09T16:19:59.650645+00:00"
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "directory": "research/sources/upstream-pipeline-review-20260909/THUDM__slime",
+      "checked_utc": "2026-09-09T16:22:47.181550+00:00"
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "directory": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL",
+      "checked_utc": "2026-09-09T16:22:49.171634+00:00"
+    },
+    {
+      "repo": "OpenRLHF/OpenRLHF",
+      "commit": "3c3be6234e0cb353e76bb8019947db9dfe99fca7",
+      "directory": "research/sources/upstream-pipeline-review-20260909/OpenRLHF__OpenRLHF"
+    }
+  ],
+  "files": [
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/pyproject.toml",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/pyproject.toml",
+      "sha256": "52eea3bae22032cf09aba51bf20ddc027c07ca45405354a4128ceb92f2b99577",
+      "bytes": 2672
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/docs/source/quickstart/installation.md",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/docs/source/quickstart/installation.md",
+      "sha256": "d6d2ebbcdab64fd2d86f5e169c50210aaabbc1bd28a6c3a244a1ad7c44553297",
+      "bytes": 2014
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/examples/quickstart/training/train_qwen3p5_dense.sh",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/examples/quickstart/training/train_qwen3p5_dense.sh",
+      "sha256": "42bac54bbb5d44068ce009a40d2d39d858de38e3dac2e10fc82013d95f2ab4eb",
+      "bytes": 14400
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/examples/mini_swe_agent/README.md",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/examples/mini_swe_agent/README.md",
+      "sha256": "8e173ab122205f517db26a05beec142d0311754cb2a798cd0f051547d92e7c37",
+      "bytes": 14707
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/examples/mini_swe_agent/run_train.sh",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/examples/mini_swe_agent/run_train.sh",
+      "sha256": "3fd10043523fa7a1deeaff5b915219f0c22ca70d28f168c6ffc2cdba425510eb",
+      "bytes": 22216
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/agents/mini_swe_agent/agent.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/agents/mini_swe_agent/agent.py",
+      "sha256": "25e887581b0e6d2d32defe2bf8024199a68635c37d0caac13d7a474268999836",
+      "bytes": 7081
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/framework/entry.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/framework/entry.py",
+      "sha256": "d5f0fcf3cfb36224e14bb2bdb1a27cdb20d64cfb413288913da62627d3630401",
+      "bytes": 6968
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/framework/framework.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/framework/framework.py",
+      "sha256": "b1a1630919ccd3d52282598371df7d4963163af3794f98894a99285d25690be4",
+      "bytes": 54859
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/framework/task_runner.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/framework/task_runner.py",
+      "sha256": "2667e3e396e62ceefa7ae8d4f237f1d71847e739c774b38b3502bd7980dbf70b",
+      "bytes": 6614
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/gateway/session/codec.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/gateway/session/codec.py",
+      "sha256": "581bbc714df3f791ffb99857042bdcad30b4e7eebf82f8a4a06acad9f2f5873c",
+      "bytes": 17808
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/gateway/adapters/openai.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/gateway/adapters/openai.py",
+      "sha256": "e07e7a266f6688981d376aead68b68937b3736baab9a00dc8266d52be14f78ae",
+      "bytes": 8668
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/tasks/swe_rebench/preprocess.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/tasks/swe_rebench/preprocess.py",
+      "sha256": "0358a8a5f1afdfdf2e9ac98b21e0c5afca4bedb676bec4fc211b4a497e4902b9",
+      "bytes": 3084
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/tasks/swe_rebench/task.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/tasks/swe_rebench/task.py",
+      "sha256": "91699cc9a39543e83bccb71cdbd725fa6241c0d9def836e22be41c3029508cfb",
+      "bytes": 4796
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/tasks/swe_rebench/reward.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/tasks/swe_rebench/reward.py",
+      "sha256": "9bf084b5b265da6bbab7233c2eb8155185d9094aa1e61d6902e7093bc5661571",
+      "bytes": 7782
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/sandbox/local.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/sandbox/local.py",
+      "sha256": "37cded40f782e7c5e3491273b66d55cc3e031a2e2f4fa54e53b26b2e7c73aa33",
+      "bytes": 2125
+    },
+    {
+      "repo": "verl-project/uni-agent",
+      "commit": "bb96ecab183bdf0c3dba6958fd81d3bd96a024cd",
+      "path": "research/sources/upstream-pipeline-review-20260909/verl-project__uni-agent/uni_agent/sandbox/base.py",
+      "url": "https://raw.githubusercontent.com/verl-project/uni-agent/bb96ecab183bdf0c3dba6958fd81d3bd96a024cd/uni_agent/sandbox/base.py",
+      "sha256": "258cb472b50196eb158976c5cb259cf32cf2e4288753d92abed126fc65496bda",
+      "bytes": 19195
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/pyproject.toml",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/pyproject.toml",
+      "sha256": "759526db1aa7491f31924a0f4e1dde1b019e79ef9df335aff611b8b80f6fe132",
+      "bytes": 3430
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/examples/swe_smith/train_smith_agent.py",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/train_smith_agent.py",
+      "sha256": "2f1322328f1751481e2f6a7daa68b4723dcafdc78cf673213b8ca3d5578bb0db",
+      "bytes": 9870
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/examples/swe_smith/agents/smith_agent.py",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/agents/smith_agent.py",
+      "sha256": "72a6b8950578f929700918127e5da15c4b7051ef906a0532efe53546e78fe433",
+      "bytes": 39030
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/examples/swe_smith/run.sh",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/run.sh",
+      "sha256": "25e91d2dc03df29789e56b48698c99349a4054cbb0b742583b59d1a5640451a5",
+      "bytes": 4667
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/scripts/setup_verl.sh",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/scripts/setup_verl.sh",
+      "sha256": "68011a01915252e57fbf9875c8f9dd13333dae775eeb670fba48665073a70fa2",
+      "bytes": 3297
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/agentlightning/controller/local_reconciler.py",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/agentlightning/controller/local_reconciler.py",
+      "sha256": "9fa001134caf97711fe105615d4f7a15283eae1c2b0b55c1ea21b35078a25a76",
+      "bytes": 11464
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "commit": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+      "path": "research/sources/upstream-pipeline-review-20260909/microsoft__agent-lightning/agentlightning/server/proxy.py",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/agentlightning/server/proxy.py",
+      "sha256": "e908ca79591e3a58a703a1360c2eea4a796433454e47a5a07965f40a68d512f0",
+      "bytes": 8806
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm/pyproject.toml",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/pyproject.toml",
+      "sha256": "958fefa0c259b11627f48b8bee7101d43e29b74fe2214a4ad6185232e33ec2de",
+      "bytes": 4832
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm/examples/harbor_swe/train_harbor.sh",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/examples/harbor_swe/train_harbor.sh",
+      "sha256": "d1f0738a77a1f80ecc3b7a526d19065025bd1c355eb48894d2009dfa05cbfe9e",
+      "bytes": 1739
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm/rllm/trainer/unified_trainer.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/trainer/unified_trainer.py",
+      "sha256": "86d8e0c28d70ceb7692ee0599fe5178a8c5243cbc3f4a8050427dedf545af3d3",
+      "bytes": 51899
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm/rllm/harnesses/cli_harness.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/harnesses/cli_harness.py",
+      "sha256": "7f84d561f6f1219fb3f8a086e6608b55de7538c68717a62ba4d454cdaccb789f",
+      "bytes": 12650
+    },
+    {
+      "repo": "rllm-org/rllm",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "path": "research/sources/upstream-pipeline-review-20260909/rllm-org__rllm/rllm/sandbox/sandboxed_flow.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/sandbox/sandboxed_flow.py",
+      "sha256": "9a30a70556d247695dee72c730658cb374c78549f9fc59840d5bd6c28fa0669c",
+      "bytes": 5691
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/README.md",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/README.md",
+      "sha256": "a95e59ba6100ed84defd4f39cf727d95a619b02ff89434ca99a6f1388b74bc6d",
+      "bytes": 3926
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/run_mini_swe_8B.sh",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/run_mini_swe_8B.sh",
+      "sha256": "d5fc3f6c54af43aea62139bd10f32a5d8d988259f9a22fad5c34ffb15a961745",
+      "bytes": 2814
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/run_mini_swe_30B.sh",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/run_mini_swe_30B.sh",
+      "sha256": "8ea6721bd1cb1e958cbfe73c349826c330a365ab65285d102fb5cb34b4e39072",
+      "bytes": 2901
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/mini_swe_generator.py",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/mini_swe_generator.py",
+      "sha256": "dbfabbe212e8f7ef9bef6f9a8f9fc0e8085d7ca734ec4beaeac0289d12da3173",
+      "bytes": 11376
+    },
+    {
+      "repo": "NovaSky-AI/SkyRL",
+      "commit": "ba3487ae66917d37d82d4c4482c44f4e252f45b0",
+      "path": "research/sources/upstream-pipeline-review-20260909/NovaSky-AI__SkyRL/examples/train/mini_swe_agent/mini_swe_utils.py",
+      "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/ba3487ae66917d37d82d4c4482c44f4e252f45b0/examples/train/mini_swe_agent/mini_swe_utils.py",
+      "sha256": "0c682607ee410ac51b1e6eb4c71b4cb1a75a6f64441c038681bbe7e3b45ede82",
+      "bytes": 3791
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/README.md",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/README.md",
+      "sha256": "60a91389e19dd1f36c33e31da1aa57f9755d9083c906eb28fa812792ef71d921",
+      "bytes": 20097
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/examples/coding_agent_rl/README.md",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/examples/coding_agent_rl/README.md",
+      "sha256": "646fd38afdcda441e853d378651171bb7657de0d1873deda2e152c0d93ef8e9f",
+      "bytes": 12470
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/examples/coding_agent_rl/generate.py",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/examples/coding_agent_rl/generate.py",
+      "sha256": "493f995c961ae302d81725c134f122a6933a4396236a498d514550dd8d7707b1",
+      "bytes": 14155
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/examples/coding_agent_rl/swe.py",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/examples/coding_agent_rl/swe.py",
+      "sha256": "ca8f69d23bb7f3b0fadd8e9bdccb6519ff87367203ae4f39e195696a752cfca7",
+      "bytes": 20626
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/docs/zh/get_started/agent.md",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/docs/zh/get_started/agent.md",
+      "sha256": "81d2aecaa7930becbf0855ce1a970a81337949f8b760b73073b19a639c615722",
+      "bytes": 6922
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/README.md",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/README.md",
+      "sha256": "fcb17908893986e0c4adb674d7b82e921b0da6655757ff5ddf4626aab1f99cad",
+      "bytes": 27589
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/docs/en/tutorial/agentic_rl.md",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/docs/en/tutorial/agentic_rl.md",
+      "sha256": "1cc7ca66ab97cfad40b95a889b41e2481d901eaa512f8afbedffd969b1c5289a",
+      "bytes": 12818
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/docs/en/tutorial/online_proxy.md",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/docs/en/tutorial/online_proxy.md",
+      "sha256": "bd69339765490260021cfe39f26d11fec7c703e3d79b82d544f522a5f3424675",
+      "bytes": 15851
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/examples/swe/README.md",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/examples/swe/README.md",
+      "sha256": "1e8f95785e896d9ee6f1f2650389e309e8f699fefbf9c7fb026acc01138e1f66",
+      "bytes": 9577
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/docs/en/reference/lora.md",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/docs/en/reference/lora.md",
+      "sha256": "816d15f449eefe9c07931c23634045390188e436af64cd61fc24ad78621b9227",
+      "bytes": 3112
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/areal/experimental/openai/proxy/server.py",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/areal/experimental/openai/proxy/server.py",
+      "sha256": "03c2b36487e9909ea7de6e62d157deacf043d92de90d8c7fcd784d0422881e8c",
+      "bytes": 9122
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/tests/experimental/openai/test_streaming_chat_completions.py",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/tests/experimental/openai/test_streaming_chat_completions.py",
+      "sha256": "3627d4de683c8b7fdb60211ba95adfb3c827e009a3482eecd771f0adc16523b1",
+      "bytes": 8069
+    },
+    {
+      "repo": "OpenRLHF/OpenRLHF",
+      "commit": "3c3be6234e0cb353e76bb8019947db9dfe99fca7",
+      "path": "research/sources/upstream-pipeline-review-20260909/OpenRLHF__OpenRLHF/examples/python/agent_func_openai_server_executor.py",
+      "url": "https://raw.githubusercontent.com/OpenRLHF/OpenRLHF/3c3be6234e0cb353e76bb8019947db9dfe99fca7/examples/python/agent_func_openai_server_executor.py",
+      "sha256": "a00574fd6d36160cc31fd61020a413d0f9b1dfae760b7cfadba170a89888288f",
+      "bytes": 12477
+    },
+    {
+      "repo": "areal-project/AReaL",
+      "commit": "f289b989bc5d1930d5c6d592d335e2ffaf8c2f01",
+      "path": "research/sources/upstream-pipeline-review-20260909/areal-project__AReaL/areal/experimental/openai/proxy/proxy_rollout_server.py",
+      "url": "https://raw.githubusercontent.com/areal-project/AReaL/f289b989bc5d1930d5c6d592d335e2ffaf8c2f01/areal/experimental/openai/proxy/proxy_rollout_server.py",
+      "sha256": "e7b4feda56f05c25f3320279926e417f02efda16d34f737a8a85d666b0bd73e7",
+      "bytes": 42194
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/scripts/run-qwen3.5-27B.sh",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/scripts/run-qwen3.5-27B.sh",
+      "sha256": "f6c653a6580a6997554805857136ec9a14d807d6d2c2447e7c7679f3c0a426b6",
+      "bytes": 5033
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/scripts/models/qwen3.5-27B.sh",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/scripts/models/qwen3.5-27B.sh",
+      "sha256": "7faa8dd7c964f05b34544beefa11317a972fdcb94cda5a1866041e8144580f8b",
+      "bytes": 599
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/slime/utils/arguments.py",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/slime/utils/arguments.py",
+      "sha256": "02bd92253fd1e87298a9e4c14f183426eed52ed269eabad2550599f511ae2aea",
+      "bytes": 93052
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/slime/backends/megatron_utils/model.py",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/slime/backends/megatron_utils/model.py",
+      "sha256": "2d9c16dfe1759c43955c9763e4e446aed708fe305aa01ea1b049da4e7f38a5fa",
+      "bytes": 42000
+    },
+    {
+      "repo": "THUDM/slime",
+      "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+      "path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/slime/agent/adapters/openai.py",
+      "url": "https://raw.githubusercontent.com/THUDM/slime/4c193f1f37509cca70f0e88807a9305b70f63f4e/slime/agent/adapters/openai.py",
+      "sha256": "e68af264a6ab6436298091a3374d61bc75f128610402c0f5ae201e1a01133af0",
+      "bytes": 14500
+    }
+  ],
+  "completed_utc": "2026-09-09T16:25:46.317256+00:00",
+  "findings": {
+    "priority": "Previous AGL preference withdrawn as an unverified DSH compatibility claim: fixed AGL rejects stream=true; first CPU integration gate reproduced HTTP 400.",
+    "adopted_framework": null,
+    "migration_performed": false,
+    "target_combo_verified": false,
+    "uni_agent_bundled_verl": "fefb080262e1c015a0ea05f958822a6a512dc795",
+    "local_verl": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+    "data_preprocessor_documentation_mismatch": "Uni-Agent guide names curated 1150 dataset; pinned preprocessor loads nebius/SWE-rebench filtered without revision and outputs a different default filename than dense launcher.",
+    "priority_reason": "Inspected AGL native forwarding versus Uni-Agent MessageCodec.decode_response and completed-outcome SSE adapter; target DSH thinking/tool replay compatibility remains unverified.",
+    "post_agl_candidates": {
+      "rllm": "Native streaming implemented and prior project CPU DSH fixture evidence at gateway layer; whole trainer unverified",
+      "areal": "Streaming endpoint and corresponding tests inspected at f289b989; FSDP2+vLLM LoRA documented, no project runtime test",
+      "openrlhf": "Current OpenAI executor example returns JSON content, no SSE/tool-call response branch; not a direct DSH replacement"
+    }
+  },
+  "project_records": [
+    {
+      "path": "README.md",
+      "sha256": "a7e05a1d34d65caf6a1e0d01e8c35e79aeed89ad824aa523c7e704585455a220"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "6559eb11c67981b78639f95778fca7f2ee40ee3bab3adf0c468abfad6c6bb8b2"
+    },
+    {
+      "path": "configs/agent-rl/readiness.json",
+      "sha256": "5dbed3b189a4c03f9c3835ea571d1bb74ba59761ed01774629ce7b2111a0762a"
+    },
+    {
+      "path": "runtime/agent-rl/pipeline-review-hold.json",
+      "sha256": "a55488f2bffa71487b41cd3d91a0d74a226bdda21802662e1899f455bf2b4428"
+    }
+  ],
+  "updated_utc": "2026-09-09T16:59:28.087586+00:00",
+  "combination_support_sources": [
+    "https://www.deepseek.com/harness/en/",
+    "https://huggingface.co/Qwen/Qwen3.5-27B",
+    "https://huggingface.co/docs/peft/main/package_reference/lora",
+    "https://microsoft.github.io/agent-lightning/latest/75-example-coding-agent/"
+  ],
+  "agl_integration_evidence": "runtime/agent-rl/agl-integration/acceptance.json",
+  "slime_suitability": {
+    "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+    "ownership_sources": [
+      "https://github.com/THUDM",
+      "https://docs.z.ai/guides/llm/glm-5",
+      "https://www.lmsys.org/blog/2025-07-09-slime/"
+    ],
+    "qwen35_27b_script_present": true,
+    "script_default_actor_gpus": 32,
+    "default_is_not_proven_minimum": true,
+    "lora_pr": {
+      "url": "https://github.com/THUDM/slime/pull/1865",
+      "state": "open",
+      "merged": false,
+      "checked_utc": "2026-09-09T16:59:28.087586+00:00",
+      "metadata_path": "research/sources/upstream-pipeline-review-20260909/THUDM__slime/lora-pr-1865.json",
+      "sha256": "29ffa71ec5870f9eba2156c03f3679ef6aef7043af35a62f887afea85f78708c"
+    },
+    "assessment": "Strong architecture for coding-agent RL; current pinned main not established as a supported 2-H100 27B BF16 LoRA path. No installation or runtime check performed."
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "updated_utc": "2026-09-09T15:05:11.326518+00:00",
+  "scope": "Qwen3.5-27B BF16 + LoRA + DSH Agent RL engineering preparation",
+  "training_launch_ready": false,
+  "launch_guard_exit": 2,
+  "registered_agent_loop": true,
+  "source_commits": {
+    "verl": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+    "rllm": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+    "dsh": "a66e4702047846cdaa10c66c9d3df3951f5ea70d"
+  },
+  "training_environment": {
+    "protocol": "custom-training-pytest-v1",
+    "backend": "project-local worktree and restricted process",
+    "official_benchmark_result": false,
+    "qualified_tasks": [
+      {
+        "instance_id": "dask__dask-10009",
+        "fingerprint": "1b96f27061fd142324ad33e206e77fbc13dd14906d66b5135d745f6ea74962c0",
+        "qualification": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10009/qualification-20260909T145603/qualification.json",
+        "executed_tests": 364,
+        "skipped_tests": 1
+      },
+      {
+        "instance_id": "dask__dask-10027",
+        "fingerprint": "3fe627430edf4d4b792f2ac9014eeafd04afb1807714f4c59c5a04c892dff76d",
+        "qualification": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10027/qualification-20260909T145736/qualification.json",
+        "executed_tests": 532,
+        "skipped_tests": 28
+      }
+    ],
+    "task_dependencies": ".venv-train-dask",
+    "python": "3.10.18",
+    "packages": 33,
+    "max_verifier_address_space_bytes": 3221225472,
+    "verifier_seconds": 120,
+    "task_threads": 2
+  },
+  "native_reuse": "Unchanged upstream rLLM native HTTP/SSE gateway and trace-to-DataProto; verl AgentLoopBase/AgentLoopOutput with native vLLM Qwen parsers",
+  "budgets": {
+    "max_concurrent_environments": 1,
+    "requests": 12,
+    "trajectory_seconds": 600,
+    "prompt_tokens": 4096,
+    "response_region_tokens": 4096,
+    "context_tokens": 8192,
+    "tool_observation_tokens": 1024,
+    "rollout_n": 2,
+    "train_batch_size": 2
+  },
+  "checks": {
+    "real_dsh_scripted_model_fixture": "runtime/agent-rl/training-interface-checks/28b102bcfdd1/acceptance.json",
+    "native_contract": "runtime/agent-rl/native-interface-check/acceptance.json",
+    "actual_training_data_and_config": "runtime/agent-rl/training-data-check.json",
+    "upstream_cli_config": "runtime/agent-rl/training-config-resolved.yaml",
+    "launch_refused": "runtime/agent-rl/training-launch-refused.json"
+  },
+  "preserved_failures": [
+    {
+      "path": "runtime/agent-rl/training-interface-checks/d83a2666eb15/acceptance.json",
+      "reason": "Resolving virtualenv interpreter symlink discarded task site-packages; lexical interpreter path now preserved"
+    },
+    {
+      "path": "logs/agent-rl-training-dask-preparation-1.log",
+      "reason": "Missing explicit pytest plugin and bounded-thread environment; fixed dependencies and DASK_NUM_WORKERS=2"
+    },
+    {
+      "path": "logs/agent-rl-training-data-check.log",
+      "reason": "Check assumed attention_mask field; pinned upstream dataset returns raw_prompt"
+    },
+    {
+      "path": "logs/agent-rl-training-data-check-2.log",
+      "reason": "Superseded token-length measurement counted BatchEncoding keys; final check explicitly measures input_ids"
+    }
+  ],
+  "real_model_rollouts": 0,
+  "parameter_updates": 0,
+  "gpu_initializations": 0,
+  "containers_started": 0,
+  "limitations": [
+    "CPU scripted model arrays do not establish actual Qwen token/logprob alignment or policy synchronization.",
+    "No real GPU forward/backward, weight transfer, sleep/wake or checkpoint recovery.",
+    "Optional tests skipped: 1 of 365 for dask-10009 and 28 of 560 for dask-10027; actual sets/failures match qualification.",
+    "Only two of the original eight audited tasks have prepared environments; not a production data scale.",
+    "Requires current host UID/namespace/Landlock capabilities on future execution host.",
+    "Full verifier trust/fidelity for broader task types needs review; these are custom training rewards, never official benchmark scores."
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "9b96e865bee76ecdf7a64f94571a37038a3251f6de52b9e75d05f0451b336227"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "817a1d213824a2168270a000592b59991677e5a3654ce7f8dfb56965c71cf098"
+    },
+    {
+      "path": "scripts/agent_rl.sh",
+      "sha256": "a4647497fcd39d5b2a5b3aa1129fe6b0d3dbd605a38693ba70f6f4a992b83356"
+    },
+    {
+      "path": "scripts/agent_rl_native.py",
+      "sha256": "0bd29f499b1449d738d5f81aace0e2f2900646858884d14dc0dd5e030d66927b"
+    },
+    {
+      "path": "scripts/agent_rl_dsh_loop.py",
+      "sha256": "265f255717f08b96a95357e8975da28a6aced9b3bf2a8ebb3779bdca4990bb2d"
+    },
+    {
+      "path": "scripts/agent_rl_dsh_worker.py",
+      "sha256": "93ed05d18d541def3420cc46181fd7baf01837f2b8544bb0990d469d803ab915"
+    },
+    {
+      "path": "scripts/agent_rl_training_runtime.py",
+      "sha256": "e8ea08e05777e6f6c34fef1c05e65eb2b3677b85099170e1e682c9e92e259cbf"
+    },
+    {
+      "path": "scripts/agent_rl_training_task.py",
+      "sha256": "89448a17cdd520b3b43c4ba79a0837fb13713ecd01d6fd8059a3f25f607fee25"
+    },
+    {
+      "path": "scripts/check_agent_rl_training.py",
+      "sha256": "a5f241fb7daa0df38fe29d40069f0eb1b7b03f9194e4bf20acff37ba4611d089"
+    },
+    {
+      "path": "scripts/check_agent_rl_training_data.py",
+      "sha256": "57fe364df455c2f266bde5b99e5bc7bbf9c3d88ed689c2b79388d54d348d2092"
+    },
+    {
+      "path": "scripts/prepare_agent_rl_training_tasks.py",
+      "sha256": "91d8923a3ebffd3cfda32a00f43331cdde47bd0e3075364328ba8f9f08879954"
+    },
+    {
+      "path": "scripts/gym_task_env.py",
+      "sha256": "a65266c27ee65c292c4a25d1f0afded96df9b11a507150cbb95aa9d8c2f73f1f"
+    },
+    {
+      "path": "configs/agent-rl/qwen35_27b_lora_2h100.yaml",
+      "sha256": "7954f92fa8254b1efaf67fa964af7dc8cf68c154c2c3d22d43ecd8f944053447"
+    },
+    {
+      "path": "configs/agent-rl/native_http/vllm.yaml",
+      "sha256": "00246ff79e969582848390245c9af898750cabe7c008adc34aa3c995882c0376"
+    },
+    {
+      "path": "configs/agent-rl/training_runtime/local.yaml",
+      "sha256": "06585dd58c3cab59e8ce9ef4082ed58811d307893bbc22c32e662f1a795a2e5b"
+    },
+    {
+      "path": "configs/agent-rl/agent_loops.yaml",
+      "sha256": "ee150af8712a339e2222985184f3896c10871c0acdd86e56a1ea3100215287ca"
+    },
+    {
+      "path": "configs/agent-rl/dsh-qwen-rl.patch.yml",
+      "sha256": "ceace11b2da30e56b7a8051c438bec24e7808a74b62ca2094535f715a81f4005"
+    },
+    {
+      "path": "configs/agent-rl/training-tasks.json",
+      "sha256": "98ec8a2fb72434269b7abe06ac7a6ef51ef4a491d764afe9546d1ec7127b694f"
+    },
+    {
+      "path": "configs/agent-rl/readiness.json",
+      "sha256": "387229af144e1b9dd1bf3f8e2f7a0d1e9879e605ddecaf9fffbb6cb80d9afe51"
+    },
+    {
+      "path": "configs/agent-rl/dsh-interface.json",
+      "sha256": "b95749cdbca24d7563886147ccfb5e47dd0926813266c5dd9acf21009ca788ef"
+    },
+    {
+      "path": "configs/agent-rl/native-interfaces.json",
+      "sha256": "21eccdc207836dfeadafcb201000296a16795d0fceb69467cee1e2835917e68b"
+    },
+    {
+      "path": "data/agent-rl/train-ready.parquet",
+      "sha256": "84ebd3080c45a6b085f700d62ff47e38dfb013b726f2b0cc5887092ad953f91e"
+    },
+    {
+      "path": "data/agent-rl/train-ready-manifest.json",
+      "sha256": "552eb7de881f91f6aa043cc98b9bd1e08236ec0b6df8fbeb6aa7f3ac6efd428d"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask-dependencies.lock",
+      "sha256": "b1616497cfb729efa107b95e70d1348469dcbac92767e527a27e48057715a79e"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dependency-source.json",
+      "sha256": "66b368288ff5018191d1a906b52d80b8ed60d9686de34390c8d1994c5b20c957"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10009/task.json",
+      "sha256": "7c36130766449a8cce538461053b179751a0ae509284c67a2f84e7f6c4b25c5c"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10009/source.json",
+      "sha256": "1e3fb9d1e5d4379ba962c11b3d8f741ea9858c7e7733d8694d6cf0aef85d2558"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10009/qualification-20260909T145603/qualification.json",
+      "sha256": "a449d040bd651ab9e7b7d9649268f510c8cae39ff7e516b6888d56f1c1c665d4"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10027/task.json",
+      "sha256": "6298b5ca6b79004fd7715b5ef08c2dc39a1c26159d774a86c4e9d694ecbb58e2"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10027/source.json",
+      "sha256": "8851c4c4e60eae453f800284d26d63acadeca3b4f85834d7acac1105afa576f8"
+    },
+    {
+      "path": "runtime/agent-rl/training-environments/dask__dask-10027/qualification-20260909T145736/qualification.json",
+      "sha256": "be30ed5a73f551c320ce402c7b7f022e6dd53fd2360889981be705e005e4d1cc"
+    }
+  ]
+}

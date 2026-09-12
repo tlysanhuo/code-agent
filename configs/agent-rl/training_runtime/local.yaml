@@ -1,0 +1,20 @@
+# @package _global_
+# Custom TRAINING environments. This does not change benchmark protocol.
+data:
+  train_files: ${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train-ready.parquet
+  # Loader plumbing only; validation remains disabled in the primary config.
+  val_files: ${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train-ready.parquet
+actor_rollout_ref:
+  rollout:
+    agent:
+      agent_loop_config_path: ${oc.env:CODE_AGENT_ROOT}/configs/agent-rl/agent_loops.yaml
+dsh_training:
+  task_registry: ${oc.env:CODE_AGENT_ROOT}/configs/agent-rl/training-tasks.json
+  run_root: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/training-runs
+  dsh_patch: ${oc.env:CODE_AGENT_ROOT}/configs/agent-rl/dsh-qwen-rl.patch.yml
+  trajectory_seconds: 600
+ray_kwargs:
+  ray_init:
+    runtime_env:
+      env_vars:
+        PYTHONPATH: ${oc.env:CODE_AGENT_ROOT}/scripts

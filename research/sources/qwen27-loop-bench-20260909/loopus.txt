@@ -1,0 +1,1175 @@
+LoopUS: Recasting Pretrained LLMs into Looped Latent Refinement Models
+// Restore the saved color scheme preference, or
+// enact the browser preference if "automatic",
+// without expecting DOM load to have completed.
+//
+// Also restore any saved readingmode and ToC display preferences.
+function initializeReadingPreferences() {
+let saved_theme = localStorage.getItem("ar5iv_theme") || "automatic";
+if (saved_theme === "automatic") {
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+saved_theme = "dark";
+}
+}
+if (saved_theme == "dark") {
+document.documentElement.setAttribute("data-theme", "dark");
+} else {
+document.documentElement.setAttribute("data-theme", "light");
+}
+const tocDisplay = localStorage.getItem('arxiv_html_paper_toc_display');
+if (tocDisplay) {
+document.documentElement.setAttribute("data-toc-display", tocDisplay);
+}
+const readingMode = localStorage.getItem('arxiv_html_paper_reading_mode');
+if (readingMode) {
+document.documentElement.setAttribute("data-reading-mode", readingMode);
+}
+// Pre-apply spinout-banner dismissal here, before the banner paints, so it
+// never flashes in only to be hidden later by the deferred arxiv-header.js.
+// Key matches arxiv-header.js: "arxiv-banner-dismissed:" + data-banner-name.
+if (localStorage.getItem('arxiv-banner-dismissed:spinout-nonprofit')) {
+document.documentElement.setAttribute("data-banner-dismissed", "");
+}
+}
+// Run as soon as JS starts, to minimize repainting
+initializeReadingPreferences();
+/* Banner pre-dismissal (set above before paint -> no flash-then-hide) and
+reading-mode chrome hiding. */
+html[data-banner-dismissed] .ds-announcement { display: none; }
+html[data-reading-mode="enabled"] .ds-announcement,
+html[data-reading-mode="enabled"] .ds-site-footer { display: none; }
+/* Keep the announcement text dark on the Open-Blue band in both colour themes
+(otherwise it inherits the paper's warm-wash text in dark mode and washes out). */
+.ds-announcement-text { color: var(--arxiv-ink, #1c1a17); }
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1 Introduction
+2 Background
+LLM Hidden State Representations.
+Looped LLMs.
+Deep Learning Gating Mechanisms.
+3 Looped Depth Up-Scaling (LoopUS)
+3.1 Recasting LLM as a Looped LLM
+Selective Gating for Stable Loop Dynamics.
+Adaptive Computation via Early Stopping Mechanism.
+Random Deep Supervision for Loop Training.
+3.2 Training Objective
+Overall Objective.
+Refinement Losses.
+Confidence Loss.
+4 Empirical Validation
+4.1 Evaluation Protocol
+4.2 Backbone-Level Evaluation across Model Scales
+4.3 Comparison with Prior Methods under Limited Training Budgets
+4.4 Inference-Time Recursion-Depth Analysis
+4.5 Dynamics of Stable Latent Refinement
+4.6 Component Ablation Study
+5 Conclusion
+References
+A Experimental Details
+A.1 Backbones and Training Data
+A.2 Optimization Details
+A.3 Evaluation Details
+A.4 KV-Cache Implementation for Autoregressive Inference
+A.5 Halting and Recursion Diagnostics
+B Dynamical and Geometric Interpretation of LoopUS
+C Additional Qualitative Example
+D Hidden-State Trajectory Analysis
+E Halting Strategies
+Threshold-based halting.
+Convergence-based halting.
+CDF-based halting.
+Discussion.
+F Limitations and Future Work
+Extension beyond text-only language modeling.
+Heterogeneous and hybrid model architectures.
+Scaling to larger and more diverse training regimes.
+Dedicated math and long-context reasoning coverage.
+Integration with instruction tuning and preference optimization.
+LoopUS applied to diffusion LLMs.
+LoopUS as a pretraining-native architecture.
+License: CC BY-NC-ND 4.0
+arXiv:2605.11011v1 [cs.LG] 10 May 2026
+LoopUS: Recasting Pretrained LLMs into Looped Latent Refinement Models
+Taekyhun Park
+Affiliation: Department of Data Science
+Affiliation: Pusan National University
+Affiliation: Busan, Republic of Korea
+Email: pthpark1@pusan.ac.kr
+Yongjae Lee
+Affiliation: Department of Industrial Engineering
+Affiliation: Pusan National University
+Affiliation: Busan, Republic of Korea
+Email: yongzzai1102@gmail.com
+Dohee Kim
+Affiliation: Department of Artificial
+Affiliation: Intelligence Engineering
+Affiliation: Changwon National University
+Affiliation: Changwon, Republic of Korea
+Email: kimdohee@changwon.ac.kr
+Hyerim Bae
+††thanks: Corresponding author
+Affiliation: Department of Industrial Engineering
+Affiliation: Pusan National University
+Affiliation: Busan, Republic of Korea
+Email: hrbae@pusan.ac.kr
+Abstract
+Looped computation shows promise in improving the reasoning-oriented performance of LLMs by scaling test-time compute. However, existing approaches typically require either training recurrent models from scratch or applying disruptive retrofits, which involve substantial computational costs and may compromise pretrained capabilities. To address these limitations, we introduce Looped Depth Up-Scaling (LoopUS), a post-training framework that converts a standard pretrained LLM into a looped architecture. As a key technical contribution, LoopUS recasts the pretrained LLM into an encoder, a looped reasoning block, and a decoder. It operationalizes this latent-refinement architecture through four core components: (1) block decomposition, guided by staged representation dynamics; (2) an input-dependent selective gate to mitigate hidden-state drift; (3) random deep supervision for memory-efficient learning over long recursive horizons; and (4) a confidence head for adaptive early exiting. Collectively, these mechanisms transform a standard non-looped model into a looped form while stabilizing it against both computational bottlenecks and representation collapse. Through stable latent looping, LoopUS improves reasoning-oriented performance without extending the generated traces or requiring recurrent training from scratch. For more details, see https://thrillcrazyer.github.io/LoopUS.
+1 Introduction
+The reasoning performance of large language models (LLMs) can be improved during inference by allocating additional computation, or test-time compute (TTC), in latent space to refine hidden states before producing the next token [1, 2, 3]. By deepening internal processing rather than inflating sequence length, latent-space computation offers a complementary axis along which reasoning capacity can scale within a fixed model without increasing its parameter count [4, 5, 6, 7, 8, 9]. Looped language models are one example of this paradigm: they iterate a designated block (e.g., a transformer block or a stack of layers) to increase effective computational depth without additional parameters. However, training looped architectures from scratch is expensive at modern scales [4, 6].
+As an alternative, recent studies [10, 11] have explored tuning pretrained LLMs into a looped form. However, these approaches suffer from three limitations:
+(i) There is no principled recipe for identifying which layers should be reused as the recurrent block because existing methods rely on heuristics rather than an analysis of the internal representation dynamics of the model [10, 11].
+(ii) Naive iteration causes hidden-state drift because the layers were trained for single-pass use at a fixed depth rather than as a recurrent operator. Repeated reuse can therefore degrade representational fidelity, preventing iterative refinement of output quality [12].
+(iii) Backpropagation through a long unrolled loop is both memory-intensive and prone to vanishing or exploding gradients [13, 14, 15].
+We begin by analyzing the hidden-state geometry of a pretrained LLM to understand how representations evolve across depth. In our preliminary investigation (Figure 1), the representation trajectory follows a staged pattern: early layers rapidly transform token embeddings, middle layers evolve gradually within a stable plateau, and final layers make a sharp transition toward output decoding. This pattern is consistent with recent findings on hidden-state geometry [16, 17, 18]. Building on this observation, we decompose the LLM into three functionally distinct blocks.
+(a) Hidden state distance across layers.
+(b) Hidden state trajectory visualized via PCA.
+Figure 1:
+Staged representation dynamics in Qwen/Qwen3-1.7B.
+(a) Cosine distance between consecutive hidden states reveals three distinct regimes.
+(b) Hidden-state trajectories confirm that middle layers trace a gradual arc within a confined
+region of latent space, while the final layers project sharply toward the output vocabulary space.
+We propose Looped Depth Up-Scaling (LoopUS), a post-training framework that recasts a pretrained LLM into a looped form through four components. (i) Block Decomposition resolves the layer-selection problem by partitioning the model into encoder, reasoning, and decoder blocks, grounded in the staged representation dynamics shown in Figure 1 rather than relying on heuristic layer selection. Note that only the reasoning block is reused as the loop body. (ii) A Selective Gate addresses hidden-state drift by interpolating each proposed update with the previous state, turning every iteration into a damped refinement step instead of an unconstrained jump. (iii) Random Deep Supervision sidesteps full Backpropagation Through Time (BPTT): at each step, only a few uniformly sampled iterations receive gradients, while the rest run detached. This keeps training manageable as the loop budget grows. (iv) A Confidence Head predicts when further refinement is unnecessary, enabling adaptive test-time compute that allocates more iterations to harder inputs and fewer to easier ones.
+Empirically, LoopUS improves zero-shot accuracy by 3.0% over pretrained backbones and reduces WikiText and LAMBADA perplexities by 17.4% and 21.3%, respectively. It also demonstrates high adaptation efficiency, yielding a 14.6% relative gain on TinyLlama with 17–20×\times fewer training tokens than existing looped baselines. Our analyses confirm that training remains stable across extended loop depths: hidden-state trajectories contract and token distributions sharpen, indicating that gains stem from controlled, iterative latent refinement rather than uncontrolled depth expansion.
+The main contributions of this paper are threefold:
+•
+Representation-guided looped post-training framework: We propose LoopUS, a post-training framework that converts a pretrained LLM into a looped latent-reasoning model. LoopUS decomposes the model into encoder, reasoning, and decoder blocks using staged representation dynamics, and reuses only the middle reasoning block as the loop body.
+•
+Stable and efficient latent recursion: We introduce mechanisms that make latent looping stable and practical in pretrained LLMs, including a Mamba-inspired selective decay gate, random deep supervision, and a confidence head. The gate mitigates hidden-state drift, while random deep supervision avoids full BPTT over long recursive horizons.
+•
+Empirical analysis of loop dynamics: We show that LoopUS improves reasoning-oriented performance, remains competitive under limited training budgets, and exhibits convergent loop dynamics through loop-depth analyses, latent-trajectory visualizations, token-level prediction analyses, and component ablations.
+2 Background
+LLM Hidden State Representations.
+Recent LLM interpretability studies, including Anthropic’s work [19, 20], suggest that LLM hidden states quickly move into an abstract predictive space in which high-level concepts can be represented, manipulated, and refined across depth rather than being rewritten at each layer. Prior studies on representation evolution and logit-lens analyses demonstrate a progression from local, lexical processing in lower layers to increasingly abstract, prediction-oriented representations in deeper layers [21, 22]. In this context, middle layers often form a plateau that changes relatively little, encoding information needed for the final prediction [17]. This is followed by a sharper transition near the final layers, where representations are further transformed toward the vocabulary space [16]. Furthermore, Ng [18] and Upstage [23] show that duplicating or stacking pretrained blocks can improve performance. We therefore treat the middle layers as a reusable latent workspace, exploiting this region through looping rather than by adding distinct blocks.
+Looped LLMs.
+Complementing TTC [24], which scales sequence length to elicit more explicit reasoning, looped transformers scale computation depth by repeatedly applying the same block to refine latent representations without increasing the parameter count [10, 25, 26, 15]. Building on recurrent-transformer formulations [27], retrofitted recurrence [11, 10, 5], latent refinement [25, 26, 6], and adaptive recursion [28], this work treats inference-time compute as repeated hidden-state computation. LoopUS is most similar to retrofitting-based approaches, but differs in its use of block decomposition to ground the loop, selective gating and random deep supervision to explicitly stabilize latent refinement, and a learned confidence head to enable adaptive computation.
+Deep Learning Gating Mechanisms.
+Gating mechanisms have long been used to regulate state updates in recurrent and deep networks [29, 30, 31]. For our setting, the key distinction is between softmax-style gating, which normalizes scores across alternatives [32], and decay-style gating, which directly controls state retention [33]. Recent sequence models increasingly adopt the latter approach, ranging from simple exponential decay to Mamba-style input-dependent selective decay [34, 33, 35, 36, 37]. LoopUS follows this Mamba-style perspective in the depth domain, using an input-dependent exponential decay gate that is well-suited for iterative refinement.
+3 Looped Depth Up-Scaling (LoopUS)
+Figure 2: Overview of the LoopUS architecture.
+(a) A pretrained LLM is recast into encoder, reasoning, and decoder blocks, using a selective gate (𝒢\mathcal{G}) inserted between loop iterations to stabilize the loop dynamics. (b) The looped LLM is trained with random deep supervision using next-token prediction loss (ℒLM\mathcal{L}_{\mathrm{LM}}), monotonicity loss (ℒMono\mathcal{L}_{\text{Mono}}), and confidence loss (ℒQ\mathcal{L}_{\text{Q}}).
+3.1 Recasting LLM as a Looped LLM
+As shown in Figure 2 (a), LoopUS partitions a pretrained LLM into an encoder ℰ\mathcal{E}, a reasoning block ℳ\mathcal{M}, and a decoder 𝒟\mathcal{D}. Following Mi:DM [38], we choose this front-middle-back split based on cosine-similarity analysis across depth, placing the encoder-reasoning and reasoning-decoder boundaries near the layers where the similarity profile changes most abruptly.
+Given an input sequence, LoopUS applies the encoder once to obtain the initial representation:
+h(0)=ℰ(x0:T),h(0)∈ℝT×h.h^{(0)}=\mathcal{E}(x_{0:T}),\qquad h^{(0)}\in\mathbb{R}^{T\times h}.
+(1)
+It then performs BB loop iterations. For b=0,…,B−1b=0,\ldots,B-1, the reasoning block proposes an update, and the selective gate incorporates it into the current hidden state:
+ℛ⁡(h(b))\displaystyle\mathcal{R}(h^{(b)})
+=𝒢⁡(ℳ,h(b)),h(b+1)\displaystyle=\mathcal{G}\!\left(\mathcal{M},h^{(b)}\right),h^{(b+1)}
+=ℛ⁡(h(b)),h(B)\displaystyle=\mathcal{R}(h^{(b)}),h^{(B)}
+=ℛ∘ℛ∘⋯∘ℛ⏟B​iterations​(h(0))\displaystyle=\underbrace{\mathcal{R}\circ\mathcal{R}\circ\cdots\circ\mathcal{R}}_{B\ \text{iterations}}\left(h^{(0)}\right)
+(2)
+Here 𝒢\mathcal{G} is introduced in Section 3.1. After BB iterations, the decoder maps the final refined state to vocabulary logits, ℓ(B)=𝒟⁡(h(B))\ell^{(B)}=\mathcal{D}(h^{(B)}).
+Selective Gating for Stable Loop Dynamics.
+Figure 3: Conceptual view of latent refinement in LoopUS. As the reasoning block is looped, each proposed update is mixed with the previous hidden state by the selective gate, gradually steering the trajectory toward the answer region instead of allowing it to drift.
+Naively reapplying a pretrained middle block induces hidden-state drift, as it was originally optimized for single-pass execution rather than as a recurrent operator [10]. Therefore, a stable latent workspace requires a structural condition restricting each update to a damped refinement. LoopUS realizes this via a selective gate that interpolates proposed updates with the previous state. This dampens latent-space displacement and steers the trajectory toward regions increasingly favoring the correct answer.
+Figure 3 visualizes this: each gated refinement preserves part of the prior representation while making a directed move toward an answer-supporting latent subspace. Consequently, LoopUS incorporates an input-dependent selective gate after each reasoning iteration. Given the current hidden state h(b)h^{(b)}, the gate first measures the residual change proposed by the reasoning block and maps it to a positive per-token, per-channel step size:
+δ(b)\displaystyle\delta^{(b)}
+=ℳ⁡(h(b))−h(b),Δ(b)\displaystyle=\mathcal{M}(h^{(b)})-h^{(b)},\qquad\Delta^{(b)}
+=softplus⁡(WΔ​δ(b)+bΔ).\displaystyle=\operatorname{softplus}\!\left(W_{\Delta}\delta^{(b)}+b_{\Delta}\right).
+(3)
+Since the pretrained block ℳ\mathcal{M} is highly nonlinear and lacks strict Lipschitz bounds, guaranteeing a formal global contraction is intractable. To effectively mitigate unconstrained drift, LoopUS instead enforces a relaxed, contraction-like iteration. Using a learned channel-wise decay coefficient A∈ℝ<0A\in\mathbb{R}_{<0}, it computes a discrete decay factor,
+α(b)=exp⁡(Δ(b)⊙A),\alpha^{(b)}=\exp\!\left(\Delta^{(b)}\odot A\right),
+(4)
+ensuring α(b)∈(0,1)\alpha^{(b)}\in(0,1) elementwise, an approach that shares conceptual synergy with input-dependent decay mechanisms in recent sequence models like Mamba [33]. The subsequent hidden state is then obtained by interpolating between the proposed update and the prior state:
+h(b+1)=𝒢⁡(ℳ,h(b))=α(b)⊙ℳ⁡(h(b))+(1−α(b))⊙h(b)h^{(b+1)}=\mathcal{G}\!\left(\mathcal{M},h^{(b)}\right)=\alpha^{(b)}\odot\mathcal{M}(h^{(b)})+\left(1-\alpha^{(b)}\right)\odot h^{(b)}
+(5)
+Since α(b)∈(0,1)\alpha^{(b)}\in(0,1), Equation 5 provides a convex interpolation between the proposed update and the previous state. Although this convex combination does not mathematically guarantee the entire composite operator is a strict contraction, it restricts the maximal stride of each update. Consequently, each iteration acts as a damped relaxation step—analogous to an Euler integration step in a bounded vector field—rather than an extrapolative update that might amplify drift. Specifically, larger values of α(b)\alpha^{(b)} weight the new update more heavily, whereas smaller values preserve more of the prior state:
+h(b+1)−h(b)=α(b)⊙(ℳ⁡(h(b))−h(b)),h^{(b+1)}-h^{(b)}=\alpha^{(b)}\odot\left(\mathcal{M}(h^{(b)})-h^{(b)}\right),
+(6)
+or, expressed in vector form:
+h(b+1)=h(b)+P(b)​(ℳ⁡(h(b))−h(b)),P(b)=Diag⁡(α(b)).h^{(b+1)}=h^{(b)}+P^{(b)}\left(\mathcal{M}(h^{(b)})-h^{(b)}\right),\qquad P^{(b)}=\operatorname{Diag}(\alpha^{(b)}).
+(7)
+Under a continuous-time analogy, this recursion corresponds to a forward Euler step for the state-dependent ordinary differential equation:
+h˙=P​(h)​(ℳ​(h)−h),\dot{h}=P(h)\left(\mathcal{M}(h)-h\right),
+(8)
+where P⁡(h)P(h) acts as a diagonal preconditioner induced by the gate. Because its diagonal entries lie strictly in (0,1)(0,1), the gate applies a damped step size along each coordinate. The discrete update therefore realizes a diagonally preconditioned, relaxed fixed-point iteration toward h⋆=ℳ⁡(h⋆)h^{\star}=\mathcal{M}(h^{\star}), where the data-dependent step sizes serve as an implicit per-coordinate regularizer. This design encourages contraction-like behavior across loop iterations, as empirically confirmed in Section 4.5, enabling the stable reuse of pretrained middle layers without architectural modification.
+Adaptive Computation via Early Stopping Mechanism.
+To enable adaptive computation at inference time, LoopUS augments each reasoning step with a confidence-based stopping rule. After the bb-th refinement step, the confidence head produces a raw logit and its corresponding probability:
+q~(b)=qϕ​(h(b)),q(b)=σ⁡(q~(b)).\tilde{q}^{(b)}=q_{\phi}\!\left(h^{(b)}\right),\qquad q^{(b)}=\sigma\!\left(\tilde{q}^{(b)}\right).
+(9)
+The model compares q(b)q^{(b)} against a predefined threshold qthq_{\mathrm{th}}, continuing to refine the representation while q(b)<qthq^{(b)}<q_{\mathrm{th}} and halting once q(b)≥qthq^{(b)}\geq q_{\mathrm{th}}. This reflects the adaptive-computation principle of Less is More [39]: additional loop steps are allocated only when the current latent state lacks sufficient confidence. In this way, pretrained transformer depth is dynamically converted into adaptive TTC.
+Random Deep Supervision for Loop Training.
+Backpropagating through all loop steps would tightly couple the fully unrolled graph, rendering training memory-intensive and unstable [13]. Thus, LoopUS employs random deep supervision [8]: for each training batch, the model is unrolled for BB steps, but gradients are computed only for a uniformly sampled subset of steps 𝒮⊆{0,…,B−1}\mathcal{S}\subseteq\{0,\dots,B-1\} with size |𝒮|=K|\mathcal{S}|=K. Steps in 𝒮\mathcal{S} receive normal gradient updates, whereas the intermediate steps are executed without gradient tracking (no_grad) and detached before the subsequent iteration, effectively blocking gradient flow through unsupervised depths. Coupled with the stabilizing effect of the selective gate, this strategy trains the model to halt robustly at diverse stopping depths while circumventing the prohibitive cost of full BPTT [40].
+3.2 Training Objective
+As illustrated in Figure 2(b), LoopUS is trained by jointly optimizing a next-token prediction loss, a monotonicity loss, and a confidence loss at each sampled depth b∈𝒮b\in\mathcal{S}.
+Overall Objective.
+At a sampled depth b∈𝒮b\in\mathcal{S}, the total per-step loss is defined as:
+ℒ(b)=ℒLM(b)+ℒmono(b)+ℒQ(b),\mathcal{L}^{(b)}=\mathcal{L}_{\mathrm{LM}}^{(b)}+\mathcal{L}_{\mathrm{mono}}^{(b)}+\mathcal{L}_{Q}^{(b)},
+(10)
+where ℒLM(b)\mathcal{L}_{\mathrm{LM}}^{(b)} and ℒmono(b)\mathcal{L}_{\mathrm{mono}}^{(b)} optimize latent refinement, and ℒQ(b)\mathcal{L}_{Q}^{(b)} trains early stopping.
+Refinement Losses.
+To optimize latent refinement, we employ an autoregressive cross-entropy loss alongside a monotonicity regularizer. The primary supervision acts on the updated logits:
+ℒLM(b)=CE(𝒟(h(b)),x2:T),\mathcal{L}_{\mathrm{LM}}^{(b)}=\mathrm{CE}\!\left(\mathcal{D}(h^{(b)}),x_{2:T}\right),
+(11)
+which directly drives the refined latent state to deliver better predictive distributions. To prevent detrimental updates, we evaluate the pre-update state and systematically penalize predictive regressions:
+ℒmono(b)\displaystyle\mathcal{L}_{\mathrm{mono}}^{(b)}
+=SiLU⁡(ℒLM(b)−ℒLM(b−1)).\displaystyle=\operatorname{SiLU}\!\left(\mathcal{L}_{\mathrm{LM}}^{(b)}-\mathcal{L}_{\mathrm{LM}}^{(b-1)}\right).
+(12)
+This monotonicity term penalizes updates that degrade the subsequent prediction loss, while remaining negligible for updates that preserve or enhance predictive quality. We adopt the SiLU activation [41] because, unlike ReLU [42] or SELU [43], it yields small negative values for minor improvements while asymptoting to zero for large negative arguments. This softly rewards beneficial refinements, encourages the loop to progress via small, stable updates, and stabilizes training without enabling the monotonicity penalty to dominate the primary objective ℒLM\mathcal{L}_{\mathrm{LM}}. Effectively, the monotonicity term enforces a gradual decay in the task-aligned surrogate error across successive loop iterations.
+⬇
+h = Encoder(x)
+sampled = RandomSampler(B, K)
+for b in range(B):
+# Supervised step
+if b in sampled:
+h_prev = h
+h_prop = Reasoner(h)
+h = Gate(h_prev, h_prop)
+q_logit = ConfidenceHead(h)
+y_hat = Decoder(h)
+y_prev = Decoder(h_prev)
+loss = CE(y_hat, y_true) # L_LM
+loss += SiLU(CE(y_hat, y_true)
+- CE(y_prev, y_true)) # L_Mono
+loss += BCEWithLogits(q_logit,
+(y_hat == y_true)) # L_Q
+loss.backward()
+opt.step()
+opt.zero_grad()
+h = h.detach()
+else: # Unsupervised step
+with no_grad():
+h = Gate(h, Reasoner(h))
+h = h.detach()
+Figure 4: Pseudocode of LoopUS.
+Confidence Loss.
+To train adaptive stopping, we supervise the post-update confidence logit q~(b+1)\tilde{q}^{(b+1)} with per-sample token accuracy,
+ℒQ(b)\displaystyle\mathcal{L}_{Q}^{(b)}
+=BCEWithLogits⁡(q~(b+1),qtarget(b)),\displaystyle=\mathrm{BCEWithLogits}(\tilde{q}^{(b+1)},q_{\mathrm{target}}^{(b)}),
+(13)
+qtarget(b)\displaystyle q_{\mathrm{target}}^{(b)}
+=1Tvalid∑j=1T−1[x^j(b+1)=xj+1],\displaystyle=\frac{1}{T_{\mathrm{valid}}}\sum_{j=1}^{T-1}\mathbf{1}\!\left[\hat{x}_{j}^{(b+1)}=x_{j+1}\right],
+This formulation yields a lightweight stopping criterion that requires only a single scalar prediction per step, avoiding the extra statistics required by convergence-based [7] or cumulative distribution function (CDF)-based adaptive rules [4]. Together, these terms train LoopUS to make each loop step predictive, avoid regressive updates, and estimate whether further computation is unnecessary.
+4 Empirical Validation
+4.1 Evaluation Protocol
+We evaluate LoopUS across five pretrained backbones spanning model families and scales: Qwen3-1.7B, Qwen3-4B, and Qwen3-8B [44], using cloud NVIDIA L40S, RTX PRO 6000, and RTX PRO 6000 GPUs, respectively; TinyLlama [45], using NVIDIA L40S GPUs; and Phi-4 [46], using NVIDIA H200 GPUs. Unless otherwise stated, models are trained on FineWeb-Edu [47] with 3B tokens, a context length of 1024, the AdamW optimizer, a cosine learning-rate schedule, bf16 mixed precision, and the default LoopUS setting of B=20B=20 total loop steps with K=5K=5 supervised depths per batch. Models are evaluated with lm-evaluation-harness [48]. We report perplexity on WikiText [49] and Lambada [50], and accuracy on MMLU [51], HellaSwag (HS) [52], ARC-Easy (ARC-E), ARC-Challenge (ARC-C) [53], PIQA [54], WinoGrande (WG) [55], and OpenBookQA (OBQA) [56]. Unless otherwise noted, inference uses a maximum recursion budget of 8 with confidence-based stopping and KV caching. Full details are provided in Appendix A.
+4.2 Backbone-Level Evaluation across Model Scales
+Table 1: LoopUS improves pretrained backbones across scales. Results on language modeling and downstream benchmarks. ppl denotes perplexity (lower is better), and acc denotes accuracy (higher is better). AVG is the mean over the seven acc benchmarks, and Δ\Delta denotes the change in AVG from the original backbone (w/o LoopUS) to the adapted checkpoint (w/ LoopUS). Bold highlights the better result between the two variants of each backbone. All models are evaluated zero-shot.
+Model
+Setting
+Wiki
+LAMBADA
+MMLU
+HS
+ARC-E
+ARC-C
+PIQA
+WG
+OBQA
+AVG
+Δ\Delta
+ppl ↓\downarrow
+acc ↑\uparrow
+Qwen 1.7B
+w/o LoopUS
+21
+12.21
+55.4
+46.2
+72.5
+40.2
+72.2
+61.3
+28
+53.7
+–
+w/ LoopUS
+16.9
+7.43
+56.6
+46.3
+74.9
+43.1
+73.3
+63.0
+29.6
+55.3
++1.6
+Qwen 4B
+w/o LoopUS
+16.4
+7.29
+68.3
+52.1
+80.2
+50.4
+75.0
+66.5
+29.4
+60.3
+–
+w/ LoopUS
+13.9
+5.33
+67.7
+51.4
+81.3
+54.0
+76.8
+68.9
+34.4
+62.1
++1.8
+Qwen 8B
+w/o LoopUS
+12.2
+4.58
+72.8
+57.2
+81.5
+55.4
+76.3
+67.9
+31.6
+63.2
+–
+w/ LoopUS
+10.3
+4.32
+71.5
+56.0
+83.9
+58.1
+78.9
+72.4
+37.0
+65.4
++2.2
+Phi-4 14B
+w/o LoopUS
+9.59
+4.03
+76.9
+63.1
+81.3
+55.8
+80.7
+77.0
+34.0
+67.0
+–
+w/ LoopUS
+7.75
+3.49
+77.5
+60.58
+83.5
+57.7
+81.8
+77.5
+41.8
+68.6
++1.7
+LoopUS reuses pretrained computation by partitioning the backbone into encoder, reasoning, and decoder blocks while preserving the external decoding interface. Table 1 shows that this recasting yields consistent gains across models, reducing WikiText and LAMBADA perplexities and improving average downstream accuracy by +1.6 to +2.2 points, with the clearest gains on ARC-C and OBQA.
+The effect is task-dependent: MMLU and HS remain close to the base models, whereas ARC-C, PIQA, WG, and OBQA improve more consistently. This pattern suggests that LoopUS is most useful when extra latent computation can refine a decision process, and less so when performance depends more on broad knowledge retrieval or on already strong single-pass predictions. The same reasoning-oriented trend holds across model scales, indicating that architectural recasting provides a stable post-training modification rather than a task-specific patch.
+4.3 Comparison with Prior Methods under Limited Training Budgets
+Table 2: LoopUS shows adaptation efficiency under a smaller training-token budget. All methods adapt a TinyLlama-based backbone; w/o and w/ LoopUS denote the checkpoint before and after adaptation, respectively. AVG is the unweighted mean over the six tasks, and Δ\Delta reports the change in AVG from Original to Adapted. Results for prior methods are taken from the corresponding papers.
+Method
+Base
+Model
+Train
+Tokens
+Setting
+Task
+AVG
+Δ\Delta
+ARC-E
+ARC-C
+HS
+WG
+PIQA
+OBQA
+acc_n ↑\uparrow
+acc_n ↑\uparrow
+acc_n ↑\uparrow
+acc ↑\uparrow
+acc_n ↑\uparrow
+acc_n ↑\uparrow
+Ours
+TinyLlama
+1.1B
+3B
+Original
+47.1
+25.1
+42.2
+53.4
+66.8
+24.2
+43.1
+–
+Adapted
+53.0
+29.6
+55.5
+57.9
+69.8
+30.6
+49.4
++6.3
+McLeish et al.
+(2025)
+TinyLlama
+1.1B-3T
+52B
+Original
+55.7
+31.0
+59.1
+58.9
+73.0
+35.0
+52.1
+–
+Adapted
+58.6
+35.6
+45.1
+57.6
+66.4
+32.2
+49.3
+-2.9
+Bae et al.
+(2025a)
+TinyLlama
+1.1B
+60B
+Original
+44.7
+23.2
+42.2
+53.4
+66.8
+29.2
+43.3
+–
+Adapted
+49.9
+26.2
+48.8
+54.1
+68.6
+32.8
+46.7
++3.5
+LoopUS is designed to keep loop training stable and adaptation-efficient through selective gating and sparse supervision across depths. Table 2 shows the practical effect of this design choice on a shared six-task reasoning suite. Since prior results are drawn from the corresponding papers, we treat this comparison as an adaptation-efficiency reference rather than a fully controlled head-to-head benchmark. In this comparison, LoopUS achieves the largest average gain (Δ=+6.3\Delta{=}+6.3), compared with Δ=−2.9\Delta{=}-2.9 for McLeish et al. [10] and Δ=+3.5\Delta{=}+3.5 for Bae et al. [11], while using fewer additional training tokens. These results suggest that LoopUS improves adaptation efficiency not simply by adding recurrence but by preserving and reusing pretrained computation through decomposition, selective gating, and random deep supervision.
+4.4 Inference-Time Recursion-Depth Analysis
+Figure 5: Test-Time Scaling of LoopUS. On Qwen3-4B, benchmark performance is plotted against the number of latent reasoning iterations used at inference time. The dashed gray line denotes the original backbone, the dashed orange line denotes the trained LoopUS checkpoint, and the star marks the best observed depth for each task.
+LoopUS uses a confidence-based stopping rule to allocate TTC adaptively. Figure 5 shows that most of the benefit is obtained within only a few iterations, after which additional recursion yields diminishing returns while remaining stable rather than diverging. This stability extends well beyond the training regime: the checkpoint continues to behave robustly even at unseen recursion depths such as 40, 80, and 100. With adaptive stopping enabled, the same checkpoint halts after 3.39 iterations on average out of a maximum budget of 8, yet remains close to the best observed performance. These results suggest that the confidence head does not merely stop early; it learns to identify an effective stopping point quickly and allocate extra refinement only when it is useful.
+4.5 Dynamics of Stable Latent Refinement
+Figure 6: Training organizes the loop into a stable refinement process. We plot the step-wise monotonicity loss, next-token prediction loss, and confidence-head Accuracy for loop indices {0,2,4,8,12,16,19}\{0,2,4,8,12,16,19\}.
+LoopUS trains each loop step as a damped corrective update through selective gating and a monotonicity-aware objective. This is consistent with recent energy-based views of autoregressive modeling, where extra latent computation acts as iterative refinement toward more compatible states [57, 7]. Figure 6 shows this behavior emerging during training: the monotonicity loss decreases toward zero across loop positions, while the next-token prediction loss and confidence loss remain well-behaved across shallow and deep unrolls. Training therefore encourages each transition to be a small, stable corrective edit rather than an unstable depth expansion.
+Figure 7: The learned loop induces convergent trajectories. The largest latent-space movement occurs in the earliest iterations, after which the step-to-step distance contracts, indicating that the latent trajectory approaches a fixed point rather than diverging.
+Figure 8: Loop updates translate into token-level predictive refinement. Across iterations, probability mass shifts across candidate tokens, showing how latent updates refine the next-token prediction.
+Figures 7 and 8 show the same Qwen3-4B example for the prompt “32 * 64 =” from latent- and token-space perspectives, respectively. The latent trajectory makes its largest move in the first few iterations and then contracts, indicating convergence toward a stable answer region. Consistently, the correct next token “2” rises from 2.17×10−5%2.17\times 10^{-5}\% at iteration 0 to 81.9%81.9\% after one refinement step and to about 89.8%89.8\% by iteration 4, while the remaining candidates lose most of their mass early on. Together with Figure 6, these results suggest that LoopUS uses a large initial corrective update followed by smaller, convergent refinements that sharpen the final prediction.
+4.6 Component Ablation Study
+Figure 9: Ablation study of LoopUS components. We report average ℒLM\mathcal{L}_{\mathrm{LM}} over 20 runs after (a) removing the selective gate, (b) removing the encoder-decoder decomposition, (c) training without random deep supervision, (d) replacing the decay gate with sigmoid gating, (e) changing the monotonicity-loss activation among ReLU, SiLU, SELU, and SoftPlus, and (f) comparing the standard LoopUS training recipe against TBPTT.
+Figure 9 analyzes how ℒLM\mathcal{L}_{\mathrm{LM}} changes when key components of LoopUS are removed or replaced. (a) Removing the selective gate causes convergence to a higher ℒLM\mathcal{L}_{\mathrm{LM}} because it eliminates the damped interpolation that preserves the previous hidden state, thereby weakening drift-controlled latent refinement. (b) Removing the encoder–decoder decomposition also leads to a higher final ℒLM\mathcal{L}_{\mathrm{LM}}. This demonstrates that without an explicit separation between representation extraction, latent refinement, and output decoding, the loop fails to preserve the pretrained latent workspace. Instead, it relearns a less stable recurrent trajectory that converges to a worse optimum. (c) Training without random deep supervision destabilizes optimization and slows convergence, even if the final ℒLM\mathcal{L}_{\mathrm{LM}} remains similar. This highlights that sparse supervision across depths is critical for efficiently training long loops in practice. (d) Replacing the decay gate with sigmoid gating also makes optimization less stable and yields a higher final ℒLM\mathcal{L}_{\mathrm{LM}}, indicating that the decay-style gate better supports stable long-loop training. (e) Among the tested activation functions for the monotonicity term, SiLU [41] provides the most reliable optimization behavior. ReLU [42], SELU [43], and SoftPlus [58] each lead to less stable or less favorable trajectories, which supports the design choice used in the main LoopUS recipe. (f) TBPTT [59] incurs higher computational cost while plateauing at a substantially higher ℒLM\mathcal{L}_{\mathrm{LM}} than the standard LoopUS training recipe, indicating lower efficiency and worse performance in this setting.
+5 Conclusion
+This paper presents Looped Depth Up-Scaling (LoopUS), a post-training framework that recasts a pretrained LLM into a looped latent-refinement model through encoder–reasoning–decoder decomposition, a selective gate, random deep supervision with stepwise detachment, and a lightweight confidence head for adaptive stopping. Across diverse model scales, LoopUS improves pretrained backbones while preserving standard interfaces, yielding enhanced reasoning performance, consistent perplexity reductions, and high adaptation efficiency under limited training budgets. Our analyses suggest that these gains arise from controlled latent refinement rather than uncontrolled depth expansion. Training remains well behaved across loop depths, with hidden-state trajectories contracting through diminishing corrections, token distributions becoming sharper, and adaptive halting allocating computation where it is most useful. Ablations further confirm that the selective gate, architectural decomposition, and random deep supervision are central to making long latent loops effective and trainable. Overall, latent looping provides a practical way to turn pretrained transformer depth into an adaptive allocation of test-time compute and stronger task-aligned inference.
+References
+[1]
+A. Lahoti, K. Li, B. Chen, C. Wang, A. Bick, J. Z. Kolter, T. Dao, and A. Gu (2026)
+Mamba-3: improved sequence modeling using state space principles.
+In The Fourteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §1.
+[2]
+Y. Wu, Z. Sun, S. Li, S. Welleck, and Y. Yang (2025)
+Inference scaling laws: an empirical analysis of compute-optimal inference for LLM problem-solving.
+In The Thirteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §1.
+[3]
+C. V. Snell, J. Lee, K. Xu, and A. Kumar (2025)
+Scaling LLM test-time compute optimally can be more effective than scaling parameters for reasoning.
+In The Thirteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §1.
+[4]
+R. Zhu, Z. Wang, K. Hua, T. Zhang, Z. Li, H. Que, B. Wei, Z. Wen, F. Yin, H. Xing, et al. (2025)
+Scaling latent reasoning via looped language models.
+arXiv preprint arXiv:2510.25741.
+Cited by: Appendix F,
+§1,
+§3.2.
+[5]
+S. Bae, Y. Kim, R. Bayat, S. Kim, J. Ha, T. Schuster, A. Fisch, H. Harutyunyan, Z. Ji, A. Courville, and S. Yun (2025)
+Mixture-of-recursions: learning dynamic recursive depths for adaptive token-level computation.
+In The Thirty-ninth Annual Conference on Neural Information Processing Systems,
+External Links: Link
+Cited by: §A.4,
+§A.4,
+§1,
+§2.
+[6]
+J. Geiping, S. McLeish, N. Jain, J. Kirchenbauer, S. Singh, B. R. Bartoldson, B. Kailkhura, A. Bhatele, and T. Goldstein (2025)
+Scaling up test-time compute with latent reasoning: a recurrent depth approach.
+External Links: 2502.05171,
+Link
+Cited by: §1,
+§2.
+[7]
+A. Gladstone, G. Nanduru, M. M. Islam, P. Han, H. Ha, A. Chadha, Y. Du, H. Ji, J. Li, and T. Iqbal (2026)
+Energy-based transformers are scalable learners and thinkers.
+In The Fourteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: Appendix B,
+§1,
+§3.2,
+§4.5.
+[8]
+G. Wang, J. Li, Y. Sun, X. Chen, C. Liu, Y. Wu, M. Lu, S. Song, and Y. A. Yadkori (2025)
+Hierarchical reasoning model.
+External Links: 2506.21734,
+Link
+Cited by: §1,
+§3.1.
+[9]
+S. Nie, F. Zhu, Z. You, X. Zhang, J. Ou, J. Hu, J. ZHOU, Y. Lin, J. Wen, and C. Li (2025)
+Large language diffusion models.
+In The Thirty-ninth Annual Conference on Neural Information Processing Systems,
+External Links: Link
+Cited by: Appendix B,
+Appendix F,
+§1.
+[10]
+S. McLeish, A. Li, J. Kirchenbauer, D. S. Kalra, B. R. Bartoldson, B. Kailkhura, A. Schwarzschild, J. Geiping, T. Goldstein, and M. Goldblum (2025)
+Teaching pretrained language models to think deeper with retrofitted recurrence.
+External Links: 2511.07384,
+Link
+Cited by: §1,
+§2,
+§3.1,
+§4.3,
+Table 2.
+[11]
+S. Bae, A. Fisch, H. Harutyunyan, Z. Ji, S. Kim, and T. Schuster (2025)
+Relaxed recursive transformers: effective parameter sharing with layer-wise loRA.
+In The Thirteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §A.4,
+§1,
+§2,
+§4.3,
+Table 2.
+[12]
+G. Chen, D. Liu, and J. Shao (2026)
+Loop as a bridge: can looped transformers truly link representation space and natural language outputs?.
+External Links: 2601.10242,
+Link
+Cited by: §1.
+[13]
+I. Sutskever (2013)
+Training recurrent neural networks..
+Ph.D. Thesis, University of Toronto, Canada.
+Cited by: §1,
+§3.1.
+[14]
+R. Pascanu, T. Mikolov, and Y. Bengio (2013)
+On the difficulty of training recurrent neural networks.
+In International conference on machine learning,
+pp. 1310–1318.
+Cited by: §1.
+[15]
+R. Zhu, T. Peng, T. Cheng, X. Qu, J. Huang, D. Zhu, H. Wang, K. Xue, X. Zhang, Y. Shan, T. Cai, T. Kergan, A. Kembay, A. Smith, C. Lin, B. Nguyen, Y. Pan, Y. Chou, Z. Cai, Z. Wu, Y. Zhao, T. Liu, J. Yang, W. Zhou, C. Zheng, C. Li, Y. Zhou, Z. Li, Z. Zhang, J. Liu, G. Zhang, W. Huang, and J. Eshraghian (2025)
+A survey on latent reasoning.
+External Links: 2507.06203,
+Link
+Cited by: Appendix F,
+§1,
+§2.
+[16]
+K. Shibata, K. Yano, R. Takahashi, J. Lee, W. Ikeda, and J. Suzuki (2026)
+Suppressing final layer hidden state jumps in transformer pretraining.
+External Links: 2601.18302,
+Link
+Cited by: §1,
+§2.
+[17]
+P. Tikhonov and D. Ilvovsky (2025)
+Frozen in the middle: hidden states remain unchanged across intermediate layers of language models.
+In Proceedings of the 34th ACM International Conference on Information and Knowledge Management,
+CIKM ’25, New York, NY, USA, pp. 5289–5293.
+External Links: ISBN 9798400720406,
+Link,
+Document
+Cited by: §1,
+§2.
+[18]
+D. N. Ng (2026)
+LLM neuroanatomy: how i topped the llm leaderboard without changing a single weight.
+External Links: Link
+Cited by: §1,
+§2.
+[19]
+Anthropic (2024)
+Mapping the mind of a large language model.
+External Links: Link
+Cited by: §2.
+[20]
+Anthropic (2025)
+On the biology of a large language model.
+External Links: Link
+Cited by: §2.
+[21]
+nostalgebraist (2020)
+Interpreting GPT: the logit lens.
+Note: LessWrong
+External Links: Link
+Cited by: §2.
+[22]
+E. Voita, D. Talbot, F. Moiseev, R. Sennrich, and I. Titov (2019)
+The bottom-up evolution of representations in the transformer: a study with machine translation and language modeling objectives.
+In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing,
+pp. 4395–4405.
+External Links: Link
+Cited by: §2.
+[23]
+S. Kim, D. Kim, C. Park, W. Lee, W. Song, Y. Kim, H. Kim, Y. Kim, H. Lee, J. Kim, C. Ahn, S. Yang, S. Lee, H. Park, G. Gim, M. Cha, H. Lee, and S. Kim (2024)
+SOLAR 10.7B: scaling large language models with simple yet effective depth up-scaling.
+In Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 6: Industry Track), Y. Yang, A. Davani, A. Sil, and A. Kumar (Eds.),
+Mexico City, Mexico, pp. 23–35.
+External Links: Link,
+Document
+Cited by: §2.
+[24]
+J. Wei, X. Wang, D. Schuurmans, M. Bosma, brian ichter, F. Xia, E. H. Chi, Q. V. Le, and D. Zhou (2022)
+Chain of thought prompting elicits reasoning in large language models.
+In Advances in Neural Information Processing Systems, A. H. Oh, A. Agarwal, D. Belgrave, and K. Cho (Eds.),
+External Links: Link
+Cited by: §2.
+[25]
+B. Zeng, S. Song, S. Huang, Y. Wang, H. Li, Z. He, X. Wang, Z. Li, and Z. Lin (2025)
+Pretraining language models to ponder in continuous space.
+External Links: 2505.20674,
+Link
+Cited by: §2.
+[26]
+Y. Fu, S. Rijhwani, G. Neubig, and Y. Bisk (2025)
+Think-at-hard: teaching small language models to think on hard problems.
+External Links: 2506.04458,
+Link
+Cited by: §2.
+[27]
+M. Dehghani, S. Gouws, O. Vinyals, J. Uszkoreit, and Ł. Kaiser (2019)
+Universal transformers.
+External Links: 1807.03819,
+Link
+Cited by: §2.
+[28]
+R. Zhu et al. (2025)
+Ouro: a latent reasoning model with adaptive depth via gated recurrence.
+External Links: 2507.07919,
+Link
+Cited by: Appendix E,
+Appendix E,
+§2.
+[29]
+S. Hochreiter and J. Schmidhuber (1997)
+Long short-term memory.
+Neural computation 9 (8), pp. 1735–1780.
+Cited by: §2.
+[30]
+K. Cho, B. van Merriënboer, C. Gulcehre, D. Bahdanau, F. Bougares, H. Schwenk, and Y. Bengio (2014)
+Learning phrase representations using RNN encoder–decoder for statistical machine translation.
+In Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), A. Moschitti, B. Pang, and W. Daelemans (Eds.),
+Doha, Qatar, pp. 1724–1734.
+External Links: Link,
+Document
+Cited by: §2.
+[31]
+R. K. Srivastava, K. Greff, and J. Schmidhuber (2015)
+Training very deep networks.
+Advances in Neural Information Processing Systems Workshop on Deep Learning.
+External Links: Link
+Cited by: §2.
+[32]
+S. Sim, D. Kim, and H. Bae (2023)
+Correlation recurrent units: a novel neural architecture for improving the predictive performance of time-series data.
+IEEE Transactions on Pattern Analysis and Machine Intelligence 45 (12), pp. 14266–14283.
+External Links: Document
+Cited by: §2.
+[33]
+A. Gu and T. Dao (2024)
+Mamba: linear-time sequence modeling with selective state spaces.
+External Links: 2312.00752,
+Link
+Cited by: §2,
+§3.1.
+[34]
+A. Gu, K. Goel, and C. Re (2022)
+Efficiently modeling long sequences with structured state spaces.
+In International Conference on Learning Representations,
+External Links: Link
+Cited by: §2.
+[35]
+M. Beck, K. Pöppel, M. Spanring, A. Auer, O. Prudnikova, M. K. Kopp, G. Klambauer, J. Brandstetter, and S. Hochreiter (2024)
+XLSTM: extended long short-term memory.
+In The Thirty-eighth Annual Conference on Neural Information Processing Systems,
+External Links: Link
+Cited by: §2.
+[36]
+A. Behrouz, P. Zhong, and V. Mirrokni (2024)
+Titans: learning to memorize at test time.
+arXiv preprint arXiv:2501.00663.
+Cited by: §2.
+[37]
+S. Yang, J. Kautz, and A. Hatamizadeh (2025)
+Gated delta networks: improving mamba2 with delta rule.
+In The Thirteenth International Conference on Learning Representations,
+External Links: Link
+Cited by: §2.
+[38]
+D. Shin, S. Lee, S. Bae, H. Ryu, C. Ok, H. Jung, H. Ji, J. Lim, J. Lee, J. Han, et al. (2026)
+Mi: dm 2.0 korea-centric bilingual language models.
+arXiv preprint arXiv:2601.09066.
+Cited by: §3.1.
+[39]
+A. Jolicoeur-Martineau (2025)
+Less is more: recursive reasoning with tiny networks.
+External Links: 2510.04871,
+Link
+Cited by: §3.1.
+[40]
+W. Peebles and S. Xie (2022)
+Scalable diffusion models with transformers.
+arXiv preprint arXiv:2212.09748.
+Cited by: §3.1.
+[41]
+S. Elfwing, E. Uchibe, and K. Doya (2018)
+Sigmoid-weighted linear units for neural network function approximation in reinforcement learning.
+Neural networks 107, pp. 3–11.
+Cited by: §3.2,
+§4.6.
+[42]
+V. Nair and G. E. Hinton (2010)
+Rectified linear units improve restricted boltzmann machines.
+In Proceedings of the 27th international conference on machine learning (ICML-10),
+pp. 807–814.
+Cited by: §3.2,
+§4.6.
+[43]
+G. Klambauer, T. Unterthiner, A. Mayr, and S. Hochreiter (2017)
+Self-normalizing neural networks.
+Advances in neural information processing systems 30.
+Cited by: §3.2,
+§4.6.
+[44]
+A. Yang, A. Li, B. Yang, B. Zhang, B. Hui, B. Zheng, B. Yu, C. Gao, C. Huang, C. Lv, C. Zheng, D. Liu, F. Zhou, F. Huang, F. Hu, H. Ge, H. Wei, H. Lin, J. Tang, J. Yang, J. Tu, J. Zhang, J. Yang, J. Yang, J. Zhou, J. Zhou, J. Lin, K. Dang, K. Bao, K. Yang, L. Yu, L. Deng, M. Li, M. Xue, M. Li, P. Zhang, P. Wang, Q. Zhu, R. Men, R. Gao, S. Liu, S. Luo, T. Li, T. Tang, W. Yin, X. Ren, X. Wang, X. Zhang, X. Ren, Y. Fan, Y. Su, Y. Zhang, Y. Zhang, Y. Wan, Y. Liu, Z. Wang, Z. Cui, Z. Zhang, Z. Zhou, and Z. Qiu (2025)
+Qwen3 technical report.
+External Links: 2505.09388,
+Link
+Cited by: §A.1,
+§4.1.
+[45]
+P. Zhang, G. Zeng, T. Wang, and W. Lu (2024)
+TinyLlama: an open-source small language model.
+External Links: 2401.02385
+Cited by: §4.1.
+[46]
+M. Abdin, J. Aneja, H. Behl, S. Bubeck, R. Eldan, S. Gunasekar, M. Harrison, R. J. Hewett, M. Javaheripi, P. Kauffmann, J. R. Lee, Y. T. Lee, Y. Li, W. Liu, C. C. T. Mendes, A. Nguyen, E. Price, G. de Rosa, O. Saarikivi, A. Salim, S. Shah, X. Wang, R. Ward, Y. Wu, D. Yu, C. Zhang, and Y. Zhang (2024)
+Phi-4 technical report.
+External Links: 2412.08905,
+Link
+Cited by: §A.1,
+§4.1.
+[47]
+G. Penedo, H. Kydlíček, L. B. allal, A. Lozhkov, M. Mitchell, C. Raffel, L. V. Werra, and T. Wolf (2024)
+The fineweb datasets: decanting the web for the finest text data at scale.
+In The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track,
+External Links: Link
+Cited by: §A.1,
+§4.1.
+[48]
+L. Gao, J. Tow, B. Abbasi, S. Biderman, S. Black, A. DiPofi, C. Foster, L. Golding, J. Hsu, A. Le Noac’h, H. Li, K. McDonell, N. Muennighoff, C. Ociepa, J. Phang, L. Reynolds, H. Schoelkopf, A. Skowron, L. Sutawika, E. Tang, A. Thite, B. Wang, K. Wang, and A. Zou (2023)
+A framework for few-shot language model evaluation.
+Zenodo.
+External Links: Document,
+Link
+Cited by: §4.1.
+[49]
+S. Merity, C. Xiong, J. Bradbury, and R. Socher (2017)
+Pointer sentinel mixture models.
+In International Conference on Learning Representations,
+External Links: Link
+Cited by: §4.1.
+[50]
+D. Paperno, G. Kruszewski, A. Lazaridou, N. Q. Pham, R. Bernardi, S. Pezzelle, M. Baroni, G. Boleda, and R. Fernández (2016)
+The LAMBADA dataset: word prediction requiring a broad discourse context.
+In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), K. Erk and N. A. Smith (Eds.),
+Berlin, Germany, pp. 1525–1534.
+External Links: Link,
+Document
+Cited by: §4.1.
+[51]
+D. Hendrycks, C. Burns, S. Basart, A. Zou, M. Mazeika, D. Song, and J. Steinhardt (2021)
+Measuring massive multitask language understanding.
+External Links: 2009.03300,
+Link
+Cited by: §4.1.
+[52]
+R. Zellers, A. Holtzman, Y. Bisk, A. Farhadi, and Y. Choi (2019)
+HellaSwag: can a machine really finish your sentence?.
+External Links: 1905.07830,
+Link
+Cited by: §4.1.
+[53]
+P. Clark, I. Cowhey, O. Etzioni, T. Khot, A. Sabharwal, C. Schoenick, and O. Tafjord (2018)
+Think you have solved question answering? try arc, the ai2 reasoning challenge.
+arXiv:1803.05457v1.
+Cited by: §4.1.
+[54]
+Y. Bisk, R. Zellers, R. L. Bras, J. Gao, and Y. Choi (2019)
+PIQA: reasoning about physical commonsense in natural language.
+External Links: 1911.11641,
+Link
+Cited by: §4.1.
+[55]
+K. Sakaguchi, R. L. Bras, C. Bhagavatula, and Y. Choi (2019)
+WinoGrande: an adversarial winograd schema challenge at scale.
+External Links: 1907.10641,
+Link
+Cited by: §4.1.
+[56]
+T. Mihaylov, P. Clark, T. Khot, and A. Sabharwal (2018)
+Can a suit of armor conduct electricity? a new dataset for open book question answering.
+External Links: 1809.02789,
+Link
+Cited by: §4.1.
+[57]
+M. Blondel, M. E. Sander, G. Vivier-Ardisson, T. Liu, and V. Roulet (2026)
+Autoregressive language models are secretly energy-based models: insights into the lookahead capabilities of next-token prediction.
+External Links: 2512.15605,
+Link
+Cited by: Appendix B,
+§4.5.
+[58]
+C. Dugas, Y. Bengio, F. Bélisle, C. Nadeau, and R. Garcia (2000)
+Incorporating second-order functional knowledge for better option pricing.
+In Advances in Neural Information Processing Systems, T. Leen, T. Dietterich, and V. Tresp (Eds.),
+Vol. 13, pp. .
+External Links: Link
+Cited by: §4.6.
+[59]
+F.A. Gers, J. Schmidhuber, and F. Cummins (1999)
+Learning to forget: continual prediction with lstm.
+In 1999 Ninth International Conference on Artificial Neural Networks ICANN 99. (Conf. Publ. No. 470),
+Vol. 2, pp. 850–855 vol.2.
+External Links: Document
+Cited by: §4.6.
+[60]
+T. Dao (2024)
+FlashAttention-2: faster attention with better parallelism and work partitioning.
+In The Twelfth International Conference on Learning Representations,
+External Links: Link
+Cited by: §A.2.
+[61]
+J. Song, C. Meng, and S. Ermon (2021)
+Denoising diffusion implicit models.
+In International Conference on Learning Representations,
+External Links: Link
+Cited by: Appendix B.
+[62]
+R. Xu, Y. Gao, L. Wang, J. Li, W. Chen, Q. Guo, M. Yang, and S. Zhang (2026)
+Looping back to move forward: recursive transformers for efficient and flexible large multimodal models.
+arXiv preprint arXiv:2602.09080.
+Cited by: Appendix F.
+[63]
+Qwen Team (2026)
+Qwen3.6-27B: flagship-level coding in a 27B dense model.
+External Links: Link
+Cited by: Appendix F.
+[64]
+DeepSeek-AI (2026)
+DeepSeek-v4: towards highly efficient million-token context intelligence.
+Cited by: Appendix F.
+[65]
+E. Choi, K. Choi, S. Hong, J. Hwang, H. Jeon, H. Jo, J. Kim, S. Kim, S. Kim, S. Kim, Y. Kim, Y. Kim, H. Lee, J. Lee, K. Lee, S. Park, H. Yeen, H. Chang, S. J. Choi, Y. Choi, J. Ham, K. Jeon, G. Jeong, G. J. Jo, Y. Jo, J. Jung, N. Kang, D. Kim, E. Kim, H. Kim, H. Kim, H. Kim, J. Kim, M. Kim, M. Kim, U. Kim, Y. Kim, Y. Kim, C. Lee, C. Lee, C. Lee, D. Lee, E. H. Lee, H. Lee, J. Lee, J. Lee, S. Lee, S. Lim, S. Lim, W. Lim, C. Moon, J. Park, J. Park, Y. Park, H. Seo, W. Seo, Y. Song, S. Yang, S. Yang, C. E. Yea, S. Yi, C. Yoon, D. Yoon, S. Yoon, and H. Yun (2026)
+K-exaone technical report.
+External Links: 2601.01739,
+Link
+Cited by: Appendix F.
+[66]
+S. Park, S. Kim, J. Cho, G. Gim, D. Jung, M. Cha, E. Choo, T. Hong, M. Jeong, S. Joo, M. Khang, E. Kim, M. Kim, S. Kim, Y. Kim, H. Lee, S. Lee, S. Lee, S. Park, G. Shin, I. Song, W. Song, S. Yang, S. Yi, S. Yoon, J. Ko, S. Song, K. Choi, H. Lee, S. Kim, D. Chang, K. Cho, J. Choe, H. Lee, J. Lee, K. Lim, and A. Oh (2026)
+Solar open technical report.
+External Links: 2601.07022,
+Link
+Cited by: Appendix F.
+[67]
+NVIDIA, :, A. Blakeman, A. Grattafiori, A. Basant, A. Gupta, A. Khattar, A. Renduchintala, A. Vavre, A. Shukla, A. Bercovich, A. Ficek, A. Shaposhnikov, A. Kondratenko, A. Bukharin, A. Milesi, A. Taghibakhshi, A. Liu, A. Barton, A. S. Mahabaleshwarkar, A. Klein, A. Zuker, A. Geifman, A. Shen, A. Bhiwandiwalla, A. Tao, A. Agrusa, A. Verma, A. Guan, A. Mandarwal, A. Mehta, A. Aithal, A. Poojary, A. Ahamed, A. Mishra, A. K. Thekkumpate, A. Dattagupta, B. Zhu, B. Sadeghi, B. Simkin, B. Lanir, B. Schifferer, B. Nushi, B. Kartal, B. D. Rouhani, B. Ginsburg, B. Norick, B. Soubasis, B. Kisacanin, B. Yu, B. Catanzaro, C. del Mundo, C. Hwang, C. Wang, C. Hsieh, C. Zhang, C. Yu, C. Mungekar, C. Patel, C. Alexiuk, C. Parisien, C. Neale, C. Meurillon, D. Mosk-Aoyama, D. Su, D. Corneil, D. Afrimi, D. Lo, D. Rohrer, D. Serebrenik, D. Gitman, D. Levy, D. Stosic, D. Mosallanezhad, D. Narayanan, D. Nathawani, D. Rekesh, D. Yared, D. Kakwani, D. Ahn, D. Riach, D. Stosic, E. Minasyan, E. Lin, E. Long, E. P. Long, E. Segal, E. Lantz, E. Evans, E. Ning, E. Chung, E. Harper, E. Tramel, E. Galinkin, E. Pounds, E. Briones, E. Bakhturina, E. Tsykunov, F. Ladhak, F. Wang, F. Jia, F. Soares, F. Chen, F. Galko, F. Sun, F. Siino, G. H. Agam, G. Ajjanagadde, G. Bhatt, G. Prasad, G. Armstrong, G. Shen, G. Batmaz, G. Nalbandyan, H. Qian, H. Sharma, H. Ross, H. Ngo, H. Hum, H. Sahota, H. Wang, H. Soni, H. Upadhyay, H. Mao, H. C. Nguyen, H. Q. Nguyen, I. Cunningham, I. Galil, I. Shahaf, I. Gitman, I. Loshchilov, I. Schen, I. Levy, I. Moshkov, I. Golan, I. Putterman, J. Kautz, J. P. Scowcroft, J. Casper, J. Mitra, J. Glick, J. Chen, J. Oliver, J. Zhang, J. Zeng, J. Lou, J. Zhang, J. Choi, J. Huang, J. Conway, J. Guman, J. Kamalu, J. Greco, J. Cohen, J. Jennings, J. Daw, J. V. Vialard, J. Yi, J. Parmar, K. Xu, K. Zhu, K. Briski, K. Cheung, K. Luna, K. Wyss, K. Santhanam, K. Shih, K. Kong, K. Bhardwaj, K. Shankar, K. C. Puvvada, K. Pawelec, K. Anik, L. McAfee, L. Sleiman, L. Derczynski, L. Ding, L. Wei, L. Liebenwein, L. Vega, M. Grover, M. V. Segbroeck, M. R. de Melo, M. Nazemi, M. N. Sreedhar, M. Kilaru, M. Ashkenazi, M. Romeijn, M. Chochowski, M. Cai, M. Kliegl, M. Moosaei, M. Kulka, M. Novikov, M. Samadi, M. Corpuz, M. Wang, M. Price, M. Andersch, M. Boone, M. Evans, M. Martinez, M. Khona, M. Chrzanowski, M. Lee, M. Dabbah, M. Shoeybi, M. Patwary, N. Mulepati, N. Nabwani, N. Hereth, N. Assaf, N. Habibi, N. Zmora, N. Haber, N. Sessions, N. Bhatia, N. Jukar, N. Pope, N. Ludwig, N. Tajbakhsh, N. Ailon, N. Juluru, N. Sharma, O. Hrinchuk, O. Kuchaiev, O. Delalleau, O. Olabiyi, O. U. Argov, O. Puny, O. Tropp, O. Xie, P. Chadha, P. Shamis, P. Gibbons, P. Molchanov, P. Morkisz, P. Dykas, P. Jin, P. Xu, P. Januszewski, P. P. Thombre, P. Varshney, P. Gundecha, P. Tredak, Q. Miao, Q. Wan, R. K. Mahabadi, R. Garg, R. El-Yaniv, R. Zilberstein, R. Shafipour, R. Harang, R. Izzo, R. Shahbazyan, R. Garg, R. Borkar, R. Gala, R. Islam, R. Hesse, R. Waleffe, R. Watve, R. Koren, R. Zhang, R. Hewett, R. J. Hewett, R. Prenger, R. Timbrook, S. Mahdavi, S. Modi, S. Kriman, S. Lim, S. Kariyappa, S. Satheesh, S. Kaji, S. Pasumarthi, S. Muralidharan, S. Narentharen, S. Narenthiran, S. Bak, S. Kashirsky, S. Poulos, S. Mor, S. Ramasamy, S. Acharya, S. Ghosh, S. T. Sreenivas, S. Thomas, S. Fan, S. Gopal, S. Prabhumoye, S. Pachori, S. Toshniwal, S. Ding, S. Singh, S. Sun, S. Ithape, S. Majumdar, S. Singhal, S. Sergienko, S. Alborghetti, S. Ge, S. D. Devare, S. K. Barua, S. Panguluri, S. Gupta, S. Priyadarshi, S. N. Akter, T. Bui, T. Ene, T. Kong, T. Do, T. Blankevoort, T. Moon, T. Balough, T. Asida, T. B. Natan, T. Ronen, T. Konuk, T. Vashishth, U. Karpas, U. De, V. Noorozi, V. Noroozi, V. Srinivasan, V. Elango, V. Cui, V. Korthikanti, V. Rao, V. Kurin, V. Lavrukhin, V. Anisimov, W. Jiang, W. U. Ahmad, W. Du, W. Ping, W. Zhou, W. Jennings, W. Zhang, W. Prazuch, X. Ren, Y. Karnati, Y. Choi, Y. Meyer, Y. Wu, Y. Zhang, Y. Qin, Y. Lin, Y. Geifman, Y. Fu, Y. Subara, Y. Suhara, Y. Gao, Z. Moshe, Z. Dong, Z. Zhu, Z. Liu, Z. Chen, and Z. Yan (2025)
+NVIDIA nemotron 3: efficient and open intelligence.
+External Links: 2512.20856,
+Link
+Cited by: Appendix F.
+[68]
+K. Team, G. Chen, Y. Zhang, J. Su, W. Xu, S. Pan, Y. Wang, Y. Wang, G. Chen, B. Yin, Y. Chen, J. Yan, M. Wei, Y. Zhang, F. Meng, C. Hong, X. Xie, S. Liu, E. Lu, Y. Tai, Y. Chen, X. Men, H. Guo, Y. Charles, H. Lu, L. Sui, J. Zhu, Z. Zhou, W. He, W. Huang, X. Xu, Y. Wang, G. Lai, Y. Du, Y. Wu, Z. Yang, and X. Zhou (2026)
+Attention residuals.
+External Links: 2603.15031,
+Link
+Cited by: Appendix F.
+[69]
+G. Tie, Z. Zhao, D. Song, F. Wei, R. Zhou, Y. Dai, W. Yin, Z. Yang, J. Yan, Y. Su, Z. Dai, Y. Xie, Y. Cao, L. Sun, P. Zhou, L. He, H. Chen, Y. Zhang, Q. Wen, T. Liu, N. Z. Gong, J. Tang, C. Xiong, H. Ji, P. S. Yu, and J. Gao (2025)
+A survey on post-training of large language models.
+External Links: 2503.06072,
+Link
+Cited by: Appendix F.
+[70]
+Z. Zhou, L. Chen, H. Tong, and D. Song (2026)
+DLLM: simple diffusion language modeling.
+External Links: 2602.22661,
+Link
+Cited by: Appendix F.
+⬇
+h = Encoder(x)
+sampled = RandomSampler(B, K)
+for b in range(B):
+# Supervised step
+if b in sampled:
+h_prev = h
+h_prop = Reasoner(h)
+h = Gate(h_prev, h_prop)
+q_logit = ConfidenceHead(h)
+y_hat = Decoder(h)
+y_prev = Decoder(h_prev)
+loss = CE(y_hat, y_true) # L_LM
+loss += SiLU(CE(y_hat, y_true)
+- CE(y_prev, y_true)) # L_Mono
+loss += BCEWithLogits(q_logit,
+(y_hat == y_true)) # L_Q
+loss.backward()
+opt.step()
+opt.zero_grad()
+h = h.detach()
+else: # Unsupervised step
+with no_grad():
+h = Gate(h, Reasoner(h))
+h = h.detach()
+Figure 10: Pseudocode of LoopUS.
+Appendix A Experimental Details
+A.1 Backbones and Training Data
+We evaluate Qwen3-1.7B, Qwen3-4B, Qwen3-8B, TinyLlama, and Phi-4 backbones [44, 46]. Our reported main experiments use streaming training on FineWeb-Edu with the CC-MAIN-2025-26 configuration [47], a total budget of 3B tokens, and sequence length 1024. The released public reference recipes are built on the same data pipeline. When applying the LoopUS architecture, the models are unrolled by selecting specific layers as the encoder and decoder, reserving the intermediate layers as the reusable reasoning block:
+•
+Qwen3-1.7B: Encoder layers 0–1, Decoder layer 27.
+•
+Qwen3-4B: Encoder layers 0–1, Decoder layer 35.
+•
+Qwen3-8B: Encoder layers 0–5, Decoder layer 35.
+•
+Phi-4: Encoder layers 0–5, Decoder layer 39.
+•
+TinyLlama: Encoder layer 0, Decoder layer 21.
+This formulation separates a shallow encoder from a late decoder while repurposing the entire middle transformer block as the looped latent workspace.
+A.2 Optimization Details
+Training is implemented with Accelerate and distributed data parallelism, with gradient checkpointing enabled throughout the run. The reference script uses AdamW with a learning rate of 5×10−55\times 10^{-5}, one epoch over the token budget, bf16 mixed precision, FlashAttention-2 [60], cosine scheduling, 300 warmup steps, 8 dataloader workers, and pinned-memory data loading. Logging is performed every 50 steps, checkpoints are saved every 5000 steps, and at most 3 checkpoints are retained. The data pipeline reserves a small held-out slice with val_ratio=10−4\texttt{val\_ratio}=10^{-4}, although periodic validation is disabled in the released main training script by setting eval_interval=−1\texttt{eval\_interval}=-1.
+The loop-specific configuration uses 20 total reasoning steps with deep supervision on 5 loop positions per example, a training stopping threshold of 0.55, and the all stopping mode. The training code also supports checkpoint-time lm-evaluation-harness runs; in the released script this option is enabled for WikiText with a limit of 200 samples.
+A.3 Evaluation Details
+We evaluate five pretrained backbones: Qwen3-1.7B, Qwen3-4B, Qwen3-8B, TinyLlama, and Phi-4. The reported training runs were conducted in cloud GPU environments, using NVIDIA L40S GPUs for Qwen3-1.7B and TinyLlama, NVIDIA RTX PRO 6000 GPUs for Qwen3-4B and Qwen3-8B, and NVIDIA H200 GPUs for Phi-4. Unless otherwise stated, models are trained on FineWeb-Edu with a budget of 3B tokens, context length 1024, AdamW, cosine learning-rate decay, bf16 mixed precision, and the default LoopUS setting of B=20B{=}20 total loop steps with K=5K{=}5 supervised depths per batch.
+For evaluation, we use lm-evaluation-harness in a zero-shot setting and report perplexity on WikiText and Lambada, together with accuracy on MMLU, HellaSwag, ARC-Easy, ARC-Challenge, PIQA, WinoGrande, and OpenBookQA. Standard inference uses a maximum recursion budget of 8, a stopping threshold of 0.6, and KV caching for autoregressive decoding. The main experiments are organized to test three claims: that architectural recasting improves the pretrained backbone while preserving its language-modeling interface, that selective gating and random deep supervision improve adaptation behavior under limited budgets relative to prior retrofitting schemes, and that the resulting recurrence behaves as controlled iterative refinement rather than uncontrolled extra depth.
+A.4 KV-Cache Implementation for Autoregressive Inference
+Figure 11: Effect of KV caching on LoopUS autoregressive decoding speed with the recursion budget fixed to B=8B=8. Across Qwen3-1.7B, Qwen3-4B, and Qwen3-8B, caching consistently reduces seconds per generated token, with the largest gains appearing at longer generations.
+Let x1:tx_{1:t} denote the already processed prefix at autoregressive decoding step tt, and let BB denote the maximum recursion budget used for that forward pass. We use tt for decoding time and bb for latent refinement depth. LoopUS stores the autoregressive cache state as
+𝒞t=(𝒞tenc,{𝒞trea,b}b=1B,𝒞tdec,st),\mathcal{C}_{t}=\left(\mathcal{C}^{\mathrm{enc}}_{t},\{\mathcal{C}^{\mathrm{rea},b}_{t}\}_{b=1}^{B},\mathcal{C}^{\mathrm{dec}}_{t},s_{t}\right),
+(14)
+where 𝒞tenc\mathcal{C}^{\mathrm{enc}}_{t} is the encoder KV cache, 𝒞trea,b\mathcal{C}^{\mathrm{rea},b}_{t} is the KV cache of the bb-th refinement depth, 𝒞tdec\mathcal{C}^{\mathrm{dec}}_{t} is the decoder KV cache, and sts_{t} is the number of previously seen tokens. In the implementation, these objects are instantiated as separate Hugging Face DynamicCaches plus a seen_tokens counter. Conceptually, inference proceeds in two phases. In the prefill phase, the full prompt is processed once and all encoder, reasoning, and decoder caches are populated for the prompt tokens. In the subsequent decode phase, LoopUS no longer recomputes the full prefix. Instead, when generating token xt+1x_{t+1}, each module receives only the newest token representation together with its previously accumulated cache, so the new query attends to the stored keys and values of the entire prefix while appending only one additional KV entry per layer and per loop depth. The initial forward pass processes the full prompt, whereas every later decoding step uses only the newest token,
+xt+1,pt+1=st,x_{t+1},\qquad p_{t+1}=s_{t},
+(15)
+with the absolute position pt+1p_{t+1} supplied through cache_position. This keeps rotary position IDs and causal masks aligned with the full prefix even though the model no longer recomputes x1:tx_{1:t}.
+The per-token latent update can be written as
+ht+1(0),𝒞t+1enc\displaystyle h^{(0)}_{t+1},\mathcal{C}^{\mathrm{enc}}_{t+1}
+=ℰ⁡(xt+1,𝒞tenc,pt+1),\displaystyle=\mathcal{E}\left(x_{t+1};\mathcal{C}^{\mathrm{enc}}_{t},p_{t+1}\right),
+(16)
+ht+1(b),𝒞t+1rea,b\displaystyle h^{(b)}_{t+1},\mathcal{C}^{\mathrm{rea},b}_{t+1}
+=ℛb(ht+1(b−1);𝒞trea,b,pt+1),b=1,…,B,\displaystyle=\mathcal{R}_{b}\left(h^{(b-1)}_{t+1};\mathcal{C}^{\mathrm{rea},b}_{t},p_{t+1}\right),\quad b=1,\dots,B,
+(17)
+ℓt+1,𝒞t+1dec\displaystyle\ell_{t+1},\mathcal{C}^{\mathrm{dec}}_{t+1}
+=𝒟⁡(ht+1(B),𝒞tdec,pt+1),\displaystyle=\mathcal{D}\left(h^{(B)}_{t+1};\mathcal{C}^{\mathrm{dec}}_{t},p_{t+1}\right),
+(18)
+where ℓt+1\ell_{t+1} denotes the next-token logits. The key design choice is that LoopUS does not share a single cache across all recursive refinements; instead, each refinement depth bb has its own cache 𝒞trea,b\mathcal{C}^{\mathrm{rea},b}_{t}. This separation is necessary because the hidden state entering loop depth bb is not the same object as the hidden state entering depth b′≠bb^{\prime}\neq b: although the block parameters are shared, the token representations evolve after every refinement step, so the corresponding keys and values represent different latent trajectories. Reusing one common cache across all depths would mix KV states produced at different refinement stages and would no longer correspond to the actual recurrence being executed. Maintaining one cache per depth therefore preserves the semantics of the unrolled loop while still amortizing prefix computation over autoregressive time. This design matches the fact that the same middle block is reused as a depth-indexed dynamical operator rather than as one flat transformer pass, and it keeps the implementation compatible with recursive decoding views similar to Bae et al. [11, 5].
+If the active context reaches the maximum window size MM, the cached state is truncated before appending the next token,
+𝒞t←crop⁡(𝒞t,M−1),st←M−1,\mathcal{C}_{t}\leftarrow\operatorname{crop}(\mathcal{C}_{t},M-1),\qquad s_{t}\leftarrow M-1,
+(19)
+so all encoder, reasoning, and decoder caches remain synchronized with the same sliding window. In this form, KV caching turns LoopUS generation into an incremental state update over 𝒞t\mathcal{C}_{t} rather than repeated recomputation of the entire prefix at every token.
+To quantify the practical effect of this design, we benchmark autoregressive decoding with the recursion budget fixed to B=8B=8 and measure token-generation throughput over five repeated runs on an NVIDIA L40S GPU. Figure 11 summarizes the resulting cached-versus-uncached comparison across output lengths. At 1024 generated tokens, KV caching yields a 1.64×1.64\times speedup for Qwen3-1.7B, a 2.31×2.31\times speedup for Qwen3-4B, and a 2.49×2.49\times speedup for Qwen3-8B. This pattern is consistent with the observation of Bae et al. [5] that looped transformers benefit strongly from cache reuse because recurrent decoding repeatedly reaccesses shared memory across refinement steps. Once the prefix state has been materialized, caching removes much of the repeated computation that would otherwise be spent reconstructing the same context at each autoregressive step.
+A.5 Halting and Recursion Diagnostics
+The halting comparison in Figure 18 is implemented with a fixed Qwen3-1.7B LoopUS checkpoint and compares three inference rules: threshold halting, convergence halting based on hidden-state change, and CDF-based halting. These runs use the task set {MMLU, HellaSwag, ARC-Easy, PIQA, WinoGrande, Lambada, WikiText}, maximum recursion budget B=10B=10, batch size 16, maximum length 1024, seed 2026, and runtime-stat logging. The convergence sweep uses ϵ∈{0.1,1,5,10,100}\epsilon\in\{0.1,1,5,10,100\}, while the CDF sweep uses thresholds {0.2,0.3,0.5,0.7,0.8}\{0.2,0.3,0.5,0.7,0.8\}.
+The separate recursion-depth study varies the inference budget on the Qwen3-4B LoopUS checkpoint while keeping the remaining evaluation settings fixed. This diagnostic isolates how far additional loop depth can improve performance before gains saturate or begin to trade off against over-refinement; the corresponding results are reported in Figure 5 in Section 4.4.
+Appendix B Dynamical and Geometric Interpretation of LoopUS
+Recent work suggests that latent-space iterative reasoning can be understood through a dynamical lens. Gladstone et al. [7] argue that “thinking” can be framed as optimization with respect to a learned verifier that measures the compatibility between an input and a candidate prediction, with additional computation corresponding to iterative refinement until convergence. Complementarily, Blondel et al. [57] establish an explicit bijection between autoregressive models and EBMs in function space. They show that a sequence-level energy decomposes into per-token rewards,
+R⁡(x,y)=∑t=1|y|r⁡(x⊕y<t,yt),R(x,y)=\sum_{t=1}^{|y|}r(x\oplus y_{<t},y_{t}),
+(20)
+and that an autoregressive model’s next-token logits qq relate to these per-token rewards rr through the soft Bellman equation: q⁡(st,yt)=r⁡(st,yt)+Vq​(st⊕yt)q(s_{t},y_{t})=r(s_{t},y_{t})+V_{q}(s_{t}\oplus y_{t}), where VqV_{q} is a soft value function encoding lookahead over all possible continuations. Thus even a model trained purely on next-token prediction implicitly induces a global compatibility function rather than making only isolated token-level decisions. Taken together, these results suggest that an autoregressive transformer can exhibit gradual refinement trajectories similar to energy minimization processes.
+This view is consistent with LoopUS because our hidden-state analysis in Figure 1 suggests that the reused middle layers already form a near-fixed-point latent workspace. LoopUS then turns this workspace into an iterative refinement process. Using the recursion-depth index bb, after vectorizing the hidden state and writing P(b)=Diag⁡(α(b))P^{(b)}=\mathrm{Diag}(\alpha^{(b)}), Eq. 5 can be rewritten exactly as
+h(b+1)=h(b)−P(b)​(h(b)−ℳ⁡(h(b))).h^{(b+1)}=h^{(b)}-P^{(b)}\left(h^{(b)}-\mathcal{M}(h^{(b)})\right).
+(21)
+This is a diagonally preconditioned relaxed fixed-point iteration. Therefore, the mathematically unconditional statement is that LoopUS searches for a latent state h⋆h^{\star} satisfying h⋆=ℳ⁡(h⋆)h^{\star}=\mathcal{M}(h^{\star}). Any converged point with strictly positive diagonal entries in P(b)P^{(b)} must satisfy this fixed-point condition. In other words, the rigorous part of the argument is a stable fixed-point search in latent space; the energy interpretation becomes exact only under an additional assumption on the residual field.
+Specifically, suppose there exists a scalar potential Φx​(h)\Phi_{x}(h) on the relevant latent manifold such that
+∇hΦx​(h)=h−ℳ⁡(h).\nabla_{h}\Phi_{x}(h)=h-\mathcal{M}(h).
+(22)
+Then Eq. 21 becomes
+h(b+1)=h(b)−P(b)​∇hΦx​(h(b)),h^{(b+1)}=h^{(b)}-P^{(b)}\nabla_{h}\Phi_{x}(h^{(b)}),
+(23)
+which is simply diagonally preconditioned gradient descent on Φx\Phi_{x}. If Φx\Phi_{x} is LL-smooth and the effective step size is small enough, e.g., ‖P(b)‖2≤1/L\|P^{(b)}\|_{2}\leq 1/L, the descent lemma yields
+Φx​(h(b+1))≤Φx​(h(b))−⟨g(b),P(b)​g(b)⟩+L2​‖P(b)​g(b)‖22,g(b)=∇hΦx​(h(b)),\Phi_{x}(h^{(b+1)})\leq\Phi_{x}(h^{(b)})-\langle g^{(b)},P^{(b)}g^{(b)}\rangle+\frac{L}{2}\|P^{(b)}g^{(b)}\|_{2}^{2},\quad g^{(b)}=\nabla_{h}\Phi_{x}(h^{(b)}),
+(24)
+so the potential decreases whenever the gated step is sufficiently small. Under this assumption, fixed points of ℳ\mathcal{M} coincide with stationary points of Φx\Phi_{x}. This provides a geometric intuition for why LoopUS can be viewed as mimicking an energy minimization process, provided the residual field h−ℳ⁡(h)h-\mathcal{M}(h) locally resembles a gradient field.
+More directly, our training objective enforces a next-token-prediction surrogate energy descent. Define
+Ex(h)=CE(𝒟(h),x2:T),E_{x}(h)=\mathrm{CE}\!\left(\mathcal{D}(h),x_{2:T}\right),
+(25)
+which is exactly the next-token prediction loss for the gold continuation under the decoder. Then the monotonicity loss from Section 3.2 can be written as
+ℒmono(b)=SiLU⁡(Ex​(h(b+1))−Ex​(h(b))).\mathcal{L}_{\mathrm{mono}}^{(b)}=\operatorname{SiLU}\!\left(E_{x}(h^{(b+1)})-E_{x}(h^{(b)})\right).
+(26)
+Because SiLU is positive for positive arguments and produces only small negative values for negative arguments, minimizing ℒmono(b)\mathcal{L}_{\mathrm{mono}}^{(b)} penalizes positive increments in ExE_{x} and mildly rewards negative increments. Therefore, even without proving that h−ℳ⁡(h)h-\mathcal{M}(h) is the gradient of a global scalar potential, LoopUS is explicitly trained to make this decoder-induced surrogate energy approximately non-increasing along the loop. The confidence head complements this by stopping once the predicted benefit of further refinement becomes small. In this sense, the halting trends in Figure 18 and the smooth contraction-like trajectories in Figures 16 and 17 are not just qualitative analogies: they are the empirical signature of a loop trained to behave like a descent process on a task-aligned surrogate energy.
+The monotonicity loss and stepwise detachment sharpen this picture at the level of individual refinement transitions. The monotonicity term does not only prefer a good final state; it explicitly trains each local update h(b)→h(b+1)h^{(b)}\rightarrow h^{(b+1)} to avoid increasing the decoder surrogate energy ExE_{x}. Stepwise detachment then prevents gradients from coupling all loop positions into one long backpropagation-through-time graph, so each supervised depth is optimized primarily as a local correction applied to the current latent state rather than as one stage in a globally entangled trajectory. Combined with the selective gate, this biases LoopUS toward sequences of small, progressively improving latent edits instead of brittle one-shot remappings. In this limited dynamical sense, LoopUS resembles deterministic iterative refinement procedures such as DDIM [61] and recent language diffusion models [9]: each step is trained to move the representation toward a more task-aligned region while preserving stable multi-step evolution.
+The diffusion analogy should not be overstated. LoopUS does not inject explicit noise, does not learn a reverse diffusion process or noise schedule, and does not optimize a score-matching objective. Strictly speaking, LoopUS is also not an explicit EBM. We do not learn a standalone scalar energy over all input-output pairs, nor do we run gradient descent on that scalar in output space. A more precise statement is that LoopUS is an implicit latent optimizer: the refinement process is amortized into the recurrent hidden-state dynamics of a pretrained autoregressive transformer, approximating a steepest-descent-like process through repeated latent updates. The connection to diffusion or EBMs is therefore geometric and dynamical rather than probabilistic. This distinction matters, but the main conceptual point remains: what makes the loop useful is not merely extra depth, but the emergence of a compatibility-seeking dynamical process that keeps allocating compute until the representation settles into a more predictive state.
+Appendix C Additional Qualitative Example
+Figure 12 provides a representative example of how LoopUS refines its latent state across loop iterations during generation. Rather than making one large, brittle update, the model follows a coherent multi-step trajectory: early iterations make the largest representational corrections, while later iterations make smaller adjustments that stabilize the prediction. This qualitative behavior is consistent with the view developed in the main text that LoopUS acts as an iterative latent refinement process rather than as a one-shot remapping of the hidden state.
+Figures 13, 14, and 15 further visualize these loop trajectories in a shared PCA space for multiple LoopUS backbones. Across models, the hidden states evolve along smooth, low-dimensional paths instead of exhibiting erratic jumps between iterations. The trajectories typically show larger motion in the first few refinement steps followed by progressive contraction, which supports our interpretation of LoopUS as a controlled descent-like process in latent space. Although the exact geometry varies by backbone, the common pattern is that iterative reuse of the reasoning block produces structured movement toward a more stable predictive state.
+Figure 12: Example generation thinking trace from LoopUS on Qwen3-4B. The figure visualizes how the model’s intermediate reasoning trajectory evolves across loop iterations for a representative sample.
+Figure 13: LoopUS thinking PCA visualization for Qwen3-1.7B.
+Figure 14: LoopUS thinking PCA visualization for Qwen3-8B.
+Figure 15: LoopUS thinking PCA visualization for Qwen3-4B.
+Appendix D Hidden-State Trajectory Analysis
+To test whether the staged representation dynamics used to motivate LoopUS are specific to a single backbone or reflect a broader pattern, we extend the hidden-state analysis to additional pretrained LLMs. Figure 16 plots PCA trajectories of hidden states across layers for six backbones, while Figure 17 reports the corresponding layer-to-layer distance profiles. Together, these figures show that the qualitative structure highlighted in Figure 1 is not unique to Qwen3-1.7B.
+Across model families, we repeatedly observe the same three-phase organization: rapid representational motion in early layers, a relatively smooth middle-layer regime, and a sharper transition near the final layers. In the PCA plots, this appears as a gradual arc or plateau through the middle of the network followed by a more pronounced turn toward the output-facing layers. In the distance profiles, the same effect appears as reduced consecutive-layer change through the middle block bracketed by larger changes at the beginning and end of the network. This cross-model consistency supports our architectural prior that pretrained decoder-only transformers naturally admit an encoder–reasoning–decoder decomposition, with the middle layers forming the most suitable region for stable iterative reuse.
+(a) Qwen3-4B
+(b) Qwen3-8B
+(c) Qwen3.5-27B
+(d) Qwen3.5-35B-A3B
+(e) Phi-4
+(f) EXAONE-4.0-32B
+Figure 16: PCA trajectories of hidden-state refinement across model backbones.
+(a) Qwen3-4B
+(b) Qwen3-8B
+(c) Qwen3.5-27B
+(d) Qwen3.5-35B-A3B
+(e) Phi-4
+(f) EXAONE-4.0-32B
+Figure 17: Hidden-state distance profiles across model backbones.
+Appendix E Halting Strategies
+Figure 18: Halting behavior under different stopping strategies. The learned threshold-based rule yields the sharpest halting distribution, indicating that LoopUS learns a meaningful stopping signal.
+We compare three inference-time halting rules while keeping the LoopUS checkpoint fixed. Let h¯t+1(b)∈ℝh\bar{h}_{t+1}^{(b)}\in\mathbb{R}^{h} denote the hidden state of the newest token after the bb-th latent refinement step at autoregressive decoding step t+1t+1, and let
+q~t+1(b)=qϕ​(h¯t+1(b)),qt+1(b)=σ⁡(q~t+1(b)).\tilde{q}_{t+1}^{(b)}=q_{\phi}\!\left(\bar{h}_{t+1}^{(b)}\right),\qquad q_{t+1}^{(b)}=\sigma\!\left(\tilde{q}_{t+1}^{(b)}\right).
+(27)
+Given a maximum recursion budget BB, each strategy returns an exit depth
+bexit​(t+1)=min⁡{b∈{1,…,B}:Stopt+1(b)=1},b_{\mathrm{exit}}(t+1)=\min\!\left\{b\in\{1,\dots,B\}:\mathrm{Stop}_{t+1}^{(b)}=1\right\},
+(28)
+with the convention that bexit​(t+1)=Bb_{\mathrm{exit}}(t+1)=B if no earlier stopping condition is satisfied. In our implementation, the confidence head is evaluated at every refinement step by default (q_eval_interval=1\texttt{q\_eval\_interval}=1), although the code also supports evaluating it every rr steps and always at the final step. During batched evaluation, halting is applied conservatively so that all examples in the active batch remain synchronized: threshold and CDF halting use the minimum stopping score across the batch, whereas convergence halting uses the maximum hidden-state change across the batch.
+Threshold-based halting.
+This is the main stopping rule used by LoopUS and corresponds directly to the confidence-based stopping rule introduced in Section 3.1. We stop as soon as the confidence head exceeds a fixed threshold,
+qt+1(b)≥qth,q_{t+1}^{(b)}\geq q_{\mathrm{th}},
+(29)
+or equivalently,
+bexitth​(t+1)=min⁡{b:qt+1(b)≥qth}.b_{\mathrm{exit}}^{\mathrm{th}}(t+1)=\min\!\left\{b:q_{t+1}^{(b)}\geq q_{\mathrm{th}}\right\}.
+(30)
+Because ℒQ\mathcal{L}_{Q} trains qϕq_{\phi} to approximate the post-update token accuracy, this rule interprets qt+1(b)q_{t+1}^{(b)} as a direct estimate that the current latent state is already sufficiently predictive and that further refinement is unlikely to be necessary. For a batch ℬ\mathcal{B}, the implementation stops only when
+minn∈ℬ⁡qn,t+1(b)≥qth,\min_{n\in\mathcal{B}}q_{n,t+1}^{(b)}\geq q_{\mathrm{th}},
+(31)
+which ensures that every sequence in the batch is ready to halt before the shared forward pass terminates.
+Convergence-based halting.
+The second strategy is a non-parametric baseline that monitors whether the latent trajectory has numerically converged. Let
+Δt+1(b)=‖h¯t+1(b)−h¯t+1(b−1)‖2,b≥1,\Delta_{t+1}^{(b)}=\left\|\bar{h}_{t+1}^{(b)}-\bar{h}_{t+1}^{(b-1)}\right\|_{2},\qquad b\geq 1,
+(32)
+where h¯t+1(b−1)\bar{h}_{t+1}^{(b-1)} and h¯t+1(b)\bar{h}_{t+1}^{(b)} are the last-token hidden states before and after the current refinement step. The model exits when the representation change becomes smaller than a preset tolerance ϵ\epsilon,
+Δt+1(b)≤ϵ,\Delta_{t+1}^{(b)}\leq\epsilon,
+(33)
+that is,
+bexitconv​(t+1)=min⁡{b:Δt+1(b)≤ϵ}.b_{\mathrm{exit}}^{\mathrm{conv}}(t+1)=\min\!\left\{b:\Delta_{t+1}^{(b)}\leq\epsilon\right\}.
+(34)
+This rule does not use the confidence head at all. Instead, it assumes that once the hidden state of the current token changes only marginally from one loop to the next, the decoder distribution is unlikely to improve enough to justify another refinement step. In batched evaluation, we stop only when
+maxn∈ℬ⁡Δn,t+1(b)≤ϵ,\max_{n\in\mathcal{B}}\Delta_{n,t+1}^{(b)}\leq\epsilon,
+(35)
+so that the entire batch has converged under the same geometric criterion.
+CDF-based halting.
+For comparison, we also implement a cumulative-distribution-based halting rule inspired by the Q-exit criterion used in Ouro [28]. In this strategy, the stepwise confidence is reinterpreted as a hazard rate,
+λt+1(b)=qt+1(b)∈(0,1).\lambda_{t+1}^{(b)}=q_{t+1}^{(b)}\in(0,1).
+(36)
+The probability of exiting exactly at step bb is then defined by
+πt+1(b)=λt+1(b)​∏j=1b−1(1−λt+1(j)),\pi_{t+1}^{(b)}=\lambda_{t+1}^{(b)}\prod_{j=1}^{b-1}\left(1-\lambda_{t+1}^{(j)}\right),
+(37)
+and the cumulative probability of having exited by step bb is
+CDFt+1(b)=∑i=1bπt+1(i)=1−∏j=1b(1−λt+1(j)).\mathrm{CDF}_{t+1}^{(b)}=\sum_{i=1}^{b}\pi_{t+1}^{(i)}=1-\prod_{j=1}^{b}\left(1-\lambda_{t+1}^{(j)}\right).
+(38)
+The corresponding stopping rule is
+bexitcdf​(t+1)=min⁡{b:CDFt+1(b)≥qth}.b_{\mathrm{exit}}^{\mathrm{cdf}}(t+1)=\min\!\left\{b:\mathrm{CDF}_{t+1}^{(b)}\geq q_{\mathrm{th}}\right\}.
+(39)
+Intuitively, this rule accumulates evidence for stopping over multiple refinement steps: even if no single step produces a confidence score above qthq_{\mathrm{th}}, several moderately large values of λt+1(b)\lambda_{t+1}^{(b)} can combine into a large cumulative exit probability. For numerical stability, the implementation accumulates the survival probability in log space,
+log⁡St+1(b)=∑j=1blog⁡(1−λt+1(j)),CDFt+1(b)=1−exp⁡(log⁡St+1(b)).\log S_{t+1}^{(b)}=\sum_{j=1}^{b}\log\!\left(1-\lambda_{t+1}^{(j)}\right),\qquad\mathrm{CDF}_{t+1}^{(b)}=1-\exp\!\left(\log S_{t+1}^{(b)}\right).
+(40)
+Since LoopUS trains its confidence head with a direct binary target on post-update token accuracy rather than with Ouro’s full exit-distribution objective, we use this CDF rule as a comparative inference heuristic rather than as the primary training-consistent stopping criterion. In batched evaluation, stopping occurs only when
+minn∈ℬ⁡CDFn,t+1(b)≥qth.\min_{n\in\mathcal{B}}\mathrm{CDF}_{n,t+1}^{(b)}\geq q_{\mathrm{th}}.
+(41)
+Discussion.
+These three strategies expose different inductive biases. Threshold halting is the rule most tightly matched to our training objective because qϕq_{\phi} is explicitly supervised to predict whether the current refinement is already good enough. Convergence halting ignores the confidence head and instead uses only latent geometry, making it a useful diagnostic for whether the loop behaves like a contractive refinement process. The CDF-based rule is more aggressive in aggregating multiple moderate confidence values across steps and therefore serves as a natural comparison point to prior looped-language-model early-exit mechanisms [28]. Figure 18 compares these strategies under matched checkpoints while varying qthq_{\mathrm{th}} or ϵ\epsilon.
+Appendix F Limitations and Future Work
+Extension beyond text-only language modeling.
+All experiments in this paper focus on text-only, decoder-only language models. Although LoopUS is formulated as a latent-space refinement method and is therefore not tied to a particular input modality in principle, we have not evaluated whether the same encoder–reasoning–decoder decomposition remains stable for multimodal models. Recent progress on recurrent and looped architectures suggests that iterative latent computation can also be useful beyond text-only settings, but it remains unclear whether a pretrained multimodal transformer exhibits the same middle-layer geometry that makes LoopUS effective in our experiments [62, 15]. Vision, audio, and cross-modal tokens may induce different hidden-state structure, different layer specialization, and different failure modes under repeated latent refinement. Extending LoopUS to vision-language and other multimodal transformers is therefore an important next step, especially for testing whether looped latent computation can improve grounding, compositional perception, and cross-modal reasoning rather than only text-domain prediction.
+Heterogeneous and hybrid model architectures.
+Our experiments instantiate LoopUS on relatively standard transformer backbones. Modern language models increasingly combine heterogeneous layers and operators, such as gated delta networks [63], sparse attention [64], mixture-of-experts routing [65, 66], state-space modules [67], and other hybrid sequence mechanisms [68]. In such models, the middle-layer region may no longer behave as a uniform reusable block, and the optimal recursion policy may depend on the operator type, layer role, or token state. Future work should study how to select, compose, or schedule looped modules in architectures whose layers have substantially different computational semantics. A particularly useful direction is to learn architecture-aware recursion policies that decide not only when to stop, but also which operator or layer group should be reused at each refinement step.
+Scaling to larger and more diverse training regimes.
+The present results are obtained under a moderate post-training budget rather than a full large-scale training pipeline. This setting is useful for isolating the effect of looped up-scaling, but it leaves open how LoopUS behaves under substantially larger corpora, longer contexts, curriculum schedules, or more diverse data mixtures. Scaling the training recipe is especially relevant because the confidence head and monotonicity objective may benefit from richer distributions of refinement trajectories than those observed in limited-token adaptation. Larger-scale studies could also clarify whether the observed gains remain concentrated on reasoning-oriented tasks or broaden to knowledge-heavy and long-context settings as the loop is exposed to more varied supervision.
+Dedicated math and long-context reasoning coverage.
+Although our benchmark suite includes several reasoning-oriented evaluations, it does not include dedicated mathematical reasoning tasks or training on math-focused corpora. This is an important limitation of the current study. Because of compute constraints, our released training setup remained at a context length of 1024 and did not incorporate additional math-oriented datasets during adaptation. As a result, the paper does not yet test whether LoopUS yields similar gains on problems that require longer derivations, sustained multi-step reasoning, or explicit mathematical supervision. A useful next step is therefore to scale the training budget and context window while adding dedicated math and reasoning datasets, so that the benefits and failure modes of latent looping can be assessed under more computation-intensive reasoning workloads.
+Integration with instruction tuning and preference optimization.
+We evaluate LoopUS as a post-training adaptation method for base models. In practical LLM development, however, model quality is shaped not only by continued pretraining but also by instruction tuning, long-context adaptation, and preference optimization methods such as reinforcement learning from feedback or GRPO-style objectives [69]. Integrating LoopUS with SFT and preference-based post-training could test whether looped latent computation improves not only benchmark accuracy but also instruction following, controllability, calibration, and user-facing reliability [4]. This direction is also important because adaptive test-time computation may interact with alignment objectives: a model should learn when extra refinement is helpful for faithfully following an instruction and when additional computation risks overthinking or drifting from the user’s intent.
+LoopUS applied to diffusion LLMs.
+Although our current implementation focuses on standard autoregressive transformers, the core mechanism of LoopUS—iterative latent refinement controlled by dynamic gating and early halting—naturally aligns with the continuous denoising trajectories of diffusion language models [9, 70]. Diffusion LLMs fundamentally rely on iterative processes to refine continuous latent representations before decoding. However, their denoising steps are typically fixed or bound to computationally uniform schedules. Integrating the LoopUS framework into diffusion LLMs could introduce data-dependent adaptive computation to the reverse diffusion process, allowing the model to halt denoising dynamically when the latent state is sufficiently clean, guided by our confidence head. Furthermore, the selective gating mechanism and monotonicity loss could serve as structural regularizers for the score network, ensuring stable, monotonic improvement across timesteps and potentially accelerating generation without requiring explicit trajectory distillation. Exploring this intersection remains a promising direction for making continuous-space language generation more practical.
+LoopUS as a pretraining-native architecture.
+Finally, LoopUS may also be useful earlier in the model lifecycle. This paper treats looped depth up-scaling as a minimally invasive retrofit applied to pretrained backbones, but the same architectural prior could be incorporated during pretraining itself. Pretraining with looped latent refinement from the beginning may allow the model to allocate representational capacity differently, learn more calibrated stopping behavior, and make better use of adaptive test-time computation. A pretraining-native LoopUS model could also expose the recurrence to a much broader distribution of intermediate states, potentially reducing the gap between training-time refinement and inference-time recursion.
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue" (
+) button, located in the page header.
+Tip: You can select the relevant text first, to include it in your report.
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+Major funding support from

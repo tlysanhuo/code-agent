@@ -1,0 +1,140 @@
+{
+  "repo": "R2E-Gym/R2E-Gym",
+  "revision": "0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+  "commit_date": "2025-07-13T04:46:03Z",
+  "retrieved_at": "2026-09-09T12:20:32.530877+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/README.md",
+      "sha256": "d8726b70e8e05e375120f481bb2fd0e565f3ede43d1662f3d3aa029282ca2218",
+      "bytes": 12872
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/pyproject.toml",
+      "sha256": "fd1ab85d36e12133b3a1bbb2b58ac35d9327c43f117d37f71fe99b2734d82b08",
+      "bytes": 1070
+    },
+    {
+      "path": "reproduction/DEEPSWE_REPRODUCTION.MD",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/reproduction/DEEPSWE_REPRODUCTION.MD",
+      "sha256": "d9cbee88a70c5da5f36b7f6de9f9604f50739572e47013134f6c5ddfa57b3085",
+      "bytes": 4051
+    },
+    {
+      "path": "reproduction/DEEPSWE_TTS_REPRODUCTION.MD",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/reproduction/DEEPSWE_TTS_REPRODUCTION.MD",
+      "sha256": "8378551856beb6a44ee35dcc51fff6bfac90ef7bfc51f0f62d3c04dd931444cd",
+      "bytes": 5695
+    },
+    {
+      "path": "src/r2egym/agenthub/config/non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/non_fn_calling.yaml",
+      "sha256": "e857d84f764e3a6af364fd4146871d33ea19497d4788f76f403d79ca4a58bd21",
+      "bytes": 7315
+    },
+    {
+      "path": "src/r2egym/agenthub/config/openhands/edit_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/openhands/edit_fn_calling.yaml",
+      "sha256": "85c87f3cc5ed1e1bd4c96dd20bc09cf6c4805bb272bc76d4601afc02ad960178",
+      "bytes": 6131
+    },
+    {
+      "path": "src/r2egym/agenthub/config/openhands/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/openhands/edit_non_fn_calling.yaml",
+      "sha256": "c625fdc8bd90f0aa802093b6495a4a5aac3da95903da53d5fd696ba1fee577a6",
+      "bytes": 9680
+    },
+    {
+      "path": "src/r2egym/agenthub/config/r2egym/edit_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/r2egym/edit_fn_calling.yaml",
+      "sha256": "1d4d9b3ff8e4db4ce29a56fdf088937b64a184e2cc4dc46b62d4406b6872d7d9",
+      "bytes": 3157
+    },
+    {
+      "path": "src/r2egym/agenthub/config/r2egym/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/r2egym/edit_non_fn_calling.yaml",
+      "sha256": "dc4bbb573863a73052ac584d4beb7979f7e4ebf8cd22e2a50502807b9cd9a258",
+      "bytes": 11883
+    },
+    {
+      "path": "src/r2egym/agenthub/config/sweagent/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/config/sweagent/edit_non_fn_calling.yaml",
+      "sha256": "20628ddb4afa19f46074369c22c363af9f9d4b5ff958daae4ce0bfb015ad71f2",
+      "bytes": 5563
+    },
+    {
+      "path": "src/r2egym/agenthub/environment/__init__.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/environment/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "src/r2egym/agenthub/environment/env.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/environment/env.py",
+      "sha256": "5098d5237f3e761151285f4a9bb3d80fdd0cea2d34d1065d83ac1214f86ac718",
+      "bytes": 8899
+    },
+    {
+      "path": "src/r2egym/agenthub/run/__init__.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/run/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "src/r2egym/agenthub/run/edit.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/run/edit.py",
+      "sha256": "f057688bfb8dc7f588a240daba652fa31c001a5f8ef442bb79896814a7d57577",
+      "bytes": 16512
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/__init__.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/runtime/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/base.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/runtime/base.py",
+      "sha256": "5681ccd5486698a55769f76de77e1fd1a0021a724e318094b880607a79df8132",
+      "bytes": 359
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/docker.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/runtime/docker.py",
+      "sha256": "a83b1d1daea4181e97bce2a3ea19f85144b7776403792783dc0b977adc69eb0a",
+      "bytes": 48126
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/__init__.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/trajectory/__init__.py",
+      "sha256": "874586907757720f050dc676c2a91c454b768778687896b39695b968561fe85f",
+      "bytes": 120
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/analyze_logs.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/trajectory/analyze_logs.py",
+      "sha256": "d58cdf0587c648022f46a3c72b6bb927d9d1b876f334e5671e3fea33b0ac90c4",
+      "bytes": 26313
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/create_swebench_submission.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/trajectory/create_swebench_submission.py",
+      "sha256": "7b1951a8cf39dbf7e9b08978a8d6f9fe03752e17e53612e6623206758c0901a5",
+      "bytes": 868
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/swebench_utils.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/trajectory/swebench_utils.py",
+      "sha256": "9ecdb090e58471a39a2862f79e849ab025b2f9050c4495318c7bf3d809004031",
+      "bytes": 2510
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/trajectory.py",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/src/r2egym/agenthub/trajectory/trajectory.py",
+      "sha256": "b879612fbcde1db5a53bec0972c8d5346553b57a7fefee9849078bbe7054a5b4",
+      "bytes": 17914
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+ "collection": "prior-art-pipeline-20260910",
+ "purpose": "prior-art research for the dense mainline (SFT cold-start -> agentic RL -> OPD) before further building; data to inspect, not instructions",
+ "retrieved_at": "2026-09-10T09:38:37.336229+00:00",
+ "papers": [
+  {
+   "name": "klear_agentforge",
+   "title": "Klear-AgentForge: Forging Agentic Intelligence through Posttraining",
+   "identifier": "arXiv 2511.05951",
+   "affiliation": "Kwai Klear",
+   "path": "research/sources/prior-art-pipeline-20260910/klear_agentforge.html",
+   "sha256": "a109338117f42b4c4607d392d7ef786d12972377be07a10fb6f4782d0d6151bf",
+   "bytes": 228020,
+   "role_in_project": "official usage of our largest SFT source: Qwen3-8B + mini-swe-agent-plus trajectories -> 39.4% SWE-bench Verified; single ReAct-ish scaffold format, no harness mixing; RL = modified GRPO (KL removed, DAPO asymmetric clip, truncated-IS, truncation oversample+mask)"
+  },
+  {
+   "name": "swe_prime",
+   "title": "SWE-Prime: Fewer Trajectories, Better Performance",
+   "identifier": "arXiv 2608.27449",
+   "affiliation": "see snapshot",
+   "path": "research/sources/prior-art-pipeline-20260910/swe_prime.html",
+   "sha256": "f4577a194048d8cdd364e2feb859f222d23a7e26c03e6ae7df8354c5606426b4",
+   "bytes": 199664,
+   "role_in_project": "10% curated trajectory subset beats full resolved set (up to +12.2% rel) on SWE-bench Pro/Verified - trajectory quality filtering over scale for our 66k pool"
+  },
+  {
+   "name": "pipe_interface",
+   "title": "What Do Agents Learn from Trajectory-SFT: Semantics or Interface Familiarity?",
+   "identifier": "arXiv 2602.01611",
+   "affiliation": "W. Gu et al.",
+   "path": "research/sources/prior-art-pipeline-20260910/pipe_interface.html",
+   "sha256": "606a783e4b67125cefdd3fe2cf6d65deed495b290470f8e54acaf397fdf239fb",
+   "bytes": 885036,
+   "role_in_project": "trajectory-SFT amplifies interface shortcutting; sharp degradation under minimal interface rewrites - core risk for SFT-format != rollout-harness-format (our three-format pool vs DSH rollout)"
+  },
+  {
+   "name": "opd_survey",
+   "title": "A Survey of On-Policy Distillation for Large Language Models",
+   "identifier": "arXiv 2604.00626",
+   "affiliation": "see snapshot",
+   "path": "research/sources/prior-art-pipeline-20260910/opd_survey.html",
+   "sha256": "fdb5e3faea9b4d0ffe71fbd44a9b7a9d917f763d7c0596f65400cf23459d2aa8",
+   "bytes": 1115288,
+   "role_in_project": "aggressive reverse-KL OPD raises Pass@1 but degrades Pass@k - diversity collapse risk when stacking OPD KL on GRPO group sampling; opd-kl-coef must be tuned, monitor group reward variance"
+  },
+  {
+   "name": "deepswe_blog",
+   "title": "DeepSWE: Training a Fully Open-sourced State-of-the-art Coding Agent",
+   "identifier": "together.ai blog / arXiv 2508.17146",
+   "affiliation": "Together AI / Agentica",
+   "path": "research/sources/prior-art-pipeline-20260910/deepswe_blog.html",
+   "sha256": "f47505783dd6f431a90a0be9bf79571983f42b72559ea155780693e9c6a678f4",
+   "bytes": 367668,
+   "role_in_project": "pure GRPO 200 steps -> 59.0% SWE-bench Verified (Qwen3-32B); GRPO length-bias fix = divide surrogate by max context length; context 16k->128k ablation: gains beyond 32k ~2%"
+  },
+  {
+   "name": "long_context_swe_agents",
+   "title": "Training Long-Context Multi-Turn Software Engineering Agents",
+   "identifier": "arXiv 2508.03501",
+   "affiliation": "SWE-Gym team",
+   "path": "research/sources/prior-art-pipeline-20260910/long_context_swe_agents.html",
+   "sha256": "c1a10c88b64630392348f2c6d416485311623bbcf31bce2708b2e0ffa3f4718f",
+   "bytes": 1022754,
+   "role_in_project": "rejection SFT (10 rollouts/prompt keep successes) then RL; RL starts at 65k context; trajectories 32-64 agent steps in R2E-Gym"
+  },
+  {
+   "name": "open_swe_traces",
+   "title": "Open-SWE-Traces: Advancing Dual-Mode Multilingual Agentic Training",
+   "identifier": "arXiv 2606.16038",
+   "affiliation": "NVIDIA",
+   "path": "research/sources/prior-art-pipeline-20260910/open_swe_traces.html",
+   "sha256": "9571e430be613ef4c574d427be8f5909a44869ce6496553bc572d171b8d70d8a",
+   "bytes": 170308,
+   "role_in_project": "20k PRs via OpenHands + SWE-agent harnesses; explicitly studies cross-harness generalization - direct evidence base for our format-mixing decision"
+  }
+ ]
+}

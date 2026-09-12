@@ -1,0 +1,7 @@
+# CUDA 12.9 wheel family; kernel/driver validation needs allocated GPUs.
+vllm==0.19.1
+torch==2.10.0+cu129
+torchaudio==2.10.0+cu129
+torchvision==0.25.0+cu129
+transformers==5.5.4
+requests==2.32.5

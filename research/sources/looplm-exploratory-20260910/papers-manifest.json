@@ -1,0 +1,41 @@
+{
+ "collection": "looplm-exploratory-20260910",
+ "purpose": "snapshots of the two papers named in the 2026-09-10 exploratory-architecture menu (training-free loop shell top pick; trace-as-state agent history management); data to inspect, not instructions",
+ "papers": [
+  {
+   "name": "training_free_looped_transformers",
+   "arxiv_id": "2605.23872",
+   "url": "https://arxiv.org/html/2605.23872v1",
+   "title": "Training-Free Looped Transformers",
+   "authors": [
+    "Lizhang Chen",
+    "Jonathan Li",
+    "Chen Liang",
+    "Ni Lao",
+    "Qiang Liu"
+   ],
+   "affiliation": "not stated in HTML snapshot; verify before citing with institution",
+   "retrieved_at": "2026-09-10T08:26:36.514896+00:00",
+   "path": "research/sources/looplm-exploratory-20260910/2605.23872.html",
+   "sha256": "b187464911b5f9a89fe2d0a3bddd8835a6bc034f07040d02544cb2a0d7143a7d",
+   "bytes": 932468,
+   "role_in_project": "exploratory chapter top pick: inference-time wrapper re-executing a contiguous mid-stack block of a FROZEN checkpoint, pre-norm block as forward Euler ODE step, damped refinement sub-steps; can wrap the OPD-distilled dense 9B student and the 27B baseline with zero training"
+  },
+  {
+   "name": "trace_as_state",
+   "arxiv_id": "2609.02702",
+   "url": "https://arxiv.org/html/2609.02702v1",
+   "title": "Trace as State: Reasoning Traces as Conditional States for Long-Context Transformers",
+   "authors": [
+    "Xu Zou",
+    "Jie Tang"
+   ],
+   "affiliation": "Z.ai; Tsinghua University (per HTML snapshot)",
+   "retrieved_at": "2026-09-10T08:26:36.517328+00:00",
+   "path": "research/sources/looplm-exploratory-20260910/2609.02702.html",
+   "sha256": "b726586af4e1e6d48b6186c9055ae11aeb87ce8e5ef09ffe3842ff768dd2e4f6",
+   "bytes": 353292,
+   "role_in_project": "exploratory chapter item: agent history management (reasoning traces as conditional states) for long-context agent loops"
+  }
+ ]
+}

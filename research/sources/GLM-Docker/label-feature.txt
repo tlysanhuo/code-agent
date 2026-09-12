@@ -1,0 +1,219 @@
+标签特性
+​
+DockerProxy 在标准 Docker 功能基础上，扩展了通过标签配置特殊功能的特性，为用户提供更灵活的容器管理能力。
+容器自动取消功能
+​
+通过容器标签配置自动取消功能，实现容器运行时间控制。
+配置参数
+​
+标签键
+:
+"platform.glm.ai/auto-cancel-at"
+标签值
+：Unix Sec 时间戳
+功能说明
+​
+如果标签键不存在，或标签值无法转换为 int64 类型，该特性不会生效
+如果特性生效
+时间戳 ≤ 当前时间，容器永远不会启动
+时间戳 > 当前时间，容器会启动，并会在指定时间停止运行
+使用示例
+​
+bash
+# 容器运行至 1757990700，停止并删除
+$
+docker
+run
+--label
+platform.glm.ai/auto-cancel-at=
+1757990700
+--rm
+ubuntu
+bash
+-c
+'while true; do date; sleep 1; done'
+Tue
+Sep
+16
+02:44:57
+UTC
+2025
+Tue
+Sep
+16
+02:44:58
+UTC
+2025
+Tue
+Sep
+16
+02:44:59
+UTC
+2025
+Tue
+Sep
+16
+02:45:00
+UTC
+2025
+Tue
+Sep
+16
+02:45:01
+UTC
+2025
+# 容器不会运行
+$
+docker
+run
+--label
+platform.glm.ai/auto-cancel-at=
+1
+ubuntu
+bash
+-c
+'while true; do date; sleep 1; done'
+$
+echo
+$?
+255
+# 容器运行至 1757990990，停止，退出码为 137
+$
+docker
+run
+--label
+platform.glm.ai/auto-cancel-at=
+1757990990
+--name
+autocancel
+ubuntu
+bash
+-c
+'while true; do date; sleep 1; done'
+Tue
+Sep
+16
+02:49:49
+UTC
+2025
+Tue
+Sep
+16
+02:49:50
+UTC
+2025
+Tue
+Sep
+16
+02:49:51
+UTC
+2025
+Tue
+Sep
+16
+02:49:52
+UTC
+2025
+$
+docker
+wait
+autocancel
+137
+# 容器正常运行，特性不启用
+$
+docker
+run
+--label
+platform.glm.ai/auto-cancel-at
+ubuntu
+bash
+-c
+'while true; do date; sleep 1; done'
+行为说明
+​
+如果容器在配置时间前运行完毕，行为与不启用特性一致
+如果容器未在配置时间前运行完毕，会被强制终止，退出代码为 137
+如果同时配置 --rm 参数，容器会在指定时间停止并自动删除
+指定容器运行队列
+​
+对于需要使用独占队列的场景，可以通过标签指定运行队列。
+配置参数
+​
+标签键
+：platform.glm.ai/job-queue
+标签值
+：目标队列 ID
+使用示例
+​
+bash
+# 启动使用指定队列的容器
+docker
+run
+-d
+--label
+platform.glm.ai/job-queue=queue-20250812105353-xxxxx
+nginx
+# 查看容器的队列标签
+docker
+inspect
+-f
+'{{index .Config.Labels "platform.glm.ai/job-queue"}}'
+<
+container_i
+d
+>
+CPU 请求资源
+​
+覆盖默认的 CPU 资源配置，满足特殊计算需求。
+默认配置
+​
+CPU 请求：0.2 核
+CPU 限制：1 核
+使用示例
+​
+bash
+# 通过标签配置 CPU 请求（单位为纳核）
+docker
+run
+--label
+platform.glm.ai/cpu-request=
+500000000
+<
+imag
+e
+>
+# 示例：设置 CPU 请求为 0.5 核
+docker
+run
+--label
+platform.glm.ai/cpu-request=
+500000000
+nginx:latest
+关于 CPU 配置的详细信息，请参阅
+cpu 资源配置
+内存请求资源
+​
+默认配置
+​
+内存请求（Request）：1Gi
+内存限制（Limit）：8Gi
+bash
+# 通过标签配置内存请求（单位为字节）
+docker
+run
+--label
+platform.glm.ai/memory-request=
+2147483648
+<
+imag
+e
+>
+# 示例：设置内存请求为 2 GiB
+docker
+run
+--label
+platform.glm.ai/memory-request=
+2147483648
+nginx:latest
+关于内存配置的详细信息，请参阅
+容器内存配置

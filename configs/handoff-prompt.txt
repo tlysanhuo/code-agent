@@ -1,0 +1,26 @@
+接手 code-agent 项目（简历面试项目）。先读三个文件再动手：
+/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/ 下的
+AGENTS.md（纪律）、README.md 顶部（最新状态+调研结论）、
+configs/loop-agent/plan.json（机器可读状态，重点看 replan_2026_09_10.formal_sft_run）。
+source scripts/env.sh 后再跑任何东西。
+
+【立即事项】正式 SFT 正在 GPU 0+5 上跑（detached，step ~130/500）：
+- 用户已钉死 1 epoch：step-500 检查点落盘即停（logs/sft-formal-train.log 看进度）
+- 停后：scoped ray 清理（见 scripts/run_sft_formal.sh，严禁全局 ray stop——共享机）→
+  GPU 释放验证 → vendor/slime/tools/convert_torch_dist_to_hf.py 转 HF（已在 smoke
+  检查点验证过全链路）→ HumanEvalPlus 评（对比 96.9% 基线）+ held-out NLL
+
+【已定稿（勿再改）】主线 = dense Qwen3.5-9B 三段：SFT 冷启动（Klear 单格式，正在跑）→
+Agentic RL（DSH + SWE-Gym/SWE-smith，GRPO 测试通过=奖励）→ OPD（27B teacher 外部
+SGLang 服务，slime 原生 --use-opd；DeepSeek-V4 TR 同族设计）。环境已按官方
+build_conda.sh 对齐收敛（TE 2.16.1/sglang 0.5.15.post1/flash-attn 2.8.3/torch 2.11+cu129）。
+
+【硬纪律】所有文件留项目内；vendor/slime 零修改；GPU 逐次授权记 UUID 进
+configs/gpu-allocation.json、用完验证释放；WANDB_MODE=online 不许改（key 在
+configs/secrets/wandb.env，600 权限）；训练参数变更需用户同意；官方 benchmark 只走
+官方协议；引用带标题+arXiv号+机构；没验证的不说完成。共享机上 ray 用独占端口
+（20379/28266），清理只杀自己会话目录匹配的 PID。
+
+【下一步队列】① SFT 停训+评估 ② 阶段 2 CPU 接线（DSH→BaseHarness 生命周期 + RL 任务
+清单冻结/排除审计）③ cudnn/torchaudio 升级（停训后）④ Polar B' 数据集（网络恢复再取）
+⑤ LoopLM 探索章最后做。

@@ -1,0 +1,695 @@
+{
+  "status": "review_candidate_not_training_authorization",
+  "main_source_commit": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+  "overrides": {
+    "hydra.searchpath": {
+      "value": [
+        "file://${oc.env:CODE_AGENT_ROOT}/vendor/verl-agent-rl/verl/trainer/config"
+      ],
+      "upstream": "Hydra 1.3.2 configuration API",
+      "adjustment": "Search pinned upstream config and put all Hydra artifacts inside project."
+    },
+    "hydra.run.dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/hydra/${now:%Y%m%d-%H%M%S}",
+      "upstream": "Hydra 1.3.2 configuration API",
+      "adjustment": "Search pinned upstream config and put all Hydra artifacts inside project."
+    },
+    "hydra.job.chdir": {
+      "value": false,
+      "upstream": "Hydra 1.3.2 configuration API",
+      "adjustment": "Search pinned upstream config and put all Hydra artifacts inside project."
+    },
+    "data.train_files": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train.parquet",
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.val_files": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train.parquet",
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.train_batch_size": {
+      "value": 2,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.max_prompt_length": {
+      "value": 4096,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.max_response_length": {
+      "value": 4096,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.filter_overlong_prompts": {
+      "value": true,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.filter_overlong_prompts_workers": {
+      "value": 1,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.dataloader_num_workers": {
+      "value": 0,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.truncation": {
+      "value": "error",
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.shuffle": {
+      "value": true,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.seed": {
+      "value": 42,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.return_raw_chat": {
+      "value": true,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.use_shm": {
+      "value": false,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "data.apply_chat_template_kwargs.enable_thinking": {
+      "value": true,
+      "upstream": "verl/trainer/config/data/legacy_data.yaml",
+      "adjustment": "Local RL task references; batch 2, prompt 4096 + response region 4096, single-process loader; no evaluation set; template thinking retained."
+    },
+    "actor_rollout_ref.hybrid_engine": {
+      "value": true,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Upstream hybrid engine; colocated on the same two GPUs."
+    },
+    "actor_rollout_ref.model.path": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/models/Qwen3.5-27B/fc05daec18b0a78c049392ed2e771dde82bdf654",
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.use_shm": {
+      "value": false,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.trust_remote_code": {
+      "value": false,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.enable_gradient_checkpointing": {
+      "value": true,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.use_remove_padding": {
+      "value": false,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.use_fused_kernels": {
+      "value": false,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.use_liger": {
+      "value": false,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.override_config.attn_implementation": {
+      "value": "sdpa",
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.lora_rank": {
+      "value": 16,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.lora_alpha": {
+      "value": 32,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.target_modules": {
+      "value": "model.language_model.layers.\\d+.mlp.(gate_proj|up_proj|down_proj)",
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.model.lora.merge": {
+      "value": true,
+      "upstream": "examples/tuning/lora/run_qwen3_8b_fsdp.sh; verl/workers/engine/fsdp/transformer_impl.py",
+      "adjustment": "Reuse official 27B; FFN-only rank16 alpha32 replaces all-linear rank64; merge=True uses upstream full-weight synchronization; padded SDPA instead of unverified GDN packed training."
+    },
+    "actor_rollout_ref.actor.strategy": {
+      "value": "fsdp2",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.ppo_mini_batch_size": {
+      "value": 2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.ppo_epochs": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.use_dynamic_bsz": {
+      "value": false,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.use_kl_loss": {
+      "value": false,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.entropy_coeff": {
+      "value": 0.0,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.clip_ratio": {
+      "value": 0.2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.clip_ratio_low": {
+      "value": 0.2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.clip_ratio_high": {
+      "value": 0.2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.loss_agg_mode": {
+      "value": "token-mean",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.optimizer": {
+      "value": "AdamW",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.optimizer_impl": {
+      "value": "torch.optim",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.lr": {
+      "value": 1e-06,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.betas": {
+      "value": [
+        0.9,
+        0.999
+      ],
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.weight_decay": {
+      "value": 0.01,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.lr_warmup_steps": {
+      "value": 0,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.optim.lr_scheduler_type": {
+      "value": "constant",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.grad_clip": {
+      "value": 1.0,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.fsdp_size": {
+      "value": 2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.model_dtype": {
+      "value": "bf16",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.dtype": {
+      "value": "bfloat16",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.param_offload": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.optimizer_offload": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.offload_policy": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.reshard_after_forward": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.ulysses_sequence_parallel_size": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.use_torch_compile": {
+      "value": false,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.entropy_from_logits_with_chunking": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.fsdp_config.entropy_checkpointing": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.checkpoint.save_contents": {
+      "value": [
+        "model",
+        "optimizer",
+        "extra"
+      ],
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.actor.checkpoint.load_contents": {
+      "value": [
+        "model",
+        "optimizer",
+        "extra"
+      ],
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; verl/trainer/config/optim/fsdp.yaml",
+      "adjustment": "FSDP2 size2 replaces size8; explicit BF16 prevents fp32 base default; micro1/minibatch2, lr1e-6; disable KL/reference to bound memory; default AdamW, symmetric GRPO clip0.2, not historical DeepSWE recipe."
+    },
+    "actor_rollout_ref.rollout.name": {
+      "value": "vllm",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.mode": {
+      "value": "async",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.dtype": {
+      "value": "bfloat16",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.tensor_model_parallel_size": {
+      "value": 2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.data_parallel_size": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.n": {
+      "value": 2,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.temperature": {
+      "value": 1.0,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.top_p": {
+      "value": 1.0,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.top_k": {
+      "value": -1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.seed": {
+      "value": 42,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.max_model_len": {
+      "value": 8192,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.max_num_seqs": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.max_num_batched_tokens": {
+      "value": 8192,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.gpu_memory_utilization": {
+      "value": 0.6,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.enforce_eager": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.enable_prefix_caching": {
+      "value": false,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.free_cache_engine": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.load_format": {
+      "value": "safetensors",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.layered_summon": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.calculate_log_probs": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.log_prob_use_dynamic_bsz": {
+      "value": false,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.logprobs_mode": {
+      "value": "processed_logprobs",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.enable": {
+      "value": true,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.max_assistant_turns": {
+      "value": 12,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.max_user_turns": {
+      "value": 12,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.max_parallel_calls": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.max_tool_response_length": {
+      "value": 1024,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.multi_turn.tokenization_sanity_check_mode": {
+      "value": "strict",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.agent.num_workers": {
+      "value": 1,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.agent.default_agent_loop": {
+      "value": "dsh_agent",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.checkpoint_engine.backend": {
+      "value": "naive",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.checkpoint_engine.update_weights_bucket_megabytes": {
+      "value": 512,
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "actor_rollout_ref.rollout.prometheus.file": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/prometheus.yml",
+      "upstream": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh; docs/advance/ppo_lora.rst; verl/trainer/config/rollout/rollout.yaml",
+      "adjustment": "TP2 replaces TP4; n2 replaces n5, maxseq1 and 8K response context; eager, sleep/free-cache, merged LoRA. dsh_agent registration absent; turns are proposed and require bridge enforcement."
+    },
+    "algorithm.adv_estimator": {
+      "value": "grpo",
+      "upstream": "verl/trainer/ppo/core_algos.py",
+      "adjustment": "Use unchanged GRPO, std normalization, no reward KL; group2 is a resource candidate. All-equal terminal rewards have zero within-group signal."
+    },
+    "algorithm.norm_adv_by_std_in_grpo": {
+      "value": true,
+      "upstream": "verl/trainer/ppo/core_algos.py",
+      "adjustment": "Use unchanged GRPO, std normalization, no reward KL; group2 is a resource candidate. All-equal terminal rewards have zero within-group signal."
+    },
+    "algorithm.use_kl_in_reward": {
+      "value": false,
+      "upstream": "verl/trainer/ppo/core_algos.py",
+      "adjustment": "Use unchanged GRPO, std normalization, no reward KL; group2 is a resource candidate. All-equal terminal rewards have zero within-group signal."
+    },
+    "trainer.use_v1": {
+      "value": true,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.v1.trainer_mode": {
+      "value": "sync",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.project_name": {
+      "value": "code_agent_rl",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.experiment_name": {
+      "value": "qwen35_27b_lora_2h100_candidate",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.logger": {
+      "value": [
+        "console",
+        "tensorboard"
+      ],
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.nnodes": {
+      "value": 1,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.n_gpus_per_node": {
+      "value": 2,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.total_epochs": {
+      "value": 1,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.total_training_steps": {
+      "value": 1,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.val_before_train": {
+      "value": false,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.test_freq": {
+      "value": -1,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.save_freq": {
+      "value": 1,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.max_actor_ckpt_to_keep": {
+      "value": 2,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.resume_mode": {
+      "value": "disable",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.default_hdfs_dir": {
+      "value": null,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.default_local_dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/checkpoints/qwen35_27b_lora_2h100_candidate",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "trainer.rollout_data_dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/logs/agent-rl/rollouts",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml; verl/trainer/ppo/v1/trainer_sync.py",
+      "adjustment": "V1 synchronous phased execution; one future integration step only, no validation; console/tensorboard local, save model/optimizer/extra, resume disabled initially."
+    },
+    "ray_kwargs.ray_init.num_cpus": {
+      "value": 8,
+      "upstream": "verl/trainer/main_ppo.py",
+      "adjustment": "8 CPUs and 2GiB object store are local candidate limits, not measured requirements."
+    },
+    "ray_kwargs.ray_init.object_store_memory": {
+      "value": 2147483648,
+      "upstream": "verl/trainer/main_ppo.py",
+      "adjustment": "8 CPUs and 2GiB object store are local candidate limits, not measured requirements."
+    },
+    "transfer_queue.enable": {
+      "value": true,
+      "upstream": "verl/trainer/config/transfer_queue/transfer_queue.yaml",
+      "adjustment": "Required upstream V1 data transport (unrelated to DockerProxy job queue); SimpleStorage 1 unit/16 sample slots for small batch; no service started."
+    },
+    "transfer_queue.backend.storage_backend": {
+      "value": "SimpleStorage",
+      "upstream": "verl/trainer/config/transfer_queue/transfer_queue.yaml",
+      "adjustment": "Required upstream V1 data transport (unrelated to DockerProxy job queue); SimpleStorage 1 unit/16 sample slots for small batch; no service started."
+    },
+    "transfer_queue.backend.SimpleStorage.total_storage_size": {
+      "value": 16,
+      "upstream": "verl/trainer/config/transfer_queue/transfer_queue.yaml",
+      "adjustment": "Required upstream V1 data transport (unrelated to DockerProxy job queue); SimpleStorage 1 unit/16 sample slots for small batch; no service started."
+    },
+    "transfer_queue.backend.SimpleStorage.num_data_storage_units": {
+      "value": 1,
+      "upstream": "verl/trainer/config/transfer_queue/transfer_queue.yaml",
+      "adjustment": "Required upstream V1 data transport (unrelated to DockerProxy job queue); SimpleStorage 1 unit/16 sample slots for small batch; no service started."
+    },
+    "skip.rollout.enable": {
+      "value": false,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    },
+    "skip.rollout.dump_dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/rollout-cache",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    },
+    "skip.rollout_tq.enable": {
+      "value": false,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    },
+    "skip.rollout_tq.dump_dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/rollout-cache-tq",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    },
+    "skip.async_rollout.enable": {
+      "value": false,
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    },
+    "skip.async_rollout.dump_dir": {
+      "value": "${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/async-rollout-cache",
+      "upstream": "verl/trainer/config/ppo_trainer.yaml",
+      "adjustment": "Disable replay of cached trajectories to preserve on-policy sampling; relocate all dormant dump paths under project."
+    }
+  },
+  "resource_budget": {
+    "gpus": 2,
+    "gpu_type": "H100 80GB",
+    "layout": "Same two GPUs, FSDP2 actors and TP2 rollout alternate; no dedicated third GPU/reference/teacher.",
+    "future_task_host_ram_candidate_gib": 192,
+    "cpu_candidate": 8,
+    "future_update_steps": 1,
+    "task_group_size": 2,
+    "prompts_per_step": 2,
+    "max_trajectories": 4,
+    "online_task_concurrency": {
+      "value": 1,
+      "enforced": false,
+      "required_at": "DSH environment bridge semaphore"
+    },
+    "requests_per_trajectory": {
+      "value": 12,
+      "enforced": false
+    },
+    "trajectory_wall_seconds": {
+      "value": 600,
+      "enforced": false
+    },
+    "future_job_wall_seconds": {
+      "value": 3600,
+      "enforced": false,
+      "required_at": "platform task timeout/owned-process watchdog"
+    },
+    "gpu_seconds_cap_if_timeout_enforced": 7200,
+    "model_memory_and_throughput": "unverified; SDPA logits/activations, GDN states, merge CPU backups and FSDP checkpoint may dominate"
+  },
+  "algorithm_scope": "Agent RL with verifiable terminal task reward. LoRA is parameter update mechanism. No SFT, LoopLM, OPD, benchmark.",
+  "resume_procedure": "Future reviewed run: trainer.resume_mode=resume_path and trainer.resume_from_path=<actual upstream global_step directory>. Need matching base revision, LoRA topology, optimizer/scheduler/RNG and dataloader state; no real checkpoint exists now."
+}

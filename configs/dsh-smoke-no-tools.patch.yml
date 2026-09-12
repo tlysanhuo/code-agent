@@ -1,0 +1,7 @@
+# The connectivity probe has no filesystem or shell tools.
+- id: persistent-bash
+  disabled: true
+- id: persistent-pwsh
+  disabled: true
+- id: str-replace-editor
+  disabled: true

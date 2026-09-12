@@ -1,0 +1,14 @@
+{
+  "repo": "collinear-ai/spider",
+  "sha": "6567293f723a6ab11d79091e4cdbc3aa0b19961b",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/collinear-ai/spider/6567293f723a6ab11d79091e4cdbc3aa0b19961b/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/collinear-ai/spider/6567293f723a6ab11d79091e4cdbc3aa0b19961b/pyproject.toml"
+    }
+  ]
+}

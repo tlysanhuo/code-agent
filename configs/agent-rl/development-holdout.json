@@ -1,0 +1,54 @@
+{
+  "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+  "tasks": [
+    {
+      "instance_id": "dask__dask-10765",
+      "repo": "dask/dask",
+      "base_commit": "63b6bb84015975c8466e80d1d498a293835ae936",
+      "source_row": 1012,
+      "private_sha256": "607d7f80eb3eca553094c128b762a89ef8eb5eba4676bfb950e6d17c90d0f586",
+      "split": "development"
+    },
+    {
+      "instance_id": "dask__dask-10921",
+      "repo": "dask/dask",
+      "base_commit": "76b255e3f3b8b116b6046d03105e3ceae40386b6",
+      "source_row": 922,
+      "private_sha256": "f50c09ac50deab9b62e2a821004c8b13212ff4ca986e962a69d54d0fc7daca6c",
+      "split": "development"
+    },
+    {
+      "instance_id": "bokeh__bokeh-13239",
+      "repo": "bokeh/bokeh",
+      "base_commit": "06a6bf5d7544500431d0fa106c9fec50f15436bf",
+      "source_row": 1933,
+      "private_sha256": "5405332aab06dc2043c9a961ca40ca0860d13c861ade6eba6348f949d500ea44",
+      "split": "development"
+    },
+    {
+      "instance_id": "bokeh__bokeh-13258",
+      "repo": "bokeh/bokeh",
+      "base_commit": "3348f65bb545a16523942cbb751ea7384556c53b",
+      "source_row": 1944,
+      "private_sha256": "ac785b87fb62a2cda036adc46021a619db80f0c6c39e299527c9ed7db0b87643",
+      "split": "development"
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1695",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "8640a921f571275d2c48d787efbb76d45fc89d7f",
+      "source_row": 1916,
+      "private_sha256": "b2f9fae5a8b1bd9f2da23a2d1225f80bddea9221c6c9e28cc9f62c115b0d3281",
+      "split": "development"
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1725",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "27ab477ef1976725e1d3a583e3f0c35966dac198",
+      "source_row": 1888,
+      "private_sha256": "644048affe7a24266da078c7bb2e3a665247764f295c7dfbf46d48e42412067e",
+      "split": "development"
+    }
+  ],
+  "rule": "Never export these task IDs, repo/base commits or associated trajectories to training; internal custom-protocol development only, not official benchmark."
+}

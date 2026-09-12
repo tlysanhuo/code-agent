@@ -1,0 +1,114 @@
+{
+  "created_utc": "2026-09-09T12:56:36.142345+00:00",
+  "sources": [
+    {
+      "path": "vendor/verl-agent-rl",
+      "role": "main training stack",
+      "repository": "https://github.com/verl-project/verl.git",
+      "commit": "1252cc71aa5bd82e5604322064d69bfe6454c660",
+      "commit_time": "2026-09-09T20:10:01+08:00",
+      "tracked_modifications": []
+    },
+    {
+      "path": "vendor/rllm-agent-rl",
+      "role": "research only; not installed",
+      "repository": "https://github.com/rllm-org/rllm.git",
+      "commit": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+      "commit_time": "2026-09-05T23:05:48-07:00",
+      "tracked_modifications": []
+    },
+    {
+      "path": "vendor/transferqueue-agent-rl",
+      "role": "upstream V1 data transport dependency",
+      "repository": "https://github.com/Ascend/TransferQueue.git",
+      "commit": "d45bfe84c9940ee7650e624dba3d60c5dbf95c62",
+      "commit_time": "2026-09-08T13:09:32+08:00",
+      "tracked_modifications": []
+    }
+  ],
+  "inspected_verl_files": [
+    {
+      "path": "examples/grpo_trainer/run_qwen3_5_27b_fsdp.sh",
+      "sha256": "171e7ecf6e758f195bd927045c6bb7ef2aad1b36ca438e70eea10407a6e101b3"
+    },
+    {
+      "path": "examples/tuning/lora/run_qwen3_8b_fsdp.sh",
+      "sha256": "5613a33a7cee6a0bc55e18375b85624c2f7331b49bc93d94cde187372ed4e12d"
+    },
+    {
+      "path": "docs/advance/ppo_lora.rst",
+      "sha256": "56e4d31d89b616f5d96cb3af1313681dc7df6c0cade8a3fb1257c40d884795c8"
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_sync.py",
+      "sha256": "bc805f2990910f29e11b45c43a0687eae645cee375ab6b9a7211650022f00186"
+    },
+    {
+      "path": "verl/trainer/ppo/v1/trainer_base.py",
+      "sha256": "4c6c2be80ff33c1e1475bf586641a110922b9a4107376c4319cf55daa8e06b8b"
+    },
+    {
+      "path": "verl/workers/engine/fsdp/transformer_impl.py",
+      "sha256": "fb8ea0cb0eab38bb746fd386bdc6866b389cf7b5deee6ebf267d71b9cca51c04"
+    },
+    {
+      "path": "verl/models/transformers/qwen3_5.py",
+      "sha256": "a6abf55ac6dd846e2d8691d75eab09ef95885394ac84d532185f2ca78dacb99f"
+    },
+    {
+      "path": "verl/experimental/agent_loop/agent_loop.py",
+      "sha256": "1cfcc45ce5eba2be4e2ff43f803c8aeb2a48d64dc4d6c807bb2f72be1ac9dee8"
+    },
+    {
+      "path": "verl/experimental/agent_loop/tool_agent_loop.py",
+      "sha256": "d21377bc9e6b6a5b727240a0b68d25b516c350e2a296ce0cf94d08fbe457b7a5"
+    },
+    {
+      "path": "verl/workers/rollout/vllm_rollout/vllm_async_server.py",
+      "sha256": "aaaff55bb0238d2eabf07ed21c0f5e60f9a2dccb56ca03821822e22c8613075f"
+    },
+    {
+      "path": "verl/utils/checkpoint/fsdp_checkpoint_manager.py",
+      "sha256": "72afa38272a99962ae9850afabe5b7353fc558b24cce9aaf77825bbe86bc749e"
+    },
+    {
+      "path": "verl/workers/rollout/llm_server.py",
+      "sha256": "275ef92bff49ead6929d55192464976d1676400681a2508eb5086143dff60bac"
+    },
+    {
+      "path": "verl/trainer/config/ppo_trainer.yaml",
+      "sha256": "5c5d4358d618b467809bee33044c662b931dad17b7bf95957a732127ea4fc651"
+    },
+    {
+      "path": "setup.py",
+      "sha256": "7457ee92e8f22bd54b1e70777c8964e16ce5e4d91b08ac2165ea82d736f84659"
+    }
+  ],
+  "historical_deepswe": {
+    "repo": "rllm-org/rllm",
+    "commit": "6458960c2478dc348c10b23e67f2789d7c1745d1",
+    "local_snapshot": "research/sources/deepswe-coldstart-20260909/rllm-release-20250703",
+    "role": "2025-07-03 release-window reference, not certified exact weights-training revision",
+    "verl_submodule": {
+      "repo": "https://github.com/agentica-project/verl.git",
+      "commit": "777704aa64c5745c4ccb250ae8977469579ebfc0",
+      "evidence": "research/sources/deepswe-coldstart-20260909/rllm-release-20250703/tree.json"
+    },
+    "gitmodules_snapshot": {
+      "path": "research/sources/agent-rl-prep-20260909/historical-rllm.gitmodules",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/.gitmodules",
+      "sha256": "1f8be359f1db1c5e6b7cb23defa41c120c66d08bfbb2ac4641f1342022cf1235"
+    }
+  },
+  "existing_environment_sources": [
+    "runtime/official-swe/metadata/source.json",
+    "runtime/deepswe-coldstart/source.json"
+  ],
+  "model": {
+    "repo": "Qwen/Qwen3.5-27B",
+    "revision": "fc05daec18b0a78c049392ed2e771dde82bdf654",
+    "path": "models/Qwen3.5-27B/fc05daec18b0a78c049392ed2e771dde82bdf654",
+    "reuse_evidence": "runtime/metadata/qwen-files-check.json",
+    "weights_downloaded_this_goal": false
+  }
+}

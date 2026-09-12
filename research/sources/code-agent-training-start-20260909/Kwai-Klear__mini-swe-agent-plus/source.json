@@ -1,0 +1,16 @@
+{
+  "repo": "Kwai-Klear/mini-swe-agent-plus",
+  "commit": "3dfa5e26831306978ff3cfa2da15b49113ded0e6",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1dc503c83afd926ab87979a4bd9417633a2506292607690558853077ea4164d8",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/README.md"
+    },
+    {
+      "path": "src/minisweagent/config/extra/swebench_add_edit_tool.yaml",
+      "sha256": "a53d2a59e6891a2200f91034302ac000c6818a65e7bea6179ff79653bec72662",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/config/extra/swebench_add_edit_tool.yaml"
+    }
+  ]
+}

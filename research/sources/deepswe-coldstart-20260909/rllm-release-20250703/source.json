@@ -1,0 +1,97 @@
+{
+  "repo": "rllm-org/rllm",
+  "revision": "6458960c2478dc348c10b23e67f2789d7c1745d1",
+  "retrieved_at": "2026-09-09T12:25:02.405112+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/README.md",
+      "bytes": 8264,
+      "sha256": "132744d5b8ba307ab9da0a1742463c67c71ac0ffcf418cb3b895b3256046982a"
+    },
+    {
+      "path": "docs/examples/swe.md",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/docs/examples/swe.md",
+      "bytes": 2608,
+      "sha256": "629b9ed8e86253e237393f94ab59a7b6585dab96f5dcfefdeeb6e2774cd06431"
+    },
+    {
+      "path": "examples/swe/README.md",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/README.md",
+      "bytes": 8157,
+      "sha256": "e752281a6f9d6d31109669dc24515491aee7e29a52e3d2b7b1bc84ae5ef1b829"
+    },
+    {
+      "path": "examples/swe/prepare_swe_data.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/prepare_swe_data.py",
+      "bytes": 3346,
+      "sha256": "2e50a5585b6ff5d23eda163fa26e1e9f7bb5e2b2a8a7e25120af36f3ccdd5d39"
+    },
+    {
+      "path": "examples/swe/run_deepswe.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/run_deepswe.py",
+      "bytes": 1480,
+      "sha256": "b8701d5e8e4be7308cba32fae68333421149462761ff1a51ed871e56fc2b1680"
+    },
+    {
+      "path": "examples/swe/train_deepswe_32b.sh",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/train_deepswe_32b.sh",
+      "bytes": 3263,
+      "sha256": "150c3f29e6b99c67dbab818fca03297ed7b837e88a7b5e3bc8baa364c5774eee"
+    },
+    {
+      "path": "examples/swe/train_deepswe_agent.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/examples/swe/train_deepswe_agent.py",
+      "bytes": 771,
+      "sha256": "183af1dafa42842ca8869dbd8b27fa33dfca3a1b66238524be781dfeb72fec5f"
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/pyproject.toml",
+      "bytes": 2794,
+      "sha256": "abbce1d2ab921b4f542bdfb3bd896f7297b93cc1644556468714d125858c5344"
+    },
+    {
+      "path": "rllm/agents/swe_agent.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/agents/swe_agent.py",
+      "bytes": 6898,
+      "sha256": "08f51b728ccf710148b0719b6e0ca8d4f3defe7477a0230e0ccf33a7f27c4a44"
+    },
+    {
+      "path": "rllm/environments/swe/cache_images_k8.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/environments/swe/cache_images_k8.py",
+      "bytes": 3654,
+      "sha256": "b7e64e3c0cc35cf3ba7de6e023fd5975a7bcb9a81a9c69f78c2bfaca6ca51165"
+    },
+    {
+      "path": "rllm/environments/swe/swe.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/environments/swe/swe.py",
+      "bytes": 6799,
+      "sha256": "bc633b8ee9166e10b692f67b0d01139c25aa20be2094bce531355d92d4ae9192"
+    },
+    {
+      "path": "rllm/rewards/code_utils/swebench.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/rewards/code_utils/swebench.py",
+      "bytes": 25181,
+      "sha256": "e32c564d30aaa554606fce546c52cf0703db44d94cf3d64a1c6b18c3ae0cb7d6"
+    },
+    {
+      "path": "rllm/trajectory_visualizer.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/rllm/trajectory_visualizer.py",
+      "bytes": 26644,
+      "sha256": "806e2544d9d98b02fcbe3be5fed7a545f0cb5b97bb7b7f1787b226bb65f02adc"
+    },
+    {
+      "path": "scripts/agent/swe/deepswe_32b.sh",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/scripts/agent/swe/deepswe_32b.sh",
+      "bytes": 3263,
+      "sha256": "150c3f29e6b99c67dbab818fca03297ed7b837e88a7b5e3bc8baa364c5774eee"
+    },
+    {
+      "path": "scripts/data/swe_dataset.py",
+      "url": "https://raw.githubusercontent.com/rllm-org/rllm/6458960c2478dc348c10b23e67f2789d7c1745d1/scripts/data/swe_dataset.py",
+      "bytes": 3642,
+      "sha256": "af24d822e4bba755ac4a68c3c3c81399dcfd0277c6db65fd8d66a69ccbec4ba0"
+    }
+  ]
+}

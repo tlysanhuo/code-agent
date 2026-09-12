@@ -1,0 +1,21 @@
+# verl 1252cc71 core, intentionally NOT its stale [vllm] extra (<=0.12).
+-e ./vendor/verl-agent-rl
+# Same wheel family as proven inference, independently installed, no env sharing.
+vllm==0.19.1
+torch==2.10.0+cu129
+torchaudio==2.10.0+cu129
+torchvision==0.25.0+cu129
+transformers==5.5.4
+numpy==2.2.6
+opencv-python-headless==4.13.0.92
+peft==0.18.1
+ray[default]==2.55.1
+tensordict==0.10.0
+hydra-core==1.3.2
+accelerate==1.13.0
+datasets==4.8.2
+pyarrow==23.0.1
+pytest==8.4.2
+
+# Required by the upstream V1 trainer, pinned via source manifest.
+-e ./vendor/transferqueue-agent-rl

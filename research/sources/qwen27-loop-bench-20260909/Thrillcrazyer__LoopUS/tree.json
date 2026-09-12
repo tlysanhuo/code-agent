@@ -1,0 +1,290 @@
+{
+  "sha": "dd655b77861d9edf8fb981e90763436b95b1f3ff",
+  "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/dd655b77861d9edf8fb981e90763436b95b1f3ff",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1abccbf4b83382a6e2a3bed5cc3f8947ca990fa",
+      "size": 4771,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/f1abccbf4b83382a6e2a3bed5cc3f8947ca990fa"
+    },
+    {
+      "path": ".python-version",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6324d401a069f4020efcf0ff07442724b52f47c2",
+      "size": 5,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/6324d401a069f4020efcf0ff07442724b52f47c2"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "size": 11357,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73b43b087be76fc766059eb1c7336e6854efca53",
+      "size": 6575,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/73b43b087be76fc766059eb1c7336e6854efca53"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6a752ea11b3e60e985c21d51dddf9f15844716f3",
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/6a752ea11b3e60e985c21d51dddf9f15844716f3"
+    },
+    {
+      "path": "assets/Framework.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a06f1385d68aa005b51d97f82129c80bc7530cfa",
+      "size": 666411,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/a06f1385d68aa005b51d97f82129c80bc7530cfa"
+    },
+    {
+      "path": "assets/loopus_thinking_pca_Qwen4B_.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fefe14171af99b6ed31ffe42deebf9422174632a",
+      "size": 234402,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/fefe14171af99b6ed31ffe42deebf9422174632a"
+    },
+    {
+      "path": "chat.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8c643371583a6b6ec9fb48225f23f42e44e7b150",
+      "size": 35109,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/8c643371583a6b6ec9fb48225f23f42e44e7b150"
+    },
+    {
+      "path": "ds_configs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6275d4756ba34d14fb07d0c4742486dc63374c5c",
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/6275d4756ba34d14fb07d0c4742486dc63374c5c"
+    },
+    {
+      "path": "ds_configs/accelerate_ds_zero2.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cad26f5c638ce91319a41167495b63c998c9941",
+      "size": 467,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/7cad26f5c638ce91319a41167495b63c998c9941"
+    },
+    {
+      "path": "ds_configs/accelerate_ds_zero3.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50e66a37500a6bc72394da5b218bd55d1df730c5",
+      "size": 475,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/50e66a37500a6bc72394da5b218bd55d1df730c5"
+    },
+    {
+      "path": "ds_configs/fsdp_config.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "303f1d52283352b30a355c3579011abc1180ca0a",
+      "size": 678,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/303f1d52283352b30a355c3579011abc1180ca0a"
+    },
+    {
+      "path": "evaluate.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "567a3f8223533c88905026a98a62e9c4c80032c6",
+      "size": 11277,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/567a3f8223533c88905026a98a62e9c4c80032c6"
+    },
+    {
+      "path": "generate.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "439f43dc44cd1efe0bed214b7b2751392a610a8a",
+      "size": 4737,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/439f43dc44cd1efe0bed214b7b2751392a610a8a"
+    },
+    {
+      "path": "models",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0673cdc242b4d07c15f41940955a28c6325cd0b8",
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/0673cdc242b4d07c15f41940955a28c6325cd0b8"
+    },
+    {
+      "path": "models/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ada155fedd236a6f27b7a3f5d6b5c660c770fe43",
+      "size": 263,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/ada155fedd236a6f27b7a3f5d6b5c660c770fe43"
+    },
+    {
+      "path": "models/configuration_lds.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "84b702572aeced592e53b9c59bf50225693b0e44",
+      "size": 5639,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/84b702572aeced592e53b9c59bf50225693b0e44"
+    },
+    {
+      "path": "models/modeling_lds.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68d47694c0e2c1560608226d6e8802e3f8a70851",
+      "size": 67208,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/68d47694c0e2c1560608226d6e8802e3f8a70851"
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d36d3cd120fea3f50a260da04f42e35308e01d47",
+      "size": 1110,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/d36d3cd120fea3f50a260da04f42e35308e01d47"
+    },
+    {
+      "path": "script",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a4811a0c0f071242cfec73c971a9bc196e756feb",
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/a4811a0c0f071242cfec73c971a9bc196e756feb"
+    },
+    {
+      "path": "script/eval_model.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39fd2ae806018ed195139465457b515d8d0d9bfb",
+      "size": 887,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/39fd2ae806018ed195139465457b515d8d0d9bfb"
+    },
+    {
+      "path": "script/train.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "56d4a72d6e112315b68eccf14dce4040c3ba0644",
+      "size": 3798,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/56d4a72d6e112315b68eccf14dce4040c3ba0644"
+    },
+    {
+      "path": "test_model.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48d594ed41df8011c585eaf3a8e4ee49feb8daca",
+      "size": 142,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/48d594ed41df8011c585eaf3a8e4ee49feb8daca"
+    },
+    {
+      "path": "train.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c622c5a2371986a8505da84cdd91ff534b9f07db",
+      "size": 1773,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/c622c5a2371986a8505da84cdd91ff534b9f07db"
+    },
+    {
+      "path": "train_sft.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "91fb7af6298ac9bcad7c7ac5c3fb2163dc1cad63",
+      "size": 1803,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/91fb7af6298ac9bcad7c7ac5c3fb2163dc1cad63"
+    },
+    {
+      "path": "training_cli.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9984f17c5da0cc8d69743afc4b097ee127c1c5bb",
+      "size": 8538,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/9984f17c5da0cc8d69743afc4b097ee127c1c5bb"
+    },
+    {
+      "path": "training_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4311f3d726aa3f9bb20782f3817f2eb23ece1ed",
+      "size": 50142,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/e4311f3d726aa3f9bb20782f3817f2eb23ece1ed"
+    },
+    {
+      "path": "utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1a870c89fd187d48f33836ab7307934cb0a25d12",
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/trees/1a870c89fd187d48f33836ab7307934cb0a25d12"
+    },
+    {
+      "path": "utils/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bba0a7fdd688c26d20b3dfdd94293cff7c10a3bd",
+      "size": 581,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/bba0a7fdd688c26d20b3dfdd94293cff7c10a3bd"
+    },
+    {
+      "path": "utils/common.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75578d7c197039292b491176cddc5e160fff1d0d",
+      "size": 9285,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/75578d7c197039292b491176cddc5e160fff1d0d"
+    },
+    {
+      "path": "utils/data.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bbb3c91d6bb238d199f35f63ca86045ca4dea39",
+      "size": 14823,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/0bbb3c91d6bb238d199f35f63ca86045ca4dea39"
+    },
+    {
+      "path": "utils/ddp_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c736bb0d3883185d291b447d55dfbee883f17b95",
+      "size": 678,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/c736bb0d3883185d291b447d55dfbee883f17b95"
+    },
+    {
+      "path": "utils/inference.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "697d1de15c5a274dd4d65dd534964b0cf0e49075",
+      "size": 4206,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/697d1de15c5a274dd4d65dd534964b0cf0e49075"
+    },
+    {
+      "path": "utils/lm_eval_harness.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd2a15e5d4b61b283ebbf663609c10d1739e6cfa",
+      "size": 34643,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/fd2a15e5d4b61b283ebbf663609c10d1739e6cfa"
+    },
+    {
+      "path": "utils/metrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2a4775d2aea2c84fffc75ba10f23d1e0b960e59",
+      "size": 7047,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/c2a4775d2aea2c84fffc75ba10f23d1e0b960e59"
+    },
+    {
+      "path": "uv.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5aa7916e45a33b65e93968a33642807c10e87eb",
+      "size": 908263,
+      "url": "https://api.github.com/repos/Thrillcrazyer/LoopUS/git/blobs/c5aa7916e45a33b65e93968a33642807c10e87eb"
+    }
+  ],
+  "truncated": false
+}

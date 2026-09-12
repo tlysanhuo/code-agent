@@ -1,0 +1,21 @@
+{
+  "repo": "R2E-Gym/R2E-Gym",
+  "commit": "0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/README.md",
+      "sha256": "d8726b70e8e05e375120f481bb2fd0e565f3ede43d1662f3d3aa029282ca2218"
+    },
+    {
+      "path": "train/train_r2egym_32B_agent.yaml",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/train/train_r2egym_32B_agent.yaml",
+      "sha256": "55fe50f01203803ae1de57e16a0ff437a63692381c3839ee0043e0f8d0c1276c"
+    },
+    {
+      "path": "train/dataset_info.json",
+      "url": "https://raw.githubusercontent.com/R2E-Gym/R2E-Gym/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/train/dataset_info.json",
+      "sha256": "e733afcd1e5d4f0ff8e321d01f8090f9e09287dbd8f751c4e95cc6b9d988c835"
+    }
+  ]
+}

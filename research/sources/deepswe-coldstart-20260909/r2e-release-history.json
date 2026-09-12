@@ -1,0 +1,744 @@
+[
+  {
+    "sha": "0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+    "node_id": "C_kwDOOVC5Q9oAKDBkOTRjNGViOTQzMWNkMTk1YzU1YTdlYTNhYmQ1NDAwNmM5YTE3MzU",
+    "commit": {
+      "author": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-07-13T04:46:03Z"
+      },
+      "committer": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-07-13T04:46:03Z"
+      },
+      "message": "Merge branch 'main' of github.com:R2E-Gym/R2E-Gym",
+      "tree": {
+        "sha": "fcf3cab14b8fe62b0cddcc52f3a3a5d4fb2855cf",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/fcf3cab14b8fe62b0cddcc52f3a3a5d4fb2855cf"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/0d94c4eb9431cd195c55a7ea3abd54006c9a1735",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/0d94c4eb9431cd195c55a7ea3abd54006c9a1735/comments",
+    "author": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4060d6101997734849aae158cd69767a91402379",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/4060d6101997734849aae158cd69767a91402379",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/4060d6101997734849aae158cd69767a91402379"
+      },
+      {
+        "sha": "68092c5b1e5e23b2615f56978c8de22b15b070ce",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/68092c5b1e5e23b2615f56978c8de22b15b070ce",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/68092c5b1e5e23b2615f56978c8de22b15b070ce"
+      }
+    ]
+  },
+  {
+    "sha": "4060d6101997734849aae158cd69767a91402379",
+    "node_id": "C_kwDOOVC5Q9oAKDQwNjBkNjEwMTk5NzczNDg0OWFhZTE1OGNkNjk3NjdhOTE0MDIzNzk",
+    "commit": {
+      "author": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-07-13T04:45:43Z"
+      },
+      "committer": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-07-13T04:45:43Z"
+      },
+      "message": "fix: deepswe reprod readme",
+      "tree": {
+        "sha": "04fa8a4af22619a43223f5fd496a27e3f37b4c43",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/04fa8a4af22619a43223f5fd496a27e3f37b4c43"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/4060d6101997734849aae158cd69767a91402379",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/4060d6101997734849aae158cd69767a91402379",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/4060d6101997734849aae158cd69767a91402379",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/4060d6101997734849aae158cd69767a91402379/comments",
+    "author": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8fb8f05a3b367126f70c54b21907a195521bcebc",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/8fb8f05a3b367126f70c54b21907a195521bcebc",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/8fb8f05a3b367126f70c54b21907a195521bcebc"
+      }
+    ]
+  },
+  {
+    "sha": "68092c5b1e5e23b2615f56978c8de22b15b070ce",
+    "node_id": "C_kwDOOVC5Q9oAKDY4MDkyYzViMWU1ZTIzYjI2MTVmNTY5NzhjOGRlMjJiMTViMDcwY2U",
+    "commit": {
+      "author": {
+        "name": "1jsingh",
+        "email": "jaskirat.singh@anu.edu.au",
+        "date": "2025-07-02T22:25:51Z"
+      },
+      "committer": {
+        "name": "1jsingh",
+        "email": "jaskirat.singh@anu.edu.au",
+        "date": "2025-07-02T22:25:51Z"
+      },
+      "message": "fix: ef verifier run",
+      "tree": {
+        "sha": "38a5c9a3899ee35fc5133e2616a3422c283e8475",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/38a5c9a3899ee35fc5133e2616a3422c283e8475"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/68092c5b1e5e23b2615f56978c8de22b15b070ce",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/68092c5b1e5e23b2615f56978c8de22b15b070ce",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/68092c5b1e5e23b2615f56978c8de22b15b070ce",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/68092c5b1e5e23b2615f56978c8de22b15b070ce/comments",
+    "author": {
+      "login": "1jsingh",
+      "id": 25987491,
+      "node_id": "MDQ6VXNlcjI1OTg3NDkx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25987491?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/1jsingh",
+      "html_url": "https://github.com/1jsingh",
+      "followers_url": "https://api.github.com/users/1jsingh/followers",
+      "following_url": "https://api.github.com/users/1jsingh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/1jsingh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/1jsingh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/1jsingh/subscriptions",
+      "organizations_url": "https://api.github.com/users/1jsingh/orgs",
+      "repos_url": "https://api.github.com/users/1jsingh/repos",
+      "events_url": "https://api.github.com/users/1jsingh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/1jsingh/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "1jsingh",
+      "id": 25987491,
+      "node_id": "MDQ6VXNlcjI1OTg3NDkx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25987491?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/1jsingh",
+      "html_url": "https://github.com/1jsingh",
+      "followers_url": "https://api.github.com/users/1jsingh/followers",
+      "following_url": "https://api.github.com/users/1jsingh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/1jsingh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/1jsingh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/1jsingh/subscriptions",
+      "organizations_url": "https://api.github.com/users/1jsingh/orgs",
+      "repos_url": "https://api.github.com/users/1jsingh/repos",
+      "events_url": "https://api.github.com/users/1jsingh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/1jsingh/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8fb8f05a3b367126f70c54b21907a195521bcebc",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/8fb8f05a3b367126f70c54b21907a195521bcebc",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/8fb8f05a3b367126f70c54b21907a195521bcebc"
+      }
+    ]
+  },
+  {
+    "sha": "8fb8f05a3b367126f70c54b21907a195521bcebc",
+    "node_id": "C_kwDOOVC5Q9oAKDhmYjhmMDVhM2IzNjcxMjZmNzBjNTRiMjE5MDdhMTk1NTIxYmNlYmM",
+    "commit": {
+      "author": {
+        "name": "Your Name",
+        "email": "you@example.com",
+        "date": "2025-07-02T18:57:04Z"
+      },
+      "committer": {
+        "name": "Your Name",
+        "email": "you@example.com",
+        "date": "2025-07-02T18:57:04Z"
+      },
+      "message": "feat: update README",
+      "tree": {
+        "sha": "d05b6c160ae31c30cb907b9d9a54b944efeeef82",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/d05b6c160ae31c30cb907b9d9a54b944efeeef82"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/8fb8f05a3b367126f70c54b21907a195521bcebc",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/8fb8f05a3b367126f70c54b21907a195521bcebc",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/8fb8f05a3b367126f70c54b21907a195521bcebc",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/8fb8f05a3b367126f70c54b21907a195521bcebc/comments",
+    "author": {
+      "login": "invalid-email-address",
+      "id": 148100,
+      "node_id": "MDQ6VXNlcjE0ODEwMA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/148100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/invalid-email-address",
+      "html_url": "https://github.com/invalid-email-address",
+      "followers_url": "https://api.github.com/users/invalid-email-address/followers",
+      "following_url": "https://api.github.com/users/invalid-email-address/following{/other_user}",
+      "gists_url": "https://api.github.com/users/invalid-email-address/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/invalid-email-address/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/invalid-email-address/subscriptions",
+      "organizations_url": "https://api.github.com/users/invalid-email-address/orgs",
+      "repos_url": "https://api.github.com/users/invalid-email-address/repos",
+      "events_url": "https://api.github.com/users/invalid-email-address/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/invalid-email-address/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "invalid-email-address",
+      "id": 148100,
+      "node_id": "MDQ6VXNlcjE0ODEwMA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/148100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/invalid-email-address",
+      "html_url": "https://github.com/invalid-email-address",
+      "followers_url": "https://api.github.com/users/invalid-email-address/followers",
+      "following_url": "https://api.github.com/users/invalid-email-address/following{/other_user}",
+      "gists_url": "https://api.github.com/users/invalid-email-address/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/invalid-email-address/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/invalid-email-address/subscriptions",
+      "organizations_url": "https://api.github.com/users/invalid-email-address/orgs",
+      "repos_url": "https://api.github.com/users/invalid-email-address/repos",
+      "events_url": "https://api.github.com/users/invalid-email-address/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/invalid-email-address/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/3fecf615ce46f9bac9d2a4fd22623f6408a940de"
+      }
+    ]
+  },
+  {
+    "sha": "3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+    "node_id": "C_kwDOOVC5Q9oAKDNmZWNmNjE1Y2U0NmY5YmFjOWQyYTRmZDIyNjIzZjY0MDhhOTQwZGU",
+    "commit": {
+      "author": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-07-02T18:48:19Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-07-02T18:48:19Z"
+      },
+      "message": "Merge pull request #3 from R2E-Gym/feat--add-deepswe-compatible-r2e-gym\n\nfeat: push changes",
+      "tree": {
+        "sha": "e3b11135501d1812c497162e6fb8ef0d4a49433d",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/e3b11135501d1812c497162e6fb8ef0d4a49433d"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJoZX7zCRC1aQ7uu5UhlAAACvYQAICQoApOO9rXAMjc9epDYKdU\nslRhQ5jOYEdr1tW+KFpbg1Dm1zf9eXZ93k9StOaUS2+58wK/ysqUe6xS10lqrh/p\nkJmZ9LBZIWgMwbArdO3ooTYGlVj/JaMDHFVGobs+jSdD8LD0MrfI2KILuXGZG+fp\n/DVWIFEqjRc40Cy0JytuJBSZaNwC4KKV+qM3T2EFTQ9rd9pqqYkjVwwWiTvSyu7/\n9Lz/cADE7AvWuKYRZcRxVy/FPYr7QUrpBNoLPjwf3B3omI853e/teu2vL6GShzfK\nyPb3QP7KqU4QanO6VYsGDjKnxEF5i4nOzyCnsdJbOCTgkkRa9N4hkyLrhDRtK7cq\n8SpI5kv6ezLB2MENmwyNZImCm4lIQeRZNdjDGQ+iWU1uTWjUdiKezf9HOC5oKHk8\nqHLBR4MVCggk9P1kANxqP7/Nw4fjwVJUlIigbqCkmJe2I8swuA4JzRbyZ7diu4n0\nKQ7esygZJgiHUg09igX/c/fAhB1H/y9frp/BFdfYHGzsXeK2+1S2fWs8tBLj//wE\n2oLC0f9spC0IKk6qKI6V63xLGAUwTX/6Ug8waXUTFHlXLkhDoDzMXgRKkEEMcINF\n5RKhScJKAR7sNwBOaRVjZPsQxUJ6n98DHSC6xZ9K7qhnCH9Zb+4GR4WhtC4RD27X\nvRnQ4wnWlMmFDBAdPBPN\n=I9pE\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree e3b11135501d1812c497162e6fb8ef0d4a49433d\nparent 2de03083bf57abddd1b9d577234361a318255c46\nparent 04e85a24cadeb66c943a932cbb5a3548609ff4b5\nauthor Naman Jain <naman1205jain@gmail.com> 1751482099 -0700\ncommitter GitHub <noreply@github.com> 1751482099 -0700\n\nMerge pull request #3 from R2E-Gym/feat--add-deepswe-compatible-r2e-gym\n\nfeat: push changes",
+        "verified_at": "2025-07-02T18:48:19Z"
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/3fecf615ce46f9bac9d2a4fd22623f6408a940de",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/3fecf615ce46f9bac9d2a4fd22623f6408a940de/comments",
+    "author": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2de03083bf57abddd1b9d577234361a318255c46",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/2de03083bf57abddd1b9d577234361a318255c46",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/2de03083bf57abddd1b9d577234361a318255c46"
+      },
+      {
+        "sha": "04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/04e85a24cadeb66c943a932cbb5a3548609ff4b5"
+      }
+    ]
+  },
+  {
+    "sha": "04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+    "node_id": "C_kwDOOVC5Q9oAKDA0ZTg1YTI0Y2FkZWI2NmM5NDNhOTMyY2JiNWEzNTQ4NjA5ZmY0YjU",
+    "commit": {
+      "author": {
+        "name": "Your Name",
+        "email": "you@example.com",
+        "date": "2025-07-02T18:32:03Z"
+      },
+      "committer": {
+        "name": "Your Name",
+        "email": "you@example.com",
+        "date": "2025-07-02T18:32:03Z"
+      },
+      "message": "Add DeepSWE compatible R2E-Gym features\n\nCo-authored-by: michaelzhiluo <michaelzhiluo@users.noreply.github.com>\nCo-authored-by: naman-ntc <naman-ntc@users.noreply.github.com>\nCo-authored-by: 1jsingh <1jsingh@users.noreply.github.com>",
+      "tree": {
+        "sha": "e3b11135501d1812c497162e6fb8ef0d4a49433d",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/e3b11135501d1812c497162e6fb8ef0d4a49433d"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/04e85a24cadeb66c943a932cbb5a3548609ff4b5",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/04e85a24cadeb66c943a932cbb5a3548609ff4b5/comments",
+    "author": {
+      "login": "invalid-email-address",
+      "id": 148100,
+      "node_id": "MDQ6VXNlcjE0ODEwMA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/148100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/invalid-email-address",
+      "html_url": "https://github.com/invalid-email-address",
+      "followers_url": "https://api.github.com/users/invalid-email-address/followers",
+      "following_url": "https://api.github.com/users/invalid-email-address/following{/other_user}",
+      "gists_url": "https://api.github.com/users/invalid-email-address/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/invalid-email-address/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/invalid-email-address/subscriptions",
+      "organizations_url": "https://api.github.com/users/invalid-email-address/orgs",
+      "repos_url": "https://api.github.com/users/invalid-email-address/repos",
+      "events_url": "https://api.github.com/users/invalid-email-address/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/invalid-email-address/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "invalid-email-address",
+      "id": 148100,
+      "node_id": "MDQ6VXNlcjE0ODEwMA==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/148100?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/invalid-email-address",
+      "html_url": "https://github.com/invalid-email-address",
+      "followers_url": "https://api.github.com/users/invalid-email-address/followers",
+      "following_url": "https://api.github.com/users/invalid-email-address/following{/other_user}",
+      "gists_url": "https://api.github.com/users/invalid-email-address/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/invalid-email-address/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/invalid-email-address/subscriptions",
+      "organizations_url": "https://api.github.com/users/invalid-email-address/orgs",
+      "repos_url": "https://api.github.com/users/invalid-email-address/repos",
+      "events_url": "https://api.github.com/users/invalid-email-address/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/invalid-email-address/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "2de03083bf57abddd1b9d577234361a318255c46",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/2de03083bf57abddd1b9d577234361a318255c46",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/2de03083bf57abddd1b9d577234361a318255c46"
+      }
+    ]
+  },
+  {
+    "sha": "2de03083bf57abddd1b9d577234361a318255c46",
+    "node_id": "C_kwDOOVC5Q9oAKDJkZTAzMDgzYmY1N2FiZGRkMWI5ZDU3NzIzNDM2MWEzMTgyNTVjNDY",
+    "commit": {
+      "author": {
+        "name": "1jsingh",
+        "email": "jaskirat.singh@anu.edu.au",
+        "date": "2025-06-08T21:37:09Z"
+      },
+      "committer": {
+        "name": "1jsingh",
+        "email": "jaskirat.singh@anu.edu.au",
+        "date": "2025-06-08T21:39:20Z"
+      },
+      "message": "doc: update",
+      "tree": {
+        "sha": "f57c7a902faefcd066744e8527b4781b4ee548a4",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/f57c7a902faefcd066744e8527b4781b4ee548a4"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/2de03083bf57abddd1b9d577234361a318255c46",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/2de03083bf57abddd1b9d577234361a318255c46",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/2de03083bf57abddd1b9d577234361a318255c46",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/2de03083bf57abddd1b9d577234361a318255c46/comments",
+    "author": {
+      "login": "1jsingh",
+      "id": 25987491,
+      "node_id": "MDQ6VXNlcjI1OTg3NDkx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25987491?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/1jsingh",
+      "html_url": "https://github.com/1jsingh",
+      "followers_url": "https://api.github.com/users/1jsingh/followers",
+      "following_url": "https://api.github.com/users/1jsingh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/1jsingh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/1jsingh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/1jsingh/subscriptions",
+      "organizations_url": "https://api.github.com/users/1jsingh/orgs",
+      "repos_url": "https://api.github.com/users/1jsingh/repos",
+      "events_url": "https://api.github.com/users/1jsingh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/1jsingh/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "1jsingh",
+      "id": 25987491,
+      "node_id": "MDQ6VXNlcjI1OTg3NDkx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25987491?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/1jsingh",
+      "html_url": "https://github.com/1jsingh",
+      "followers_url": "https://api.github.com/users/1jsingh/followers",
+      "following_url": "https://api.github.com/users/1jsingh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/1jsingh/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/1jsingh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/1jsingh/subscriptions",
+      "organizations_url": "https://api.github.com/users/1jsingh/orgs",
+      "repos_url": "https://api.github.com/users/1jsingh/repos",
+      "events_url": "https://api.github.com/users/1jsingh/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/1jsingh/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0"
+      }
+    ]
+  },
+  {
+    "sha": "69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+    "node_id": "C_kwDOOVC5Q9oAKDY5YmM5NTM1NDJiNDI4ZDFlNGM4YTU5Y2UzZWExYTMyZTUwZWYwZjA",
+    "commit": {
+      "author": {
+        "name": "Michael Luo",
+        "email": "michael.luo@berkeley.edu",
+        "date": "2025-04-22T03:41:55Z"
+      },
+      "committer": {
+        "name": "Michael Luo",
+        "email": "michael.luo@berkeley.edu",
+        "date": "2025-04-22T03:41:55Z"
+      },
+      "message": "Fix reset env",
+      "tree": {
+        "sha": "2c5f934ccd6d22957118eab27389ce32a1f3471a",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/2c5f934ccd6d22957118eab27389ce32a1f3471a"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/69bc953542b428d1e4c8a59ce3ea1a32e50ef0f0/comments",
+    "author": {
+      "login": "michaelzhiluo",
+      "id": 20640975,
+      "node_id": "MDQ6VXNlcjIwNjQwOTc1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20640975?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/michaelzhiluo",
+      "html_url": "https://github.com/michaelzhiluo",
+      "followers_url": "https://api.github.com/users/michaelzhiluo/followers",
+      "following_url": "https://api.github.com/users/michaelzhiluo/following{/other_user}",
+      "gists_url": "https://api.github.com/users/michaelzhiluo/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/michaelzhiluo/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/michaelzhiluo/subscriptions",
+      "organizations_url": "https://api.github.com/users/michaelzhiluo/orgs",
+      "repos_url": "https://api.github.com/users/michaelzhiluo/repos",
+      "events_url": "https://api.github.com/users/michaelzhiluo/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/michaelzhiluo/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "michaelzhiluo",
+      "id": 20640975,
+      "node_id": "MDQ6VXNlcjIwNjQwOTc1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20640975?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/michaelzhiluo",
+      "html_url": "https://github.com/michaelzhiluo",
+      "followers_url": "https://api.github.com/users/michaelzhiluo/followers",
+      "following_url": "https://api.github.com/users/michaelzhiluo/following{/other_user}",
+      "gists_url": "https://api.github.com/users/michaelzhiluo/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/michaelzhiluo/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/michaelzhiluo/subscriptions",
+      "organizations_url": "https://api.github.com/users/michaelzhiluo/orgs",
+      "repos_url": "https://api.github.com/users/michaelzhiluo/repos",
+      "events_url": "https://api.github.com/users/michaelzhiluo/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/michaelzhiluo/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+        "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f"
+      }
+    ]
+  },
+  {
+    "sha": "9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+    "node_id": "C_kwDOOVC5Q9oAKDlhM2MyNDk1YWI2OWEzY2ExZTg1ZjM5NWMzMDhiYzZmNzJkNDE2MWY",
+    "commit": {
+      "author": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-04-09T17:48:16Z"
+      },
+      "committer": {
+        "name": "Naman Jain",
+        "email": "naman1205jain@gmail.com",
+        "date": "2025-04-09T17:48:16Z"
+      },
+      "message": "feat: initial commit",
+      "tree": {
+        "sha": "17f3a4e1fba011bb0edfa34f81d34b74c41aa7fd",
+        "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/trees/17f3a4e1fba011bb0edfa34f81d34b74c41aa7fd"
+      },
+      "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/git/commits/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+    "html_url": "https://github.com/R2E-Gym/R2E-Gym/commit/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f",
+    "comments_url": "https://api.github.com/repos/R2E-Gym/R2E-Gym/commits/9a3c2495ab69a3ca1e85f395c308bc6f72d4161f/comments",
+    "author": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "Naman-ntc",
+      "id": 23135406,
+      "node_id": "MDQ6VXNlcjIzMTM1NDA2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23135406?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Naman-ntc",
+      "html_url": "https://github.com/Naman-ntc",
+      "followers_url": "https://api.github.com/users/Naman-ntc/followers",
+      "following_url": "https://api.github.com/users/Naman-ntc/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Naman-ntc/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Naman-ntc/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Naman-ntc/subscriptions",
+      "organizations_url": "https://api.github.com/users/Naman-ntc/orgs",
+      "repos_url": "https://api.github.com/users/Naman-ntc/repos",
+      "events_url": "https://api.github.com/users/Naman-ntc/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Naman-ntc/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": []
+  }
+]

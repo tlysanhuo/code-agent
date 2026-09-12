@@ -1,0 +1,1486 @@
+SOD: Step-wise On-policy Distillation for Small Language Model Agents
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+arXiv is now an independent nonprofit!
+Learn more
+×
+Back to arXiv
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Abstract
+1 Introduction
+2 Related Work
+Reinforcement Learning for Agents.
+On-policy Distillation.
+3 Preliminaries
+3.1 Multi-turn Tool-Integrated Reasoning
+3.2 Group Relative Policy Optimization
+3.3 On-policy Distillation
+4 Methodology
+4.1 Failure of On-policy Distillation under Tool-Induced State Drift
+4.2 Student-teacher Divergence and Step-wise Reweighting
+4.3 Training Objective
+5 Experiment
+5.1 Experimental Setup
+Datasets & Benchmarks.
+Evaluation Setups.
+Baselines & Implementation Details.
+5.2 Overall Performance
+5.3 Ablation Study
+5.4 Scalability and Generalization
+5.5 Dynamic training analysis
+5.6 Three Distillation Patterns of SOD
+6 Limitations
+7 Conclusion
+References
+Appendix
+A Algorithmic Details of SOD
+B Experimental Setup
+B.1 Training Datasets.
+B.2 Benchmarks
+B.3 Baselines
+B.4 Implementation Details.
+C Additional Experiments
+C.1 Training Cost and Practicality Analysis
+SOD vs. OPD: negligible algorithmic overhead.
+Why GRPO has lower per-step time.
+C.2 Quantitative Analysis of Distillation Pattern Distribution
+Key observations.
+C.3 The Performance of Naive On-policy Distillation
+D Proofs for
+D.1 Proof of Proposition
+Text-only case (gradual drift).
+TIR case (discontinuous drift).
+Single-step bound.
+Cascading errors and super-linear compounding.
+D.2 Proof of Proposition
+Step 1: Decomposition of the second moment.
+Step 2: Restricting to the low-overlap region.
+Step 3: Applying Jensen’s inequality.
+Step 4: Bounding the entropy term.
+Step 5: SNR degradation.
+Interpretation.
+D.3 Discussion: Failure Cascade and Design Implications
+D.4 Variance Reduction under Step-wise Reweighting
+SNR recovery.
+Stability under recovery.
+Interpretation.
+D.5 Justification of dkd_{k} as a Proxy for Δk\Delta_{k}
+Monotonic consistency.
+Sufficiency of ordering.
+E Prompt Template
+E.1 Datasets Prompt Template
+E.2 Baseline Prompt Template
+F Visualization and Analysis of Token Entropy from The Teacher
+G Case Study
+License: arXiv.org perpetual non-exclusive license
+arXiv:2605.07725v1 [cs.CL] 08 May 2026
+SOD: Step-wise On-policy Distillation for
+Small Language Model Agents
+Qiyong Zhong1 Mao Zheng211footnotemark:
+1
+Mingyang Song211footnotemark:
+1
+Xin Lin1
+Jie Sun3 Houcheng Jiang3 Xiang Wang3 Junfeng Fang433footnotemark:
+3
+1Zhejiang University 2Large Language Model Department, Tencent
+3University of Science and Technology of China 4National University of Singapore
+{youngzhong,linxin2}@zju.edu.cn ;
+{moonzheng,nickmysong}@tencent.com
+{sunjie2019,jianghc}@mail.ustc.edu.cn ;
+xiangwang1223@gmail.com; fangjf@nus.edu.sg
+††thanks: Equal contribution.††thanks: This work was done during an internship at Tencent.††thanks: Corresponding authors.
+Abstract
+Tool-integrated reasoning (TIR) is difficult to scale to small language models due to instability in long-horizon tool interactions and limited model capacity. While reinforcement learning methods like group relative policy optimization provide only sparse outcome-level rewards. Recently, on-policy distillation (OPD) has gained popularity by supplying dense token-level supervision from a teacher on student-generated trajectories. However, our experiments indicate that applying OPD to TIR leads to a critical failure mode: erroneous tool calls tend to cascade across subsequent reasoning steps, progressively amplifying student-teacher divergence and rendering the teacher’s token-level supervision increasingly unreliable.
+To address this, we propose SOD, a step-wise on-policy distillation framework for small language model agents, which adaptively reweights distillation strength at each step based on step-level divergence. Therefore, SOD can attenuate potentially misleading teacher signals in high-divergence regions while preserving dense guidance in well-aligned states. Experiments on challenging math, science, and code benchmarks show that SOD achieves up to 20.86% improvement over the second-best baseline. Notably, our 0.6B student achieves 26.13% on average@32 at AIME 2025, demonstrating effective transfer of agentic reasoning to lightweight models.
+Our code is available at https://github.com/YoungZ365/SOD.
+1 Introduction
+Agentic capabilities have substantially expanded the applicability of large language models (LLMs) [1, 2], enabling them to solve complex real-world tasks [3, 4, 5].
+However, such capabilities are typically realized by large-scale models, which incurs substantial inference cost, deployment overhead, and system complexity [5, 6, 7]. In latency-, resource-, and privacy-sensitive scenarios, transferring agentic capabilities to small language models (SLMs) that can be deployed on-device is therefore of significant practical importance [8, 9, 10, 11, 12]. Despite this motivation, enabling SLMs to acquire stable and effective tool-integrated reasoning (TIR) abilities remains a major challenge [13, 14, 15, 16].
+Existing post-training methods for enhancing TIR abilities are largely based on reinforcement learning (RL) [17, 18, 19], particularly policy optimization algorithms such as group relative policy optimization (GRPO) [20]. However, in SLM-based TIR settings, RL often suffers from unstable optimization [13, 14]. TIR tasks typically involve long-horizon trajectories [17], multi-step decision making [18], and interactions with external tools [5], whereas RL commonly provides only sparse outcome-level rewards [21]. For small models with limited capacity and weaker exploration ability, such sparse supervision can further exacerbate exploration failure, leaving the policy in a cold-start regime with few informative reasoning signals [22].
+Recently, on-policy distillation (OPD) has emerged as a promising paradigm for post-training [23, 24, 25, 26, 27]. Unlike RL methods that rely on sparse, trajectory-level rewards [21], OPD provides dense token-level supervision [24] on trajectories sampled from the student’s own policy [23], thereby alleviating the credit assignment difficulty inherent in sparse reward signals [28, 29] while substantially improving sample efficiency [30] and training stability [28].
+Figure 1: The motivation of SOD.
+(a) Student-teacher divergence dkd_{k} across reasoning steps, sampled from 800 trajectories: in TIR, erroneous tool calls cause divergence to accelerate sharply, unlike the gradual drift in text-only reasoning.
+(b) Teacher entropy statistics over 800 sampled trajectories: on erroneous trajectories, both the mean entropy change (bars) and the standard deviation (dashed lines) grow rapidly at later steps, indicating increasingly unreliable teacher supervision. Please refer to Appendix F for detailed cases.
+(c) Radar chart comparing methods on four benchmarks.
+However, our experiments show that directly transferring OPD to SLM-based TIR can lead to severe training instability [31, 32, 33, 34]. We attribute this failure to a fundamental difference between how student trajectories deviate from the teacher distribution in TIR and in standard text-based reasoning [29, 35, 36, 33]. As illustrated in Figure 1(a), in text-only reasoning, even when the student gradually departs from the teacher, subsequent states still evolve continuously along the generated context, and the resulting distribution shift is typically progressive [37, 23]. In contrast, TIR introduces discontinuous state transitions through tool interactions [17]. A single erroneous tool call can inject an incorrect observation into the context, causing subsequent reasoning steps to unfold from a corrupted state [13]. This issue is further amplified because teacher models are often highly accurate in tool use, whereas small models have limited capacity and weaker exploration ability [38, 14]. During early training, small models may accumulate multiple erroneous tool calls, causing their state distribution to rapidly drift away from the teacher distribution [29, 39]. In such out-of-distribution states, teacher-provided token-level supervision may become unreliable or even misleading [40, 33, 22, 41, 31] as illustrated in Figure 1(b), and the enlarged student-teacher discrepancy can induce unstable gradients and even training collapse [29, 28].
+Based on this observation, we propose SOD, a
+Step-wise On-policy Distillation framework for small language model agents. The core idea is to adaptively adjust the distillation strength at each reasoning step according to the divergence between the student and teacher. Specifically, when the student remains well aligned with the teacher, SOD preserves dense supervision to fully exploit teacher guidance; when the deviation becomes large, it progressively attenuates the distillation signal for the corresponding step, thereby reducing the influence of potentially misleading supervision under out-of-distribution states.
+Experimental results (as displayed in Figure 1(c)) demonstrate that this simple yet effective step-wise reweighting mechanism enables lightweight agents to acquire agentic TIR capabilities more efficiently.
+Extensive experiments on challenging math, science, and code benchmarks show that SOD outperforms the second-best baseline by up to 20.86%.
+Notably, our 0.6B-scale student achieves 26.13% accuracy on AIME 2025. To our best knowledge, this is the first sub-billion-parameter model to reach this level on such a challenging reasoning benchmark.
+2 Related Work
+Reinforcement Learning for Agents.
+RL-based post-training has evolved from reinforcement learning from human feedback (RLHF) [42, 43] with PPO [44] to more scalable methods like GRPO [20]. For language agents, structured reasoning paradigms such as ReAct [3], Toolformer [4], and FireAct [45] enable tool use but rely on demonstrations rather than online optimization. Recent work extends RL to agent interaction trajectories across code generation [46], tool use [47], GUI interaction [48], and web navigation [49]. A central challenge is credit assignment under sparse, delayed feedback, addressed via trajectory-level updates and value-free formulations [50, 51]. KL-regularized policy optimization further introduces bias and instability concerns [44], amplified in agentic settings by distribution shift and compounding errors. Broader frameworks scaling agentic RL across environments [52, 53, 54] still rely on trajectory-level rewards without dense supervision.
+On-policy Distillation.
+On-Policy Distillation (OPD) [36, 55, 56, 57, 58, 41, 59] introduces token-level supervision on student-generated trajectories to mitigate the distribution mismatch of offline distillation. Gu et al. [24] formulates OPD as reverse KL minimization under the student distribution, while Agarwal et al. [23] unifies on-policy and off-policy distillation across divergence objectives. Yang et al. [60] further interprets OPD as KL-regularized reinforcement learning with implicit per-token rewards, and Li et al. [29] shows that OPD primarily aligns local support on student-visited states, depending on teacher–student compatibility in reasoning patterns. OPD has also been extended to self-distillation settings without external teachers [61, 62, 63, 64, 65].
+Recently, more works [31, 32, 33, 34, 66] have explored introducing OPD to mitigate the limitations of RL.
+3 Preliminaries
+3.1 Multi-turn Tool-Integrated Reasoning
+We consider the post-training of a small language model (SLM) for multi-turn tool-integrated reasoning (TIR). Given an input xx, the model interacts with an external environment over multiple reasoning steps. At each step kk, the model generates a response yky_{k}, which may include natural-language reasoning, a tool invocation, or a final answer. If a tool is invoked, the environment returns an observation oko_{k}, which is appended to the context and conditions subsequent generations.
+A trajectory is defined as:
+τ=(x,y1,o1,…,yK,oK,yK+1),\tau=(x,y_{1},o_{1},\ldots,y_{K},o_{K},y_{K+1}),
+(1)
+where yK+1y_{K+1} denotes the final response. The policy πθ\pi_{\theta} generates only model tokens, while observations {ok}\{o_{k}\} are provided by the environment. Let yty_{t} denote a generated token and y<ty_{<t} its prefix, which may include both model outputs and tool observations.
+3.2 Group Relative Policy Optimization
+Group Relative Policy Optimization (GRPO) [20] is a reinforcement learning algorithm that updates the policy using relative rewards within a group of sampled trajectories. We assume access to an outcome-level reward function r⁡(τ)r(\tau) defined on complete trajectories. For each input xx, a group of trajectories {τi}i=1G\{\tau_{i}\}_{i=1}^{G} is sampled from the old policy πθold\pi_{\theta_{\mathrm{old}}}, each receiving reward ri=r⁡(τi)r_{i}=r(\tau_{i}).
+The group-relative advantage is computed as:
+A^i=ri−mean⁡({rj})std⁡({rj})+ϵA.\hat{A}_{i}=\frac{r_{i}-\mathrm{mean}(\{r_{j}\})}{\mathrm{std}(\{r_{j}\})+\epsilon_{A}}.
+(2)
+Let ρi,t​(θ)=πθ​(yi,t∣yi,<t)πθold​(yi,t∣yi,<t)\rho_{i,t}(\theta)=\frac{\pi_{\theta}(y_{i,t}\mid y_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(y_{i,t}\mid y_{i,<t})} denote the token-level importance ratio. The objective is defined as:
+ℒGRPO=−𝔼⁡[1G​∑i=1G1|𝒯i|​∑t∈𝒯imin⁡(ρi,t​(θ)​A^i,clip⁡(ρi,t​(θ),1−ϵ,1+ϵ)​A^i)],\mathcal{L}_{\mathrm{GRPO}}=-\mathbb{E}\left[\frac{1}{G}\sum_{i=1}^{G}\frac{1}{|\mathcal{T}_{i}|}\sum_{t\in\mathcal{T}_{i}}\min\left(\rho_{i,t}(\theta)\hat{A}_{i},\mathrm{clip}(\rho_{i,t}(\theta),1-\epsilon,1+\epsilon)\hat{A}_{i}\right)\right],
+(3)
+where 𝒯i\mathcal{T}_{i} denotes model-generated token positions.
+This objective provides an on-policy learning signal based on relative trajectory performance, but supplies only sparse outcome-level rewards.
+3.3 On-policy Distillation
+On-policy distillation (OPD) [23, 67] is a post-training paradigm that provides dense token-level supervision on student-generated trajectories by aligning the student policy with a teacher distribution. Given a trajectory y∼πθy\sim\pi_{\theta}, the OPD objective is defined as:
+ℒOPD=𝔼⁡[∑t∈𝒯i(log⁡πθ​(yt∣y<t)−log⁡πteacher​(yt∣y<t))],\mathcal{L}_{\mathrm{OPD}}^{\mathrm{}}=\mathbb{E}\left[\sum_{t\in\mathcal{T}_{i}}\left(\log\pi_{\theta}(y_{t}\mid y_{<t})-\log\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t})\right)\right],
+(4)
+where πθ\pi_{\theta} is the student policy, πteacher\pi_{\mathrm{teacher}} is the teacher model, and 𝒯i\mathcal{T}_{i} denotes the set of model-generated token positions in the sampled trajectory. This objective corresponds to a sampled estimator of the reverse KL divergence between the student and teacher policies on student-visited states.
+4 Methodology
+In this section, we introduce SOD.
+The framework of SOD is displayed in Figure 2.
+We first analyze why on-policy distillation (OPD) can become unreliable under tool-induced state drift. We then introduce a step-level divergence score as an observable proxy for the reliability of teacher supervision, and finally formulate a step-wise reweighted OPD objective.
+4.1 Failure of On-policy Distillation under Tool-Induced State Drift
+The OPD objective assumes that teacher supervision remains reliable across all student-visited states [35, 29, 33]. This assumption holds when distribution drift is gradual, but is severely violated in TIR due to discontinuous state transitions introduced by tool observations. We formalize this failure through two propositions (proofs in Appendix D).
+We define the step-level mismatch as:
+Δk=1|ℐk|∑t∈ℐkDKL(πθ(⋅∣y<t)∥πteacher(⋅∣y<t)).\Delta_{k}=\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}D_{\mathrm{KL}}\bigl(\pi_{\theta}(\cdot\mid y_{<t})\,\big\|\,\pi_{\mathrm{teacher}}(\cdot\mid y_{<t})\bigr).
+(5)
+Proposition 1 (Discontinuous divergence amplification).
+In text-only reasoning, Δk+1−Δk=O⁡(η)\Delta_{k+1}-\Delta_{k}=O(\eta) where η\eta is the per-token distributional shift. In TIR, a single erroneous tool observation of length mm causes Δk+1−Δk=Ω⁡(m⋅ηtool)\Delta_{k+1}-\Delta_{k}=\Omega(m\cdot\eta_{\mathrm{tool}}) with ηtool≫η\eta_{\mathrm{tool}}\gg\eta. Under jj consecutive tool errors, the divergence compounds super-linearly: Δk+j−Δk=Ω⁡(∑i=0j−1mi⋅ηtool(i))\Delta_{k+j}-\Delta_{k}=\Omega\!\left(\sum_{i=0}^{j-1}m_{i}\cdot\eta_{\mathrm{tool}}^{(i)}\right) with ηtool(i+1)≥ηtool(i)\eta_{\mathrm{tool}}^{(i+1)}\geq\eta_{\mathrm{tool}}^{(i)}.
+Proposition 2 (Gradient SNR degradation).
+Define the teacher-supported region Stϵ={v∈𝒱:πteacher​(v∣y<t)≥ϵ}S_{t}^{\epsilon}=\{v\in\mathcal{V}:\pi_{\mathrm{teacher}}(v\mid y_{<t})\geq\epsilon\} and the overlap ρt=∑v∈Stϵπθ​(v∣y<t)\rho_{t}=\sum_{v\in S_{t}^{\epsilon}}\pi_{\theta}(v\mid y_{<t}). When ρt≤ρ\rho_{t}\leq\rho, the second moment of the OPD loss satisfies 𝔼⁡[ℓt2]≥(1−ρ)​log2⁡(1/ϵ)\mathbb{E}[\ell_{t}^{2}]\geq(1-\rho)\,\log^{2}(1/\epsilon), and the signal-to-noise ratio of the gradient estimator SNR⁡(gt)→0\mathrm{SNR}(g_{t})\to 0 as ρt→0\rho_{t}\to 0.
+Together, these results characterize a failure cascade specific to TIR: consecutive erroneous tool calls trigger compounding divergence amplification (Prop. 1), progressively pushing the student away from the teacher distribution into low-overlap states where the OPD gradient becomes dominated by high-variance, uninformative contributions (Prop. 2). This is empirically confirmed in Figure 1: divergence accelerates sharply as tool errors accumulate (a), and teacher entropy becomes elevated and unstable in subsequent steps (b). Since OPD aggregates losses uniformly across steps, it systematically overweights these corrupted signals, motivating our step-wise reweighting mechanism.
+We formally show in Appendix D.4 that under monotonically increasing divergence, our reweighting suppresses the weighted second moment by a factor of O⁡((d1/dk)2)O((d_{1}/d_{k})^{2}), restoring bounded gradient SNR even in low-overlap states where OPD suffers SNR collapse.
+Figure 2: The overview of SOD. (a) The student generates multi-step trajectories where erroneous tool calls propagate across steps, degrading teacher supervision reliability. (b) Student-teacher distributions drift apart as errors accumulate. (c) Step-level divergence dkd_{k} quantifies this drift. (d) SOD adaptively attenuates distillation weights in high-divergence steps, unlike vanilla OPD which applies uniform weights. Please refer to Section 5.6 for more characteristics of SOD.
+4.2 Student-teacher Divergence and Step-wise Reweighting
+We partition a generated trajectory into K+1K+1 reasoning steps, where each step corresponds to a model response between two tool observations, or the final answer step. Let ℐk\mathcal{I}_{k} denote the set of token positions belonging to the kk-th model-generated step. Tool observation tokens are excluded because they are produced by the external environment rather than by the policy.
+We define a step-level divergence score to quantify student–teacher divergence at step kk:
+dk=1|ℐk|​∑t∈ℐk|log⁡πθ​(yt∣y<t)−log⁡πteacher​(yt∣y<t)|.d_{k}=\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}\left|\log\pi_{\theta}(y_{t}\mid y_{<t})-\log\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t})\right|.
+(6)
+The score dkd_{k} serves as a lightweight indicator of the local reliability of teacher supervision. A small dkd_{k} suggests that the student remains well aligned with the teacher distribution, while a large dkd_{k} indicates substantial mismatch, often caused by tool-induced state drift or corrupted observations.
+Based on these divergence scores, we adaptively reweight the strength of distillation across steps.
+We initialize the first step with full distillation strength, i.e., w1=1w_{1}=1. For subsequent steps, the weight is:
+wk=min⁡(∏u=1k−1du+ϵdu+1+ϵ,1+δ),k≥2,w_{k}=\min\!\left(\prod_{u=1}^{k-1}\frac{d_{u}+\epsilon}{d_{u+1}+\epsilon},1+\delta\right),\quad k\geq 2,
+(7)
+where ϵ\epsilon is a small constant for stability and δ\delta controls the maximum amplification of the distillation.
+Since the reweighting in Eq. 7 depends only on the ratios between consecutive divergence scores rather than their absolute values, any monotone proxy of Δk\Delta_{k} suffices. We show in Section D.5 that dkd_{k} is monotonically consistent with Δk\Delta_{k} and computable at zero marginal cost from the OPD forward pass. We therefore adopt dkd_{k} in place of Δk\Delta_{k} in our implementation.
+This weighting rule captures the evolution of student-teacher divergence along the trajectory. When the divergence increases, i.e., du+1>dud_{u+1}>d_{u}, indicating that the student is drifting away from the teacher distribution (often due to tool-induced state shift), the corresponding ratio becomes smaller than one, leading to attenuation of the distillation signal in high-mismatch regions.
+Conversely, the student may partially move back toward the teacher-supported region in later steps, effectively correcting earlier deviations. We refer to this phenomenon as recovery from earlier errors. In such cases, when du+1<dud_{u+1}<d_{u}, the reweighting mechanism allows the distillation strength to increase accordingly, restoring informative guidance. To ensure stable optimization, the weight is upper-bounded by 1+δ1+\delta.
+4.3 Training Objective
+For a student-generated trajectory, the sampled-token OPD term at token tt is:
+ℓOPD​(yt)=log⁡πθ​(yt∣y<t)−log⁡πteacher​(yt∣y<t).\ell_{\mathrm{OPD}}(y_{t})=\log\pi_{\theta}(y_{t}\mid y_{<t})-\log\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t}).
+(8)
+Instead of applying this term uniformly at step level, we reweight all tokens in step kk by the corresponding reliability weight wkw_{k}, leading to the step-wise OPD objective:
+ℒOPDstep=𝔼y∼πθ​[∑k=1K+1wk​∑t∈ℐk(log⁡πθ​(yt∣y<t)−log⁡πteacher​(yt∣y<t))].\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}}=\mathbb{E}_{y\sim\pi_{\theta}}\left[\sum_{k=1}^{K+1}w_{k}\sum_{t\in\mathcal{I}_{k}}\left(\log\pi_{\theta}(y_{t}\mid y_{<t})-\log\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t})\right)\right].
+(9)
+The final training objective is defined as:
+ℒ=ℒGRPO+ℒOPDstep.\mathcal{L}=\mathcal{L}_{\mathrm{GRPO}}+\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}}.
+(10)
+Here, ℒGRPO\mathcal{L}_{\mathrm{GRPO}} provides sparse outcome-level rewards to drive trajectory exploration, while ℒOPDstep\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}} supplies dense token-level guidance whose strength is reweighted by the student-teacher divergence, jointly enabling stable learning under tool-induced state drift.
+5 Experiment
+5.1 Experimental Setup
+Datasets & Benchmarks.
+Following Yu et al. [52], our training data comprises a 3k high-quality SFT corpus of multi-turn reasoning trajectories curated from s1-1k [68], LeetCode, and ReTool [47], along with a 30k diverse RL dataset covering mathematical reasoning from DAPO-Math [69], math and coding tasks from Skywork-or1 [70], and scientific problem solving from MegaScience [71]. Please refer to Section B.1 for more details. We evaluate on 4 challenging benchmarks: AIME 2024/2025, GPQA-Diamond [72], and LiveCodeBench [73] (See Section B.2 for details).
+Evaluation Setups.
+The temperature is fixed at 1.0 with nucleus sampling parameter top_p=0.6. For each problem, 32 independent samples are generated to enable a more thorough evaluation, from which average@32 are computed and finally reported (percentage). The teacher model is a Qwen3-4B model [28] further optimized with GRPO on the RL datasets.
+If not otherwise specified, the teacher of subsequent experiments is the 4B model. We use Qwen3-0.6B and Qwen3-1.7B as student models.
+Baselines & Implementation Details.
+For the baselines,
+we evaluate SOD against a set of supervised, RL, and distillation baselines.
+For each student, we compare SOD with the following baselines:
+(1) Vanilla.
+(2) SFT.
+(3) GRPO [20].
+(4) OPD [23].
+(5) OPSDgt [61] (On-policy self-distillation with groundtruth).
+(6) OPSDhint [61] (On-policy self-distillation with hints).
+For more details about the baselines, please refer to Section B.3.
+For implementation details, please refer to Section B.4.
+Table 1:
+Performance comparison of Qwen3 teacher and student across 4 benchmarks. The best results are in bold, and the second-best results are underlined. We report average@32 over 5 runs.
+Params
+Method
+Math
+Science
+Code
+Average
+AIME 2024
+AIME 2025
+GPQA
+LiveCodeBench
+Teacher Models from the Qwen3 Series
+4B
+GRPO
+67.60.
+±\pm1.34
+60.42.
+±\pm1.47
+55.19.
+±\pm0.81
+63.13.
+±\pm0.93
+61.59
+Distilled Student Models from the Qwen3 Series
+0.6B
+Vanilla
+7.71.
+±\pm0.33
+12.81.
+±\pm0.38
+13.24.
+±\pm0.24
+14.89.
+±\pm0.29
+12.16
+SFT
+5.67.
+±\pm0.26
+5.42.
+±\pm0.22
+15.20.
+±\pm0.30
+9.61.
+±\pm0.27
+8.97
+GRPO
+4.06.
+±\pm0.37
+4.90.
+±\pm0.31
+20.38.
+±\pm0.47
+15.95.
+±\pm0.51
+11.32
+OPD
+16.82.
+±\pm0.81
+22.95.
+±\pm0.97
+17.76.
+±\pm0.41
+22.65.
+±\pm0.75
+20.04
+OPSDgt
+12.63.
+±\pm0.58
+17.04.
+±\pm0.64
+17.32.
+±\pm0.35
+16.73.
+±\pm0.44
+15.93
+OPSDhint
+9.77.
+±\pm0.43
+14.12.
+±\pm0.48
+15.98.
+±\pm0.30
+12.65.
+±\pm0.37
+13.13
+SOD
+20.84.
+±\pm0.90
+26.13.
+±\pm1.07
+22.19.
+±\pm0.59
+27.72.
+±\pm0.83
+24.22
+1.7B
+Vanilla
+9.90.
+±\pm0.38
+8.96.
+±\pm0.33
+26.80.
+±\pm0.36
+22.73.
+±\pm0.41
+17.10
+SFT
+26.77.
+±\pm0.66
+22.40.
+±\pm0.72
+29.85.
+±\pm0.51
+24.63.
+±\pm0.57
+25.91
+GRPO
+25.63.
+±\pm1.03
+21.67.
+±\pm1.12
+33.55.
+±\pm0.76
+20.70.
+±\pm0.87
+25.39
+OPD
+43.86.
+±\pm1.23
+37.04.
+±\pm1.31
+31.73.
+±\pm0.55
+32.45.
+±\pm0.93
+36.27
+OPSDgt
+33.85.
+±\pm0.88
+24.69.
+±\pm0.94
+35.02.
+±\pm0.67
+22.73.
+±\pm0.61
+29.07
+OPSDhint
+34.42.
+±\pm0.76
+21.43.
+±\pm0.83
+33.46.
+±\pm0.59
+23.12.
+±\pm0.52
+28.11
+SOD
+50.83.
+±\pm1.15
+41.72.
+±\pm1.24
+38.72.
+±\pm0.73
+40.63.
+±\pm0.91
+42.98
+5.2 Overall Performance
+We compare SOD against six baselines on both 0.6B and 1.7B student models. The results are summarized in Table 1, from which we draw the following key observations. Note that we also provide training cost analysis in Section C.1.
+•
+Obs 1: SOD consistently outperforms all baselines across every benchmark.
+On both model scales, SOD achieves the highest scores on all four tasks, surpassing the strongest baseline OPD by 20.86% (0.6B) and 18.50% (1.7B) in relative average improvement. Notably, SFT and GRPO both fail to outperform the Vanilla baseline at the 0.6B scale, indicating that sparse outcome-level rewards and static demonstrations are insufficient for guiding small models in TIR. In contrast, our step-wise reweighting mechanism provides dense yet reliability-modulated supervision, effectively preventing misleading gradients from corrupted tool-call states while preserving informative teacher guidance in well-aligned regions.
+•
+Obs 2: The improvements generalize across different model scales, demonstrating the scalability of SOD.
+Our 1.7B student recovers 69.8% of the 4B teacher’s performance, compared to only 58.9% for OPD, showing that SOD substantially improves distillation efficiency. Furthermore, even our 0.6B model surpasses several 1.7B baselines, suggesting that step-wise reweighting can partially compensate for the capacity gap between model scales.
+Table 2:
+Ablation study on key components of SOD.
+Results are evaluated on 1.7B student model.
+Variants
+Math
+Science
+Code
+Average
+AIME 2024
+AIME 2025
+GPQA
+LiveCodeBench
+Step-wise Reweighting
+(1.1) w/ Uniform Weighting
+41.68.
+±\pm0.95
+35.58.
+±\pm1.01
+30.12.
+±\pm0.59
+31.43.
+±\pm0.68
+34.70
+(1.2) w/ Heuristic Weighting
+44.96.
+±\pm0.98
+38.75.
+±\pm1.04
+31.14.
+±\pm0.64
+33.71.
+±\pm0.72
+37.14
+(1.3) w/ Mask After Wrong
+39.11.
+±\pm1.08
+31.59.
+±\pm1.14
+26.56.
+±\pm0.67
+30.12.
+±\pm0.80
+31.85
+(1.4) w/o Weight Clipping
+45.78.
+±\pm1.16
+37.93.
+±\pm1.21
+33.57.
+±\pm0.74
+35.12.
+±\pm0.79
+38.10
+Training Objective
+(2.1) w/o GRPO
+48.87.
+±\pm0.93
+39.73.
+±\pm1.02
+35.89.
+±\pm0.62
+38.62.
+±\pm0.71
+40.78
+(2.2) w/o Step-wise OPD
+25.63.
+±\pm1.03
+21.67.
+±\pm1.12
+33.55.
+±\pm0.76
+20.70.
+±\pm0.87
+25.39
+SOD
+50.83.
+±\pm1.15
+41.72.
+±\pm1.24
+38.72.
+±\pm0.73
+40.63.
+±\pm0.91
+42.98
+5.3 Ablation Study
+To evaluate each component in SOD, we develop six variants from two perspectives on the Qwen3-1.7B student. For Step-wise Reweighting, we consider: (1.1) w/ Uniform Weighting, which fixes wk=1w_{k}=1 for all steps; (1.2) w/ Heuristic Weighting, which applies a fixed exponential decay wk=γk−kerrw_{k}=\gamma^{k-k_{\mathrm{err}}} starting from the first erroneous tool call at step kerrk_{\mathrm{err}}, with γ\gamma fixed as 0.9; (1.3) w/ Mask After Wrong, which zeros out the OPD signal for all steps after the first tool-call error; and (1.4) w/o Weight Clipping, which removes the upper-bound clipping δ\delta in Eq. 7. For Training Objective, we ablate the two terms in Eq. 10: (2.1) w/o GRPO, which removes ℒGRPO\mathcal{L}_{\mathrm{GRPO}}; and (2.2) w/o Step-wise OPD, which removes ℒOPDstep\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}}. The results are reported in Table 2, from which we observe:
+•
+Obs 3: The adaptive step-wise reweighting is critical, and neither static nor heuristic alternatives can substitute it.
+Replacing our adaptive reweighting mechanism with uniform weighting (variant 1.1) causes a notable drop to 34.70% average, confirming that treating all steps equally exposes training to misleading supervision from corrupted states. Heuristic decay (variant 1.2) partially mitigates this issue (37.14%) by down-weighting later steps, yet still falls behind because a fixed schedule cannot capture non-monotonic divergence patterns where the student recovers alignment after earlier errors. Hard masking (variant 1.3) performs worst (31.85%), as it discards all subsequent supervision after a single error, wasting informative signals from partially correct trajectories and preventing the student from recovering. Removing weight clipping (variant 1.4) yields 38.10%, indicating that unbounded amplification introduces training instability.
+•
+Obs 4: Both the GRPO and step-wise OPD components are indispensable, serving complementary roles.
+Removing GRPO (variant 2.1) reduces the average to 40.78%, showing that outcome-level rewards remain valuable for steering exploration with dense distillation. Removing step-wise OPD (variant 2.2) causes a far more severe drop to 25.39%,
+which confirms that sparse rewards alone are insufficient for stable TIR learning in small models. The pronounced asymmetry reveals their complementary nature: step-wise OPD provides the primary fine-grained guidance, while GRPO broadens trajectory-level exploration beyond the teacher distribution.
+5.4 Scalability and Generalization
+To evaluate the generalization of SOD to different teacher models, we conduct experiments using an additional Qwen3 teacher (14B) to distill students at both the 0.6B and 1.7B scales. The results are visualized in Figure 3, from which we draw the following observation:
+•
+Obs 5: SOD consistently benefits from stronger teachers, whereas OPD suffers from the increased capacity gap.
+An interesting finding emerges when comparing teacher choices under OPD: on the 0.6B student, switching from the 4B to the 14B teacher actually degrades average accuracy by a notable margin. This reveals that a larger student-teacher capacity gap amplifies distribution mismatch, causing uniform distillation to propagate increasingly unreliable supervision. In contrast, SOD with the 14B teacher consistently outperforms its 4B counterpart on both student scales, confirming that our step-wise reweighting effectively harnesses the richer knowledge from teachers while suppressing the harmful signals introduced by the wider gap.
+Figure 3: Scalability of SOD across different student-teacher configurations.
+Figure 4: Training dynamics across methods on 0.6B and 1.7B student models. We track accuracy on AIME2025 (left), policy entropy (middle), and mean tool-calling turns (right) throughout training.
+5.5 Dynamic training analysis
+To understand how SOD shapes the learning dynamics of agentic reasoning, we monitor three key metrics throughout training: task accuracy, policy entropy, and mean tool-calling turns. As shown in Figure 4, we highlight the following observations:
+•
+Obs 6: SOD consistently outperforms GRPO by a large margin. As shown in Figure 4(a)(d), SOD achieves significantly higher accuracy than GRPO across both model scales. This gap is driven by GRPO’s severe entropy collapse (Figure 4(b)(e)), where the policy loses exploration ability and degenerates into repetitive outputs, ultimately abandoning multi-step tool interactions entirely (Figure 4(c)(f)), a fatal failure mode for TIR tasks.
+•
+Obs 7: SOD achieves more stable training than OPD.
+While OPD maintains comparable entropy levels, its accuracy exhibits notable instability, particularly on 1.7B where performance peaks early then degrades significantly (Figure 4(d)), suggesting that uniform distillation can destabilize later training.
+In contrast, SOD sustains steady improvement without degradation. Additionally, SOD uses fewer tool-calling turns than OPD (Figure 4(c)(f)), indicating more efficient reasoning with fewer erroneous intermediate steps.
+5.6 Three Distillation Patterns of SOD
+During training, SOD exhibits three characteristic distillation patterns, as illustrated in Figure 5:
+(1) Stable Pattern. The student remains closely aligned with the teacher, i.e., the step-level divergence dkd_{k} is low. Therefore, adaptive weights stay high, allowing full utilization of teacher supervision along the trajectory. In this regime, the optimization closely resembles sufficient distillation.
+(2) Erroneous Pattern. Persistent deviations increase step-level divergence, often caused by incorrect intermediate reasoning or tool usage. Adaptive weights are progressively reduced, which suppresses potentially misleading supervision and stabilizes training under such corrupted states.
+(3) Recovery Pattern. The student initially deviates but then recovers. Weights are attenuated during high-divergence steps and restored later, enabling effective guidance on corrected steps and preserving useful supervision after recovery. This behavior allows the model to avoid over-penalizing temporary errors while still benefiting from supervision once alignment is re-established.
+We also provide further analysis, i.e., the quantitative analysis of distillation pattern distribution according training steps in Section C.2.
+Detailed examples are provided in Appendix G.
+Figure 5: Three distillation patterns of SOD.
+6 Limitations
+Our work has two main limitations. (1) We focus on agentic TIR tasks with a python code interpreter, which provides a clean and reproducible execution environment that isolates tool-induced state drift without confounding factors from complex API configurations. Other agentic settings (e.g., web browsing, API calls) may exhibit different drift patterns and are worth exploring. (2) All experiments use the Qwen3 [28] model family, chosen for its strong and stable performance across scales, open availability at multiple sizes, and wide adoption in recent OPD studies [61, 41, 25, 29] that facilitates fair comparison. Validating on other model families remains valuable. Due to resource constraints, we leave these explorations to future work.
+7 Conclusion
+In this work, we study on-policy distillation for small language model agents under tool-integrated reasoning. We identify that tool-induced state transitions can rapidly push the student into out-of-distribution regions where teacher supervision becomes unreliable. To address this, we propose SOD, a step-wise on-policy distillation framework that adaptively reweights distillation strength based on student–teacher divergence, preserving informative signals in aligned regions while attenuating misleading guidance under large drift. Extensive experiments across math, science, and code benchmarks demonstrate consistent improvements in both training stability and final performance. Our findings suggest that effective agent distillation requires supervision mechanisms that adapt to evolving state distributions, offering a general principle for robust training in agentic systems.
+References
+[1]
+Zhiheng Xi, Wenxiang Chen, Xin Guo, Wei He, Yiwen Ding, Boyang Hong, Ming Zhang, Junzhe Wang, Senjie Jin, Enyu Zhou, et al.
+The rise and potential of large language model based agents: A survey.
+arXiv preprint arXiv:2309.07864, 2023.
+[2]
+Minki Kang, Jongwon Jeong, Seanie Lee, Jaewoong Cho, and Sung Ju Hwang.
+Distilling llm agent into small models with retrieval and code tools.
+arXiv preprint arXiv:2505.17612, 2025.
+[3]
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik R. Narasimhan, and Yuan Cao.
+React: Synergizing reasoning and acting in language models.
+In ICLR, 2023.
+[4]
+Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Eric Hambro, Luke Zettlemoyer, Nicola Cancedda, and Thomas Scialom.
+Toolformer: Language models can teach themselves to use tools.
+In NeurIPS, 2023.
+[5]
+Joykirat Singh, Raghav Magazine, Yash Pandya, and Akshay Nambi.
+Agentic reasoning and tool integration for llms via reinforcement learning.
+arXiv preprint arXiv:2505.01441, 2025.
+[6]
+Li Chenglin, Qianglong Chen, Liangyue Li, Caiyu Wang, Feng Tao, Yicheng Li, Zulong Chen, and Yin Zhang.
+Mixed distillation helps smaller language models reason better.
+In Findings of the Association for Computational Linguistics: EMNLP 2024, pages 1673–1690, 2024.
+[7]
+Shengda Fan, Xuyan Ye, Yupeng Huo, Zhi-Yuan Chen, Yiju Guo, Shenzhi Yang, Wenkai Yang, Shuqi Ye, Jingwen Chen, Haotian Chen, et al.
+Agentprocessbench: Diagnosing step-level process quality in tool-using agents.
+arXiv preprint arXiv:2603.14465, 2026.
+[8]
+Jiajun Xu, Zhiyuan Li, Wei Chen, Qun Wang, Xin Gao, Qi Cai, and Ziyuan Ling.
+On-device language models: A comprehensive review.
+arXiv preprint arXiv:2409.00088, 2024a.
+[9]
+Xiaohan Xu, Ming Li, Chongyang Tao, Tao Shen, Reynold Cheng, Jinyang Li, Can Xu, Dacheng Tao, and Tianyi Zhou.
+A survey on knowledge distillation of large language models.
+arXiv preprint arXiv:2402.13116, 2024b.
+[10]
+Jiahao Qiu, Xinzhe Juan, Yimin Wang, Ling Yang, Xuan Qi, Tongcheng Zhang, Jiacheng Guo, Yifu Lu, Zixin Yao, Hongru Wang, et al.
+Agentdistill: Training-free agent distillation with generalizable mcp boxes.
+arXiv preprint arXiv:2506.14728, 2025.
+[11]
+Yi Yao, He Zhu, Piaohong Wang, Jincheng Ren, Xinlong Yang, Qianben Chen, Xiaowan Li, Dingfeng Shi, Jiaxian Li, Qiexiang Wang, et al.
+O-researcher: An open ended deep research model via multi-agent distillation and agentic rl.
+arXiv preprint arXiv:2601.03743, 2026.
+[12]
+Weizhen Li, Jianbo Lin, Zhuosong Jiang, Jingyi Cao, Xinpeng Liu, Jiayu Zhang, Zhenqiang Huang, Qianben Chen, Weichen Sun, Qiexiang Wang, et al.
+Chain-of-agents: End-to-end agent foundation models via multi-agent distillation and agentic rl.
+arXiv preprint arXiv:2508.13167, 2025a.
+[13]
+Cheng Qian, Emre Can Acikgoz, Qi He, Hongru Wang, Xiusi Chen, Dilek Hakkani-Tür, Gokhan Tur, and Heng Ji.
+Toolrl: Reward is all tool learning needs.
+arXiv preprint arXiv:2504.13958, 2025.
+[14]
+Corrado Rainone, Tim Bakker, and Roland Memisevic.
+Replacing thinking with tool usage enables reasoning in small language models.
+arXiv preprint arXiv:2507.05065, 2025.
+[15]
+Zhenghai Xue, Longtao Zheng, Qian Liu, Yingru Li, Xiaosen Zheng, Zejun Ma, and Bo An.
+Simpletir: End-to-end reinforcement learning for multi-turn tool-integrated reasoning.
+arXiv preprint arXiv:2509.02479, 2025.
+[16]
+Jun Liu, Zhenglun Kong, Peiyan Dong, Changdi Yang, Tianqi Li, Hao Tang, Geng Yuan, Wei Niu, Wenbin Zhang, Pu Zhao, et al.
+Structured agent distillation for large language model.
+arXiv preprint arXiv:2505.13820, 2025.
+[17]
+Xuefeng Li, Haoyang Zou, and Pengfei Liu.
+Torl: Scaling tool-integrated rl.
+arXiv preprint arXiv:2503.23383, 2025b.
+[18]
+Bowen Jin, Hansi Zeng, Zhenrui Yue, Dong Wang, Hamed Zamani, and Jiawei Han.
+Search-r1: Training llms to reason and leverage search engines with reinforcement learning.
+arXiv preprint arXiv:2503.09516, 2025.
+[19]
+Huatong Song, Jinhao Jiang, Yingqian Min, Jie Chen, Zhipeng Chen, Wayne Xin Zhao, Lei Fang, and Ji-Rong Wen.
+R1-searcher: Incentivizing the search capability in llms via reinforcement learning.
+arXiv preprint arXiv:2503.05592, 2025.
+[20]
+Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, YK Li, Yang Wu, et al.
+Deepseekmath: Pushing the limits of mathematical reasoning in open language models.
+arXiv preprint arXiv:2402.03300, 2024.
+[21]
+DeepSeek-AI.
+Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning.
+arXiv preprint arXiv:2501.12948, 2025.
+[22]
+Fan Yang, Rui Meng, Trudi Di Qi, Ali Ezzati, and Yuxin Wen.
+Kepo: Knowledge-enhanced preference optimization for reinforcement learning with reasoning.
+arXiv preprint arXiv:2602.00400, 2026a.
+[23]
+Rishabh Agarwal, Nino Vieillard, Yongchao Zhou, Piotr Stanczyk, Sabela Ramos Garea, Matthieu Geist, and Olivier Bachem.
+On-policy distillation of language models: Learning from self-generated mistakes.
+In The twelfth international conference on learning representations, 2024.
+[24]
+Yuxian Gu, Li Dong, Furu Wei, and Minlie Huang.
+Minillm: Knowledge distillation of large language models.
+In The twelfth international conference on learning representations, 2024.
+[25]
+Woogyeol Jin, Taywon Min, Yongjin Yang, Swanand Ravindra Kadhe, Yi Zhou, Dennis Wei, Nathalie Baracaldo, and Kimin Lee.
+Entropy-aware on-policy distillation of language models.
+arXiv preprint arXiv:2603.07079, 2026.
+[26]
+Jongwoo Ko, Sara Abdali, Young Jin Kim, Tianyi Chen, and Pashmina Cameron.
+Scaling reasoning efficiently via relaxed on-policy distillation.
+arXiv preprint arXiv:2603.11137, 2026.
+[27]
+Yecheng Wu, Song Han, and Hai Cai.
+Lightning opd: Efficient post-training for large reasoning models with offline on-policy distillation.
+arXiv preprint arXiv:2604.13010, 2026.
+[28]
+Qwen Team.
+Qwen3 technical report.
+arXiv preprint arXiv:2505.09388, 2025.
+[29]
+Yaxuan Li, Yuxin Zuo, Bingxiang He, Jinqian Zhang, Chaojun Xiao, Cheng Qian, Tianyu Yu, Huan-ang Gao, Wenkai Yang, Zhiyuan Liu, et al.
+Rethinking on-policy distillation of large language models: Phenomenology, mechanism, and recipe.
+arXiv preprint arXiv:2604.13016, 2026a.
+[30]
+Shicheng Xu, Liang Pang, Yunchang Zhu, Jia Gu, Zihao Wei, Jingcheng Deng, Feiyang Pan, Huawei Shen, and Xueqi Cheng.
+Rlkd: Distilling llms’ reasoning via reinforcement learning.
+In Proceedings of the AAAI Conference on Artificial Intelligence, volume 40, pages 34151–34159, 2026a.
+[31]
+Gengsheng Li, Tianyu Yang, Junfeng Fang, Mingyang Song, Mao Zheng, Haiyun Guo, Dan Zhang, Jinqiao Wang, and Tat-Seng Chua.
+Unifying group-relative and self-distillation policy optimization via sample routing.
+arXiv preprint arXiv:2604.02288, 2026b.
+[32]
+Chenxu Yang, Chuanyu Qin, Qingyi Si, Minghui Chen, Naibin Gu, Dingyu Yao, Zheng Lin, Weiping Wang, Jiaqi Wang, and Nan Duan.
+Self-distilled rlvr.
+arXiv preprint arXiv:2604.03128, 2026b.
+[33]
+Walid Bousselham, Hilde Kuehne, and Cordelia Schmid.
+Vold: Reasoning transfer from llms to vision-language models via on-policy distillation.
+arXiv preprint arXiv:2510.23497, 2025.
+[34]
+Yinjie Wang, Xuyang Chen, Xiaolong Jin, Mengdi Wang, and Ling Yang.
+Openclaw-rl: Train any agent simply by talking.
+arXiv preprint arXiv:2603.10165, 2026a.
+[35]
+Yuqian Fu, Haohuan Huang, Kaiwen Jiang, Yuanheng Zhu, and Dongbin Zhao.
+Revisiting on-policy distillation: Empirical failure modes and simple fixes.
+arXiv preprint arXiv:2603.25562, 2026.
+[36]
+Mingyang Song and Mao Zheng.
+A survey of on-policy distillation for large language models.
+arXiv preprint arXiv:2604.00626, 2026.
+[37]
+Stéphane Ross, Geoffrey J. Gordon, and Drew Bagnell.
+A reduction of imitation learning and structured prediction to no-regret online learning.
+In AISTATS, 2011.
+[38]
+Arnav Gudibande, Eric Wallace, Charlie Snell, Xinyang Geng, Hao Liu, Pieter Abbeel, Sergey Levine, and Dawn Song.
+The false promise of imitating proprietary llms.
+arXiv preprint arXiv:2305.15717, 2023.
+[39]
+Jiaqi Wang, Wenhao Zhang, Weijie Shi, Yaliang Li, and James Cheng.
+Tcod: Exploring temporal curriculum in on-policy distillation for multi-turn autonomous agents.
+arXiv preprint arXiv:2604.24005, 2026b.
+[40]
+Ijun Jang, Jewon Yeom, Juan Yeo, Hyunggu Lim, and Taesup Kim.
+Stable on-policy distillation through adaptive target reformulation.
+arXiv preprint arXiv:2601.07155, 2026.
+[41]
+Yuanda Xu, Hejian Sang, Zhengze Zhou, Ran He, Zhipeng Wang, and Alborz Geramifard.
+Tip: Token importance in on-policy distillation.
+arXiv preprint arXiv:2604.14084, 2026b.
+[42]
+Paul F Christiano, Jan Leike, Tom Brown, Miljan Martic, Shane Legg, and Dario Amodei.
+Deep reinforcement learning from human preferences.
+Advances in neural information processing systems, 30, 2017.
+[43]
+Daniel M Ziegler, Nisan Stiennon, Jeffrey Wu, Tom B Brown, Alec Radford, Dario Amodei, Paul Christiano, and Geoffrey Irving.
+Fine-tuning language models from human preferences.
+arXiv preprint arXiv:1909.08593, 2019.
+[44]
+John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+Proximal policy optimization algorithms.
+arXiv preprint arXiv:1707.06347, 2017.
+[45]
+Baian Chen, Chang Shu, Ehsan Shareghi, Nigel Collier, Karthik Narasimhan, and Shunyu Yao.
+Fireact: Toward language agent fine-tuning.
+arXiv preprint arXiv:2310.05915, 2023.
+[46]
+John Yang, Carlos E Jimenez, Alexander Wettig, Kilian Lieret, Shunyu Yao, Karthik Narasimhan, and Ofir Press.
+Swe-agent: Agent-computer interfaces enable automated software engineering.
+Advances in Neural Information Processing Systems, 37:50528–50652, 2024.
+[47]
+Jiazhan Feng, Shijue Huang, Xingwei Qu, Ge Zhang, Yujia Qin, Baoquan Zhong, Chengquan Jiang, Jinxin Chi, and Wanjun Zhong.
+Retool: Reinforcement learning for strategic tool use in llms.
+arXiv preprint arXiv:2504.11536, 2025.
+[48]
+Hao Bai, Yifei Zhou, Mert Cemri, Jiayi Pan, Alane Suhr, Sergey Levine, and Aviral Kumar.
+Digirl: Training in-the-wild device-control agents with autonomous reinforcement learning.
+Advances in Neural Information Processing Systems, 37:12461–12495, 2024.
+[49]
+Zehan Qi, Xiao Liu, Iat Long Iong, Hanyu Lai, Xueqiao Sun, Wenyi Zhao, Yu Yang, Xinyue Yang, Jiadai Sun, Shuntian Yao, et al.
+Webrl: Training llm web agents via self-evolving online curriculum reinforcement learning.
+arXiv preprint arXiv:2411.02337, 2024.
+[50]
+Yifei Zhou, Andrea Zanette, Jiayi Pan, Sergey Levine, and Aviral Kumar.
+Archer: Training language model agents via hierarchical multi-turn rl, 2024.
+URL https://arxiv. org/abs/2402.19446, 2024.
+[51]
+Kevin Chen, Marco Cusumano-Towner, Brody Huval, Aleksei Petrenko, Jackson Hamburger, Vladlen Koltun, and Philipp Krähenbühl.
+Reinforcement learning for long-horizon interactive llm agents.
+arXiv preprint arXiv:2502.01600, 2025.
+[52]
+Zhaochen Yu, Ling Yang, Jiaru Zou, Shuicheng Yan, and Mengdi Wang.
+Demystifying reinforcement learning in agentic reasoning.
+arXiv preprint arXiv:2510.11701, 2025a.
+[53]
+Yinjie Wang, Tianbao Xie, Ke Shen, Mengdi Wang, and Ling Yang.
+Rlanything: Forge environment, policy, and reward model in completely dynamic rl system.
+arXiv preprint arXiv:2602.02488, 2026c.
+[54]
+Yinjie Wang, Ling Yang, Ye Tian, Ke Shen, and Mengdi Wang.
+Co-evolving llm coder and unit tester via reinforcement learning.
+arXiv preprint arXiv:2506.03136, 2025.
+[55]
+Tianzhu Ye, Li Dong, Xun Wu, Shaohan Huang, and Furu Wei.
+On-policy context distillation for language models.
+arXiv preprint arXiv:2602.12275, 2026.
+[56]
+Tianzhu Ye, Li Dong, Zewen Chi, Xun Wu, Shaohan Huang, and Furu Wei.
+Black-box on-policy distillation of large language models.
+arXiv preprint arXiv:2511.10643, 2025.
+[57]
+Wenhong Zhu, Ruobing Xie, Rui Wang, and Pengfei Liu.
+Hybrid policy distillation for llms.
+arXiv preprint arXiv:2604.20244, 2026.
+[58]
+Binbin Zheng, Xing Ma, Yiheng Liang, Jingqing Ruan, Xiaoliang Fu, Kepeng Lin, Benchang Zhu, Ke Zeng, and Xunliang Cai.
+Scope: Signal-calibrated on-policy distillation enhancement with dual-path adaptive weighting.
+arXiv preprint arXiv:2604.10688, 2026.
+[59]
+Xiwen Chen, Jingjing Wang, Wenhui Zhu, Peijie Qiu, Xuanzhao Dong, Hejian Sang, Zhipeng Wang, Alborz Geramifard, and Feng Luo.
+Soda: Semi on-policy black-box distillation for large language models.
+arXiv preprint arXiv:2604.03873, 2026.
+[60]
+Wenkai Yang, Weijie Liu, Ruobing Xie, Kai Yang, Saiyong Yang, and Yankai Lin.
+Learning beyond teacher: Generalized on-policy distillation with reward extrapolation.
+arXiv preprint arXiv:2602.12125, 2026c.
+[61]
+Siyan Zhao, Zhihui Xie, Mengchen Liu, Jing Huang, Guan Pang, Feiyu Chen, and Aditya Grover.
+Self-distilled reasoner: On-policy self-distillation for large language models.
+arXiv preprint arXiv:2601.18734, 2026.
+[62]
+Emiliano Penaloza, Dheeraj Vattikonda, Nicolas Gontier, Alexandre Lacoste, Laurent Charlin, and Massimo Caccia.
+Privileged information distillation for language models.
+arXiv preprint arXiv:2602.04942, 2026.
+[63]
+Jonas Hübotter, Frederike Lübeck, Lejs Behric, Anton Baumann, Marco Bagatella, Daniel Marta, Ido Hakimi, Idan Shenfeld, Thomas Kleine Buening, Carlos Guestrin, et al.
+Reinforcement learning via self-distillation.
+arXiv preprint arXiv:2601.20802, 2026.
+[64]
+Idan Shenfeld, Mehul Damani, Jonas Hübotter, and Pulkit Agrawal.
+Self-distillation enables continual learning.
+arXiv preprint arXiv:2601.19897, 2026.
+[65]
+Yinghui He, Simran Kaur, Adithya Bhaskar, Yongjin Yang, Jiarui Liu, Narutatsu Ri, Liam Fowl, Abhishek Panigrahi, Danqi Chen, and Sanjeev Arora.
+Self-distillation zero: Self-revision turns binary rewards into dense supervision.
+arXiv preprint arXiv:2604.12002, 2026.
+[66]
+Hao Wang, Guozhi Wang, Han Xiao, Yufeng Zhou, Yue Pan, Jichao Wang, Ke Xu, Yafei Wen, Xiaohu Ruan, Xiaoxin Chen, et al.
+Skill-sd: Skill-conditioned self-distillation for multi-turn llm agents.
+arXiv preprint arXiv:2604.10674, 2026d.
+[67]
+Kevin Lu and Thinking Machines Lab.
+On-policy distillation.
+Thinking Machines Lab: Connectionism, 2025.
+doi: 10.64434/tml.20251026.
+https://thinkingmachines.ai/blog/on-policy-distillation.
+[68]
+Niklas Muennighoff, Zitong Yang, Weijia Shi, Xiang Lisa Li, Li Fei-Fei, Hannaneh Hajishirzi, Luke Zettlemoyer, Percy Liang, Emmanuel Candès, and Tatsunori B Hashimoto.
+s1: Simple test-time scaling.
+In Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 20286–20332, 2025.
+[69]
+Qiying Yu, Zheng Zhang, Ruofei Zhu, Yufeng Yuan, Xiaochen Zuo, Yu Yue, Weinan Dai, Tiantian Fan, Gaohong Liu, Lingjun Liu, et al.
+Dapo: An open-source llm reinforcement learning system at scale.
+arXiv preprint arXiv:2503.14476, 2025b.
+[70]
+Jujie He, Jiacai Liu, Chris Yuhao Liu, Rui Yan, Chaojie Wang, Peng Cheng, Xiaoyu Zhang, Fuxiang Zhang, Jiacheng Xu, Wei Shen, Siyuan Li, Liang Zeng, Tianwen Wei, Cheng Cheng, Bo An, Yang Liu, and Yahui Zhou.
+Skywork open reasoner 1 technical report.
+arXiv preprint arXiv:2505.22312, 2025.
+[71]
+Run-Ze Fan, Zengzhi Wang, and Pengfei Liu.
+Megascience: Pushing the frontiers of post-training datasets for science reasoning.
+arXiv preprint arXiv:2507.16812, 2025.
+[72]
+David Rein, Betty Li Hou, Asa Cooper Stickland, Jackson Petty, Richard Yuanzhe Pang, Julien Dirani, Julian Michael, and Samuel R Bowman.
+Gpqa: A graduate-level google-proof q&a benchmark.
+In First Conference on Language Modeling, 2024.
+[73]
+Naman Jain, King Han, Alex Gu, Wen-Ding Li, Fanjia Yan, Tianjun Zhang, Sida Wang, Armando Solar-Lezama, Koushik Sen, and Ion Stoica.
+Livecodebench: Holistic and contamination free evaluation of large language models for code.
+In The Thirteenth International Conference on Learning Representations.
+[74]
+Jiaru Zou, Ling Yang, Jingwen Gu, Jiahao Qiu, Ke Shen, Jingrui He, and Mengdi Wang.
+Reasonflux-prm: Trajectory-aware prms for long chain-of-thought reasoning in llms.
+The Thirty-ninth Annual Conference on Neural Information Processing Systems, 2025.
+[75]
+Yunhui Xia, Wei Shen, Yan Wang, Jason Klein Liu, Huifeng Sun, Siyue Wu, Jian Hu, and Xiaolong Xu.
+Leetcodedataset: A temporal dataset for robust evaluation and efficient training of code llms.
+arXiv preprint arXiv:2504.14655, 2025.
+[76]
+Guangming Sheng, Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin, and Chuan Wu.
+Hybridflow: A flexible and efficient rlhf framework.
+In Proceedings of the Twentieth European Conference on Computer Systems, pages 1279–1297, 2025.
+Appendix
+Appendix A Algorithmic Details of SOD
+We present the complete training procedure of SOD in Algorithm 1. At each iteration, the student generates on-policy trajectories with tool interactions, computes step-level divergence against the teacher, derives adaptive distillation weights, and updates the policy with a combined GRPO and step-wise OPD objective.
+Algorithm 1 SOD: Step-wise On-policy Distillation for Small Language Model Agents
+Input: Student policy πθ\pi_{\theta}, teacher policy πteacher\pi_{\mathrm{teacher}}, tool environment ℰ\mathcal{E}, prompt set 𝒳\mathcal{X}, group size GG, smoothing constant ϵ\epsilon, weight cap δ\delta, clipping range ϵclip\epsilon_{\mathrm{clip}}.
+Output: Trained student policy πθ\pi_{\theta}.
+Stage I: On-Policy Rollout with Tool Interaction
+for each prompt x∈𝒳x\in\mathcal{X} do
+•
+For i=1,…,Gi=1,\ldots,G: sample trajectory τi=(y1,o1,…,yK,oK,yK+1)\tau_{i}=(y_{1},o_{1},\ldots,y_{K},o_{K},y_{K+1}) from πθold\pi_{\theta_{\mathrm{old}}} by interacting with ℰ\mathcal{E}.
+•
+Compute outcome reward ri=r⁡(τi)r_{i}=r(\tau_{i}) for each trajectory.
+•
+Compute group-relative advantage A^i\hat{A}_{i} via Eq. 2.
+Stage II: Student-teacher Divergence and Step-wise Reweighting
+for each trajectory τi\tau_{i} do
+•
+Partition model-generated tokens into reasoning steps {ℐk}k=1K+1\{\mathcal{I}_{k}\}_{k=1}^{K+1} (excluding tool observation tokens).
+•
+For each step k=1,…,K+1k=1,\ldots,K{+}1, compute step-level divergence dkd_{k} via Eq. 6.
+•
+Set w1←1w_{1}\leftarrow 1.
+•
+For k=2,…,K+1k=2,\ldots,K{+}1, compute adaptive weight wkw_{k} via Eq. 7.
+Stage III: Combined Optimization
+[nosep,leftmargin=1.5em]
+•
+Compute GRPO loss ℒGRPO\mathcal{L}_{\mathrm{GRPO}} with clipped surrogate objective ( Eq. 3) using advantages {A^i}\{\hat{A}_{i}\}.
+•
+Compute step-wise OPD loss ℒOPDstep\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}} via Eq. 9 using weights {wk}\{w_{k}\}.
+•
+Update policy parameters:
+[2pt]
+θ←θ−η​∇θ(ℒGRPO+ℒOPDstep)\theta\leftarrow\theta-\eta\nabla_{\theta}\big(\mathcal{L}_{\mathrm{GRPO}}+\mathcal{L}_{\mathrm{OPD}}^{\mathrm{step}}\big).
+•
+Synchronize old policy: θold←θ\theta_{\mathrm{old}}\leftarrow\theta.
+Appendix B Experimental Setup
+B.1 Training Datasets.
+We provide information in detail of our training datasets including SFT dataset and RL dataset, which is following Yu et al. [52]. For the prompts template for different benchmarks, please refer to Section E.1. We also provide statistical information of our training data in Table 3.
+•
+SFT dataset. The SFT dataset is constructed from a mixture of curated and synthetic multi-turn problem-solving trajectories. Specifically, a teacher model (Qwen3-Coder-30B-A3B) is employed within an agent-based framework where the SandBoxFusion is used as the code interpreter to generate end-to-end interaction traces, where problems are drawn from three complementary sources: the s1-1k set [68], a curated collection of 3k LeetCode problems, and a 2k multi-turn ReTool [47] dataset. To ensure data quality, the generated trajectories for the latter two subsets are scored using ReasonFlux-PRM [74], and only the top-ranked subsets (1k each) are retained, together with the full s1-1k set, resulting in a final 3k high-quality SFT corpus.
+•
+RL dataset. The RL dataset is designed to emphasize diversity across domains in order to study its impact on training dynamics. It comprises 30k samples aggregated from multiple sources, including 17k mathematical reasoning problems from DAPO-Math [69], a mixture of 4,902 math and 3,586 code tasks from Skywork-or1 [70], and an additional 3k science problems from MegaScience [71].
+Table 3:
+Summary of the training datasets used in our experiments.
+Dataset Type
+Domain
+Source
+# Samples
+SFT Dataset
+Mathematical
+s1-1k [68]
+1k
+Coding
+LeetCode [75]
+1k
+Tool-use
+ReTool [47]
+1k
+Total
+3k
+RL Dataset
+Mathematical
+DAPO-Math [69]
+17k
+Skywork-or1 (Math) [70]
+4,902
+Coding
+Skywork-or1 (Code) [70]
+3,586
+Scientific
+MegaScience [71]
+3k
+Total
+∼30k\sim\textbf{30k}
+B.2 Benchmarks
+We provide detailed descriptions of the four benchmarks used in our evaluation.
+•
+AIME 2024/2025. The American Invitational Mathematics Examination (AIME) is a prestigious mathematics competition administered by the Mathematical Association of America (MAA). Each year’s examination consists of two sessions (AIME I and AIME II), each containing 15 problems, for a total of 30 problems per year. All answers are integers in the range [0,999][0,999], which enables unambiguous automatic evaluation via exact match. The problems span advanced topics including algebra, number theory, combinatorics, and geometry, requiring multi-step reasoning chains and creative problem-solving strategies that go well beyond pattern matching. We use the 2024 and 2025 editions as benchmarks: AIME 2024 was administered in February 2024, and AIME 2025 in February 2025. The use of recent competition problems mitigates the risk of data contamination, as these problems are unlikely to appear in pre-training corpora of models with earlier knowledge cutoffs.
+•
+GPQA-Diamond [72]. GPQA (Graduate-Level Google-Proof Q&A) is a challenging multiple-choice question-answering benchmark consisting of questions authored by domain experts holding PhDs in biology, physics, and chemistry. The questions are deliberately designed to be “Google-proof”, they cannot be answered through simple web searches, requiring instead genuine domain expertise and multi-step scientific reasoning. The dataset comprises three nested subsets: GPQA Extended (546 questions), GPQA Main (448 questions), and GPQA Diamond (198 questions). We adopt the Diamond subset, which is the highest-quality partition: it contains only questions where both independent domain expert validators answered correctly, while skilled non-expert validators (holding PhDs in other scientific fields, with unrestricted internet access) failed. Human performance baselines on the Diamond subset are approximately 65% for domain experts and 34% for non-experts, compared to a random baseline of 25%.
+•
+LiveCodeBench [73]. LiveCodeBench is a continuously updated benchmark for evaluating the coding capabilities of large language models. Unlike static benchmarks such as HumanEval, LiveCodeBench mitigates data contamination by continuously collecting new problems from competitive programming platforms (LeetCode, AtCoder, and Codeforces) and annotating each problem with its release date. This temporal annotation enables contamination-aware evaluation by restricting the test set to problems released after a model’s training data cutoff. We use the v6 release, which contains 1,055 problems spanning May 2023 to April 2025. Following common practice, we evaluate on problems within a recent time window to ensure minimal overlap with training data. The benchmark assesses multiple code-related capabilities including code generation, self-repair (debugging given execution feedback), code execution prediction, and test output prediction.
+B.3 Baselines
+We compare SOD with a diverse set of baselines spanning supervised learning, reinforcement learning, and distillation-based approaches. These baselines are chosen to reflect different sources of supervision (offline vs. on-policy), as well as different granularities of learning signals (sequence-level vs. token-level).
+•
+Vanilla.
+The base model without any additional task-specific training. This baseline reflects the zero-shot or instruction-tuned capability of the model.
+•
+SFT (Supervised Fine-Tuning).
+A standard supervised learning baseline where the model is trained to maximize the likelihood of reference solutions. This approach corresponds to off-policy imitation learning, where the model learns from fixed expert trajectories. While simple and effective, SFT suffers from exposure bias due to the mismatch between training (on ground-truth prefixes) and inference (on model-generated prefixes).
+•
+GRPO (Group Relative Policy Optimization) [20].
+A reinforcement learning approach that optimizes the model using relative performance within a group of sampled responses. For each input, multiple candidate outputs are generated, and each is assigned a scalar reward based on task-specific correctness. Instead of learning a separate value function, GRPO computes advantages by normalizing rewards within the group, effectively measuring how much better or worse a response is compared to its peers. The model is then updated using a policy optimization objective with clipping to ensure stable training. While GRPO avoids the need for a learned critic and is relatively efficient, it relies on sparse, sequence-level rewards, assigning the same advantage to all tokens in a response and thus lacking fine-grained token-level supervision.
+•
+OPD (On-Policy Distillation) [23].
+An on-policy distillation method where the model learns from its own generated trajectories while receiving dense token-level supervision from a teacher distribution. At each decoding step, the objective minimizes the divergence between the student and teacher token distributions along the student’s rollout. This approach mitigates exposure bias and provides richer supervision compared to RL, but relies on an external teacher policy.
+Following recent findings that combining OPD with GRPO stabilizes training and improves performance [31, 32, 33, 34, 23, 66], our OPD baseline adopts the joint objective ℒ=ℒGRPO+ℒOPD\mathcal{L}=\mathcal{L}_{\mathrm{GRPO}}+\mathcal{L}_{\mathrm{OPD}} (see Eq. 10 for the objective of SOD). We additionally report results for naive OPD (without GRPO) in Section C.3.
+•
+OPSDgt (On-Policy Self-Distillation with Ground Truth) [61].
+A self-distillation variant where the same model plays both teacher and student roles. The student generates responses conditioned only on the input, while the teacher is additionally conditioned on the full ground-truth solution, which is treated as privileged information. The training objective minimizes the token-level divergence between the teacher and student distributions along the student’s trajectory. This setting provides strong supervision but assumes access to complete reference solutions.
+•
+OPSDhint (On-Policy Self-Distillation with Hints) [61].
+A more practical variant of OPSD where the privileged information is replaced with a hint derived from the ground-truth solution. Instead of directly exposing the full solution, the teacher conditions on a compressed or partial guidance signal (i.e., a hint), which provides weaker but more realistic supervision. This setup evaluates whether partial information can effectively guide self-distillation. Please refer to Section E.2 for the specific prompt in generating hints.
+B.4 Implementation Details.
+All experiments are conducted using the VeRL framework [76] and Open-AgentRL framework [52]. To ensure a fair comparison, all methods share the same base training infrastructure, optimizer, and core hyperparameters unless otherwise noted.
+To promote reproducibility and better understanding the details of our implementation, we provide an anonymous code link at the end of the abstract.
+•
+Compute Resources.
+All experiments are conducted on a single node with 8 NVIDIA H20 GPUs (96GB memory each). For RL and distillation-based methods, training runs for 1 epoch and typically takes 2-3 days for 0.6B and 1.7B student models (see Table 4), while training with larger 4B and 14B teacher models requires approximately 5-6 days.
+In contrast, supervised fine-tuning (SFT) is significantly more efficient, with 5 training epochs typically completed within a few hours under the same hardware setup.
+To ensure robustness and statistical reliability, all experiments are repeated over 5 independent runs with different random seeds. These details provide sufficient information about hardware configuration, execution time, and experimental protocol for reproducibility.
+•
+Supervised Fine-Tuning (SFT).
+We fine-tune the base Qwen3-0.6B and Qwen3-1.7B models on the 3K SFT corpus for 5 epochs with a global batch size of 128. We use the AdamW optimizer with a learning rate of 5e-5. The maximum sequence length is set to 32,768 tokens with right truncation.
+•
+Baselines & Teacher Models(RL & Distillation).
+For all RL and distillation-based methods (GRPO, OPD, OPSDgt, OPSDhint) including the teacher models, we adopt a unified training configuration to isolate the effect of each algorithm. Specifically, we use the AdamW optimizer with a learning rate of 1e-6, a training batch size of 64, and a mini-batch size of 16. All RL & Distillation baselines including SOD are trained based on the SFT checkpoint. The maximum prompt length is set to 2,560 tokens and the maximum response length to 20,480 tokens. We sample 16 responses per prompt during training and 32 during validation. All methods are trained for at most 1 epoch (For the teacher models, we train for at most 2 epochs). The multi-turn agent interaction supports up to 16 tool-call turns. Rollout is performed asynchronously via vLLM with tensor parallelism of 4. For distillation-based methods (OPD and its variants), the teacher model (Qwen3-4B, further optimized with GRPO) provides token-level supervision along the student’s on-policy rollouts.
+•
+SOD.
+SOD adopts the same training configuration as the baselines described above. The only additional hyperparameters are those governing the step-wise adaptive weighting mechanism: the initial weight w1w_{1} is fixed as 1, the numerical stability constant ϵ=10−6\epsilon=10^{-6} and the upper-bound offset δ=0.2\delta=0.2 (allowing per-step weights wk≤1+δw_{k}\leq 1+\delta). These parameters control the adaptive distillation strength based on the per-step student–teacher divergence, enabling the model to automatically modulate learning intensity across reasoning steps.
+Appendix C Additional Experiments
+C.1 Training Cost and Practicality Analysis
+A natural concern is whether the step-wise divergence computation in SOD introduces substantial overhead relative to standard OPD. We address this by reporting wall-clock training metrics for all methods. All experiments are conducted on 8×\timesH20 GPUs with identical batch sizes and rollout configurations, trained for 120 steps (0.6B) or 150 steps (1.7B). Key observations are summarized as:
+Table 4:
+Training cost comparison. All runs use 8×\timesH20 96GB GPUs with identical configurations.
+Params
+Method
+Avg Time/Step
+Peak Memory
+Total Time
+(s)
+(GB)
+(h)
+0.6B
+GRPO
+680.6
+78.5
+22.7
+OPD
+1090.5
+87.7
+36.4
+SOD
+1052.3
+87.6
+35.1
+1.7B
+GRPO
+784.6
+81.7
+32.7
+OPD
+1053.6
+88.2
+43.9
+SOD
+1105.4
+88.7
+46.1
+SOD vs. OPD: negligible algorithmic overhead.
+The step-wise divergence dkd_{k} (Eq. 6) and adaptive weight wkw_{k} (Eq. 7) are computed from the student and teacher log-probabilities already available during the OPD forward pass. The additional computation is merely per-step averaging and O⁡(K)O(K) scalar multiplications (K≈3K{\approx}3–77), requiring no extra forward pass. Peak memory is equivalent (<0.5<0.5 GB difference). Notably, for the 0.6B model, SOD is actually 3.5% faster per step than OPD (1052.3s vs. 1090.5s), because the adaptive reweighting suppresses learning from erroneous tool-call patterns, resulting in more efficient rollouts with fewer failed retries and shorter responses.
+For the 1.7B model, SOD shows a modest +4.9%+4.9\% overhead (1105.4s vs. 1053.6s), which is entirely acceptable given the significant performance gains (+18.50% improvement at average) over OPD.
+Why GRPO has lower per-step time.
+GRPO exhibits ∼\sim1.4–1.5×\times lower per-step time than OPD-based methods. However, this is largely because GRPO’s training collapses in later stages: as shown in Figure 4, the GRPO-trained student progressively loses the ability to perform effective tool calls, resulting in drastically shorter responses and fewer sandbox interactions in later training steps. This artificially deflates the average per-step time. In contrast, OPD and SOD maintain long, structured reasoning trajectories with active tool usage throughout training, which naturally requires more generation time per step.
+C.2 Quantitative Analysis of Distillation Pattern Distribution
+Figure 6: Distribution of three distillation patterns over training steps. At each step, all rollout trajectories are classified into Stable, Recovery, or Erroneous based on their adaptive weight dynamics, and the proportion of each pattern is reported (smoothed with a 9-step moving average).
+To move beyond qualitative illustration and quantify how the three distillation patterns evolve during training, we conduct a systematic classification of all multi-step trajectories at each training step. Specifically, for every rollout sample at global step tt, we record the full sequence of adaptive weights {wk}k=1K\{w_{k}\}_{k=1}^{K} computed by SOD during that trajectory. We then classify each trajectory into one of three dominant patterns based on the overall shape of the wkw_{k} sequence:
+•
+Stable: Adaptive weights remain consistently high throughout the trajectory, indicating that the student stays well-aligned with the teacher across all reasoning steps.
+•
+Erroneous: Weights are progressively suppressed and remain low by the final step, indicating persistent divergence that the student fails to correct.
+•
+Recovery: Weights drop during intermediate steps (reflecting temporary divergence) but recover by the final step, indicating that the student successfully re-aligns after an initial deviation.
+We note that a fourth logical category exists, i.e., trajectories that begin aligned but degrade toward the end (i.e., early weights are high but the final weight is low). In practice, we find this pattern accounts for a negligible fraction (<<1%) of all trajectories, as persistent degradation without any preceding divergence signal is rare under SOD’s cumulative reweighting mechanism. We therefore merge these cases into the erroneous category for simplicity.
+At each training step, we classify all rollout samples and compute the proportion of each pattern. Results are smoothed with a 9-step moving average for visualization clarity. Figure 6 reports the distribution over the training trajectory for both model scales.
+Key observations.
+(1) Stable proportion increases over training. For both 0.6B and 1.7B, the fraction of stable trajectories grows steadily, confirming that SOD progressively improves student-teacher alignment as training proceeds.
+(2) Erroneous proportion decreases consistently. The proportion of erroneous trajectories declines substantially over training. This indicates that, as training progresses under SOD, the student model becomes increasingly capable: when encountering difficult reasoning steps, it no longer falls into consecutive errors but instead recovers or avoids mistakes altogether.
+(3) Recovery grows and becomes a persistent component. Notably, the recovery proportion is initially low (especially for the 0.6B model) and increases over training before stabilizing at a substantial level. This reveals a meaningful progression: early in training, the student lacks the capacity to recover from divergence; once it deviates, it tends to remain erroneous. As training proceeds, the student develops the ability to self-correct after intermediate missteps, converting what would have been erroneous trajectories into recovery ones. Even at the end of training, recovery trajectories account for a significant proportion of all samples, indicating that SOD’s adaptive reweighting mechanism remains continuously active.
+(4) Model capacity affects convergence speed and pattern composition. The 1.7B model reaches a higher stable proportion faster and drives erroneous to a lower level by the end of training, while maintaining a moderate recovery proportion throughout. In contrast, the 0.6B model starts with a much higher erroneous fraction and lower recovery fraction, reflecting its initially limited ability to self-correct. As training progresses, the 0.6B model gradually develops recovery capability, but converges more slowly overall. This suggests that SOD’s protective suppression of erroneous signals is particularly critical for smaller models during early training.
+C.3 The Performance of Naive On-policy Distillation
+In the main experiments, our OPD baseline combines the OPD loss with GRPO (i.e., ℒ=ℒGRPO+ℒOPD\mathcal{L}=\mathcal{L}_{\mathrm{GRPO}}+\mathcal{L}_{\mathrm{OPD}}) as illustrated in Section B.3. Here we report results for naive OPD, which uses only the token-level distillation loss without any RL reward signal.
+Table 5: Comparison of naive OPD vs. OPD on the 1.7B student model.
+Method
+Math
+Science
+Code
+Average
+AIME 2024
+AIME 2025
+GPQA
+LiveCodeBench
+naive OPD
+40.54.
+±\pm1.05
+35.83.
+±\pm1.11
+28.96.
+±\pm0.58
+29.81.
+±\pm0.74
+33.79
+OPD
+43.86.
+±\pm1.23
+37.04.
+±\pm1.31
+31.73.
+±\pm0.55
+32.45.
+±\pm0.93
+36.27
+SOD (w/o GRPO)
+48.87.
+±\pm0.93
+39.73.
+±\pm1.02
+35.89.
+±\pm0.62
+38.62.
+±\pm0.71
+40.78
+SOD
+50.83.
+±\pm1.15
+41.72.
+±\pm1.24
+38.72.
+±\pm0.73
+40.63.
+±\pm0.91
+42.98
+As shown in Table 5, naive OPD underperforms the OPD baseline by 2.48 points on average (33.79 vs. 36.27). Without the outcome-level reward signal from GRPO, the student relies entirely on dense teacher supervision for learning. However, as analyzed in Section 4.1, OPD applies uniform distillation across all steps including those corrupted by tool-induced state drift. In the absence of GRPO’s reward-driven exploration, the model lacks an independent signal to distinguish successful from failed trajectories, making it more susceptible to the compounding error problem.
+More notably, comparing the two pure distillation variants, naive OPD (33.79) vs. SOD w/o GRPO (40.78), reveals that our step-wise reweighting alone accounts for a +6.99 (+20.69%) improvement without any RL reward signal. This confirms that the core benefit of SOD stems from the adaptive step-wise reweighting mechanism rather than from the RL component. GRPO provides complementary gains (+2.20 on top of step-wise OPD), but the reweighting mechanism remains the primary driver of performance improvement. These results also suggest that step-wise reweighting and GRPO address orthogonal aspects of the training challenge: the former stabilizes dense supervision under state drift, while the latter provides sparse outcome-level exploration signals.
+Appendix D Proofs for Section 4.1
+We adopt the notation established in Section 4.1. For notational convenience in the derivations below, we write pt(⋅)=πθ(⋅∣y<t)p_{t}(\cdot)=\pi_{\theta}(\cdot\mid y_{<t}) and qt(⋅)=πteacher(⋅∣y<t)q_{t}(\cdot)=\pi_{\mathrm{teacher}}(\cdot\mid y_{<t}) for the student and teacher next-token distributions conditioned on the student-generated prefix y<ty_{<t}. The token-level OPD loss is ℓt=log⁡pt​(yt)−log⁡qt​(yt)\ell_{t}=\log p_{t}(y_{t})-\log q_{t}(y_{t}) with yt∼pty_{t}\sim p_{t}. The step-level mismatch Δk\Delta_{k}, the teacher-supported region StϵS_{t}^{\epsilon}, and the overlap ρt\rho_{t} are as defined in the main text.
+D.1 Proof of Proposition 1
+Proof.
+We analyze how the step-level mismatch Δk=1|ℐk|∑t∈ℐkDKL(pt∥qt)\Delta_{k}=\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}D_{\mathrm{KL}}(p_{t}\|q_{t}) evolves between consecutive steps in two settings.
+Text-only case (gradual drift).
+In text-only generation, the prefix at position tt differs from position t−1t-1 by exactly one student-sampled token. Define the per-token distributional shift as:
+η≜maxt⁡TV⁡(pt,pt−1)=maxt⁡12​∑v∈𝒱|pt​(v)−pt−1​(v)|,\eta\triangleq\max_{t}\;\mathrm{TV}(p_{t},p_{t-1})=\max_{t}\;\frac{1}{2}\sum_{v\in\mathcal{V}}\left|p_{t}(v)-p_{t-1}(v)\right|,
+(11)
+i.e., the maximum total variation (TV) distance between consecutive output distributions. For well-trained transformers, η\eta is small because the self-attention mechanism distributes influence across many context positions, so appending a single token has limited impact on the output distribution. Since consecutive steps share a boundary of one token, the step-level mismatch changes by at most O⁡(η)O(\eta) per step transition.
+TIR case (discontinuous drift).
+In TIR, the transition from step kk to step k+1k+1 involves appending an entire tool observation ok=(ok1,…,okm)o_{k}=(o_{k}^{1},\ldots,o_{k}^{m}) of length m=|ok|m=|o_{k}| to the prefix:
+y<tk+1start=y<tkend⊕ok,y_{<t_{k+1}^{\mathrm{start}}}=y_{<t_{k}^{\mathrm{end}}}\;\oplus\;o_{k},
+(12)
+where ⊕\oplus denotes concatenation. Crucially, oko_{k} is produced by the external environment, not by either model. Let ηtool\eta_{\mathrm{tool}} denote the average per-token distributional shift induced by observation tokens, measured by the TV distance between the model’s output distribution before and after conditioning on each successive observation token.
+Single-step bound.
+By the triangle inequality applied to the mm intermediate distributions between ptkendp_{t_{k}^{\mathrm{end}}} and ptk+1startp_{t_{k+1}^{\mathrm{start}}}, the total variation shift satisfies:
+TV⁡(ptk+1start,ptkend)≤m⋅ηtool.\mathrm{TV}\!\left(p_{t_{k+1}^{\mathrm{start}}},\;p_{t_{k}^{\mathrm{end}}}\right)\;\leq\;m\cdot\eta_{\mathrm{tool}}.
+(13)
+A similar bound holds for the teacher distribution. By Pinsker’s inequality (DKL(P∥Q)≥2TV(P,Q)2D_{\mathrm{KL}}(P\|Q)\geq 2\,\mathrm{TV}(P,Q)^{2}), the change in step-level KL divergence is lower-bounded by the squared TV shift. Since tool observations typically span tens to hundreds of tokens (m≫1m\gg 1) and introduce content not generated by either model, we have ηtool>η\eta_{\mathrm{tool}}>\eta in general, yielding:
+Δk+1−Δk=Ω⁡(m⋅ηtool)≥O⁡(η).\Delta_{k+1}-\Delta_{k}\;=\;\Omega(m\cdot\eta_{\mathrm{tool}})\;\geq\;O(\eta).
+(14)
+Note that even a single erroneous tool call already introduces a substantially larger divergence jump than text-only drift (Ω⁡(m⋅ηtool)\Omega(m\cdot\eta_{\mathrm{tool}}) vs. O⁡(η)O(\eta)), since the observation length m≫1m\gg 1 and the out-of-distribution content shifts conditioning more aggressively. Nevertheless, the teacher, having encountered some error patterns during training, can still provide partially useful supervision after an isolated failure. The critical issue arises from the cascading nature of errors in weaker student models, as we analyze next.
+Cascading errors and super-linear compounding.
+Weaker student models, precisely the targets of OPD, are prone to producing consecutive erroneous tool calls. A weaker student is more likely to generate an incorrect tool invocation at step kk; conditioned on the resulting erroneous observation, its subsequent reasoning is further degraded, increasing the probability of another failure at step k+1k+1. This creates a cascading failure pattern where each error compounds upon the previous ones.
+The key insight is that while the teacher may reasonably handle a single isolated error in the context (having potentially seen similar error messages during training), the joint occurrence of multiple consecutive failures creates a conditioning context that is combinatorially unlikely under the teacher’s training distribution. If each individual error context has marginal probability perrp_{\mathrm{err}} under the teacher’s training distribution, the joint context of jj consecutive errors has probability at most perrjp_{\mathrm{err}}^{j}, an exponential decay in familiarity. It is this accumulated, multi-error prefix that drives the teacher’s conditional distribution far from calibration, making ηtool(i)\eta_{\mathrm{tool}}^{(i)} grow with ii.
+Formally, when the student makes consecutive erroneous tool calls across steps k,k+1,…,k+j−1k,k+1,\ldots,k+j-1, the cumulative divergence satisfies:
+Δk+j−Δk=Ω⁡(∑i=0j−1mk+i⋅ηtool(k+i)),\Delta_{k+j}-\Delta_{k}\;=\;\Omega\!\left(\sum_{i=0}^{j-1}m_{k+i}\cdot\eta_{\mathrm{tool}}^{(k+i)}\right),
+(15)
+where mk+im_{k+i} is the length of the ii-th erroneous observation and ηtool(k+i)\eta_{\mathrm{tool}}^{(k+i)} is the corresponding per-token shift. Crucially, later errors induce progressively larger per-token shifts (ηtool(k+i+1)≥ηtool(k+i)\eta_{\mathrm{tool}}^{(k+i+1)}\geq\eta_{\mathrm{tool}}^{(k+i)}) because the prefix is already corrupted by prior errors, where the teacher has never been calibrated on such multi-error contexts, making its predictions increasingly unreliable. This yields super-linear growth of divergence with the number of consecutive tool failures, which is empirically confirmed in Figure 1(a) where the student-teacher divergence accelerates as errors accumulate.
+∎
+D.2 Proof of Proposition 2
+Proof.
+We prove the second-moment lower bound and then derive the SNR degradation.
+Step 1: Decomposition of the second moment.
+The second moment of the OPD loss ℓt=log⁡pt​(yt)−log⁡qt​(yt)\ell_{t}=\log p_{t}(y_{t})-\log q_{t}(y_{t}) under yt∼pty_{t}\sim p_{t} decomposes over the vocabulary:
+𝔼yt∼pt​[ℓt2]=∑v∈𝒱pt​(v)​(log⁡pt​(v)qt​(v))2.\mathbb{E}_{y_{t}\sim p_{t}}[\ell_{t}^{2}]\;=\;\sum_{v\in\mathcal{V}}p_{t}(v)\left(\log\frac{p_{t}(v)}{q_{t}(v)}\right)^{2}.
+(16)
+Step 2: Restricting to the low-overlap region.
+We partition the vocabulary into the teacher-supported region Stϵ={v:qt​(v)≥ϵ}S_{t}^{\epsilon}=\{v:q_{t}(v)\geq\epsilon\} and its complement S¯tϵ={v:qt​(v)<ϵ}\bar{S}_{t}^{\epsilon}=\{v:q_{t}(v)<\epsilon\}. By the overlap condition ρt≤ρ\rho_{t}\leq\rho, the student places mass at least 1−ρ1-\rho on S¯tϵ\bar{S}_{t}^{\epsilon}:
+∑v∈S¯tϵpt​(v)≥ 1−ρt≥ 1−ρ.\sum_{v\in\bar{S}_{t}^{\epsilon}}p_{t}(v)\;\geq\;1-\rho_{t}\;\geq\;1-\rho.
+(17)
+Restricting the sum to S¯tϵ\bar{S}_{t}^{\epsilon} gives a lower bound:
+𝔼⁡[ℓt2]≥∑v∈S¯tϵpt​(v)​(log⁡pt​(v)qt​(v))2.\mathbb{E}[\ell_{t}^{2}]\;\geq\;\sum_{v\in\bar{S}_{t}^{\epsilon}}p_{t}(v)\left(\log\frac{p_{t}(v)}{q_{t}(v)}\right)^{2}.
+(18)
+Step 3: Applying Jensen’s inequality.
+For any v∈S¯tϵv\in\bar{S}_{t}^{\epsilon}, since qt​(v)<ϵq_{t}(v)<\epsilon, we have:
+log⁡pt​(v)qt​(v)>log⁡pt​(v)+log⁡1ϵ.\log\frac{p_{t}(v)}{q_{t}(v)}\;>\;\log p_{t}(v)+\log\frac{1}{\epsilon}.
+(19)
+Define the conditional distribution p~​(v)=pt​(v)/(1−ρt)\tilde{p}(v)=p_{t}(v)/(1-\rho_{t}) over S¯tϵ\bar{S}_{t}^{\epsilon}. By the convexity of x↦x2x\mapsto x^{2} and Jensen’s inequality:
+𝔼⁡[ℓt2]\displaystyle\mathbb{E}[\ell_{t}^{2}]
+≥(1−ρt)​∑v∈S¯tϵp~​(v)​(log⁡pt​(v)qt​(v))2\displaystyle\;\geq\;(1-\rho_{t})\sum_{v\in\bar{S}_{t}^{\epsilon}}\tilde{p}(v)\left(\log\frac{p_{t}(v)}{q_{t}(v)}\right)^{2}
+≥(1−ρt)​(∑v∈S¯tϵp~​(v)​log⁡pt​(v)qt​(v))2\displaystyle\;\geq\;(1-\rho_{t})\left(\sum_{v\in\bar{S}_{t}^{\epsilon}}\tilde{p}(v)\log\frac{p_{t}(v)}{q_{t}(v)}\right)^{2}
+≥(1−ρt)​(log⁡1ϵ+∑v∈S¯tϵp~​(v)​log⁡pt​(v))2.\displaystyle\;\geq\;(1-\rho_{t})\left(\log\frac{1}{\epsilon}+\sum_{v\in\bar{S}_{t}^{\epsilon}}\tilde{p}(v)\log p_{t}(v)\right)^{2}.
+(20)
+Step 4: Bounding the entropy term.
+The term ∑v∈S¯tϵp~​(v)​log⁡pt​(v)=−HS¯\sum_{v\in\bar{S}_{t}^{\epsilon}}\tilde{p}(v)\log p_{t}(v)=-H_{\bar{S}}, where HS¯H_{\bar{S}} is the conditional entropy of the student restricted to S¯tϵ\bar{S}_{t}^{\epsilon}, satisfying 0≤HS¯≤log⁡|𝒱|0\leq H_{\bar{S}}\leq\log|\mathcal{V}|. For sufficiently small ϵ\epsilon satisfying ϵ<1/|𝒱|\epsilon<1/|\mathcal{V}| (a natural condition since the teacher threshold should be below the uniform baseline), we have log⁡(1/ϵ)>log⁡|𝒱|≥HS¯\log(1/\epsilon)>\log|\mathcal{V}|\geq H_{\bar{S}}, so the log⁡(1/ϵ)\log(1/\epsilon) term dominates:
+𝔼⁡[ℓt2]≥(1−ρ)​(log⁡1ϵ−HS¯)2≥(1−ρ)​log2​1ϵ⋅(1−log⁡|𝒱|log⁡(1/ϵ))2,\mathbb{E}[\ell_{t}^{2}]\;\geq\;(1-\rho)\left(\log\frac{1}{\epsilon}-H_{\bar{S}}\right)^{2}\;\geq\;(1-\rho)\,\log^{2}\!\frac{1}{\epsilon}\cdot\left(1-\frac{\log|\mathcal{V}|}{\log(1/\epsilon)}\right)^{2},
+(21)
+which grows as Ω⁡(log2⁡(1/ϵ))\Omega(\log^{2}(1/\epsilon)) when ρt→0\rho_{t}\to 0.
+Step 5: SNR degradation.
+Let gt=ℓt​∇θ​log⁡πθ​(yt∣y<t)g_{t}=\ell_{t}\nabla_{\theta}\log\pi_{\theta}(y_{t}\mid y_{<t}) be the token-level OPD gradient estimator. The expected gradient is 𝔼[gt]=∇θDKL(pt∥qt)\mathbb{E}[g_{t}]=\nabla_{\theta}D_{\mathrm{KL}}(p_{t}\|q_{t}), which is bounded for any fixed distribution pair with finite KL divergence; let C=‖𝔼⁡[gt]‖C=\|\mathbb{E}[g_{t}]\|.
+Define cmin≜minv⁡‖∇θ​log​πθ​(v∣y<t)‖2>0c_{\min}\triangleq\min_{v}\|\nabla_{\theta}\log\pi_{\theta}(v\mid y_{<t})\|^{2}>0, which is positive for any non-degenerate parameterization. The variance of the gradient estimator satisfies:
+Var⁡[‖gt‖]≥𝔼⁡[ℓt2]⋅cmin−C2.\mathrm{Var}[\|g_{t}\|]\;\geq\;\mathbb{E}[\ell_{t}^{2}]\cdot c_{\min}-C^{2}.
+(22)
+Combining with the second-moment lower bound from Step 4:
+SNR⁡(gt)=‖𝔼⁡[gt]‖Var⁡[gt]≤C(1−ρ)​log2⁡(1/ϵ)⋅cmin−C2.\mathrm{SNR}(g_{t})\;=\;\frac{\|\mathbb{E}[g_{t}]\|}{\sqrt{\mathrm{Var}[g_{t}]}}\;\leq\;\frac{C}{\sqrt{(1-\rho)\log^{2}(1/\epsilon)\cdot c_{\min}-C^{2}}}.
+(23)
+As ρ→0\rho\to 0, the denominator grows as O⁡(log⁡(1/ϵ))O(\log(1/\epsilon)) while the numerator CC remains constant, giving SNR⁡(gt)→0\mathrm{SNR}(g_{t})\to 0.
+Interpretation.
+When the student drifts far from the teacher-supported region (ρt≈0\rho_{t}\approx 0), most sampled tokens fall in S¯tϵ\bar{S}_{t}^{\epsilon} where the teacher assigns near-zero probability. The OPD loss for these tokens has large magnitude (due to −log⁡qt​(yt)>log⁡(1/ϵ)-\log q_{t}(y_{t})>\log(1/\epsilon)) but is uninformative. It reflects the teacher’s inability to model these out-of-distribution states rather than a meaningful learning signal. Meanwhile, informative signals from StϵS_{t}^{\epsilon} (where teacher guidance is calibrated) are sampled only with probability ρt\rho_{t}, making them increasingly rare. The gradient is thus dominated by high-variance, low-information contributions, rendering optimization unstable.
+∎
+D.3 Discussion: Failure Cascade and Design Implications
+The two propositions together characterize a failure cascade specific to TIR:
+1.
+Initial perturbation: An erroneous tool call returns a corrupted observation (e.g., a runtime error, incorrect output, or timeout message). This already introduces a divergence jump substantially larger than text-only drift (Ω⁡(m⋅ηtool)\Omega(m\cdot\eta_{\mathrm{tool}}) vs. O⁡(η)O(\eta)), though the teacher, having encountered some error patterns during pretraining, can still provide partially useful supervision after an isolated failure.
+2.
+Cascading accumulation: Weaker student models, precisely the targets of OPD, are prone to making consecutive errors. Each subsequent erroneous tool call further corrupts the prefix, and the joint pattern of multiple consecutive failures becomes exponentially unlikely under the teacher’s training distribution (∼perrj\sim p_{\mathrm{err}}^{j} for jj consecutive errors). It is this accumulated multi-error context, rather than any single error, that drives the teacher’s conditional distribution far from calibration. The divergence thus compounds super-linearly (Proposition 1), as empirically demonstrated by the accelerating divergence curve in Figure 1(a).
+3.
+Supervision breakdown: In the resulting low-overlap states (ρt≈0\rho_{t}\approx 0) caused by accumulated consecutive errors, the OPD gradient estimator suffers variance explosion and SNR degradation (Proposition 2). Updates become dominated by uninformative, high-magnitude contributions from tokens where the teacher provides no meaningful guidance. Figure 1(b) confirms this empirically: the teacher’s conditional entropy becomes both elevated and highly variable in steps following accumulated tool errors.
+4.
+Amplification by uniform aggregation: OPD sums token-level losses across all steps with equal weight, treating well-aligned early steps (high ρt\rho_{t}, reliable teacher guidance) identically to corrupted post-error steps (low ρt\rho_{t}, unreliable guidance). When cumulative tool errors cause a substantial portion of later steps to have low overlap, the aggregate gradient is systematically biased by these high-variance contributions.
+This analysis implies that a stabilizing objective should modulate distillation strength at the step level: preserving full-strength dense supervision in well-aligned steps while attenuating the signal when the estimated student-teacher divergence indicates teacher miscalibration. This is the design principle underlying our adaptive step-wise reweighting mechanism.
+D.4 Variance Reduction under Step-wise Reweighting
+We now show that the step-wise reweighting mechanism in Eq. (7) provably addresses the gradient SNR degradation identified in Proposition 2.
+Proposition 3 (Bounded variance under adaptive reweighting).
+Under the step-wise weighted OPD objective (Eq. 9), when the divergence increases monotonically across steps (d1≤d2≤⋯≤dkd_{1}\leq d_{2}\leq\cdots\leq d_{k}), the weighted gradient contribution from step kk satisfies:
+𝔼⁡[wk2⋅ℓt2]≤(d1+ϵ)2(dk+ϵ)2⋅𝔼⁡[ℓt2],\mathbb{E}[w_{k}^{2}\cdot\ell_{t}^{2}]\;\leq\;\frac{(d_{1}+\epsilon)^{2}}{(d_{k}+\epsilon)^{2}}\cdot\mathbb{E}[\ell_{t}^{2}],
+(24)
+where 𝔼⁡[ℓt2]\mathbb{E}[\ell_{t}^{2}] is the unweighted second moment from Proposition 2. Consequently, even when ρt→0\rho_{t}\to 0 causes 𝔼⁡[ℓt2]→∞\mathbb{E}[\ell_{t}^{2}]\to\infty, the weighted contribution remains bounded whenever dkd_{k} grows proportionally to the divergence.
+Proof.
+By the definition of wkw_{k} in Eq. (7):
+wk=min⁡(∏u=1k−1du+ϵdu+1+ϵ, 1+δ).w_{k}=\min\!\left(\prod_{u=1}^{k-1}\frac{d_{u}+\epsilon}{d_{u+1}+\epsilon},\;1+\delta\right).
+(25)
+Under monotonically increasing divergence (d1≤d2≤⋯≤dkd_{1}\leq d_{2}\leq\cdots\leq d_{k}), each ratio du+ϵdu+1+ϵ≤1\frac{d_{u}+\epsilon}{d_{u+1}+\epsilon}\leq 1, and the product telescopes:
+wk≤∏u=1k−1du+ϵdu+1+ϵ=d1+ϵdk+ϵ.w_{k}\;\leq\;\prod_{u=1}^{k-1}\frac{d_{u}+\epsilon}{d_{u+1}+\epsilon}\;=\;\frac{d_{1}+\epsilon}{d_{k}+\epsilon}.
+(26)
+The weighted second moment of the OPD loss at token t∈ℐkt\in\mathcal{I}_{k} is therefore:
+𝔼⁡[wk2⋅ℓt2]≤(d1+ϵdk+ϵ)2⋅𝔼⁡[ℓt2].\mathbb{E}[w_{k}^{2}\cdot\ell_{t}^{2}]\;\leq\;\left(\frac{d_{1}+\epsilon}{d_{k}+\epsilon}\right)^{2}\cdot\mathbb{E}[\ell_{t}^{2}].
+(27)
+From Proposition 2, when the student drifts into low-overlap states, 𝔼⁡[ℓt2]≥(1−ρ)​log2⁡(1/ϵteacher)\mathbb{E}[\ell_{t}^{2}]\geq(1-\rho)\log^{2}(1/\epsilon_{\mathrm{teacher}}). However, such drift also implies that dkd_{k} increases (since dkd_{k} is monotonically related to Δk\Delta_{k}, as shown in Appendix D.5). Specifically, when ρt→0\rho_{t}\to 0, the per-token log-probability gaps grow, causing dk≫d1d_{k}\gg d_{1}. The weighted contribution thus satisfies:
+𝔼⁡[wk2⋅ℓt2]≤(d1+ϵ)2(dk+ϵ)2⋅(1−ρ)​log2⁡(1/ϵteacher).\mathbb{E}[w_{k}^{2}\cdot\ell_{t}^{2}]\;\leq\;\frac{(d_{1}+\epsilon)^{2}}{(d_{k}+\epsilon)^{2}}\cdot(1-\rho)\log^{2}(1/\epsilon_{\mathrm{teacher}}).
+(28)
+The key insight is that the numerator (d1+ϵ)2(d_{1}+\epsilon)^{2} is bounded (determined by the initial step’s divergence), while the denominator (dk+ϵ)2(d_{k}+\epsilon)^{2} grows with the accumulated drift. This creates an automatic variance suppression: the more the student diverges (larger dkd_{k}, larger 𝔼⁡[ℓt2]\mathbb{E}[\ell_{t}^{2}]), the more aggressively the weight wkw_{k} attenuates the contribution, preventing the variance explosion that afflicts OPD.
+SNR recovery.
+For the weighted gradient estimator g~t=wk⋅ℓt⋅∇θ​log​πθ​(yt∣y<t)\tilde{g}_{t}=w_{k}\cdot\ell_{t}\cdot\nabla_{\theta}\log\pi_{\theta}(y_{t}\mid y_{<t}), the signal (expected gradient from well-aligned early steps where wk≈1w_{k}\approx 1) remains intact, while the noise from high-divergence later steps is suppressed by the factor (d1+ϵ)2/(dk+ϵ)2(d_{1}+\epsilon)^{2}/(d_{k}+\epsilon)^{2}. This restores a positive SNR for the aggregate gradient, in contrast to OPD where the SNR degrades to zero (Proposition 2).
+∎
+Stability under recovery.
+The above analysis addresses the erroneous case where divergence increases monotonically. In the recovery case (du+1<dud_{u+1}<d_{u} for some uu), the weight wkw_{k} may exceed 1, potentially amplifying the gradient contribution. However, the hard upper bound wk≤1+δw_{k}\leq 1+\delta in Eq. (7) ensures that the weighted second moment is always bounded by (1+δ)2⋅𝔼⁡[ℓt2](1+\delta)^{2}\cdot\mathbb{E}[\ell_{t}^{2}]. Since recovery steps by definition have decreasing dkd_{k} (implying the student is returning to the teacher-supported region, i.e., ρt\rho_{t} is increasing), the unweighted 𝔼⁡[ℓt2]\mathbb{E}[\ell_{t}^{2}] itself is decreasing in these steps. The combination of bounded amplification and decreasing base variance ensures optimization stability.
+Interpretation.
+This result formalizes the intuition behind our method: OPD fails because it applies uniform weight to all steps, allowing high-variance contributions from corrupted post-error steps to dominate the gradient. Our step-wise reweighting automatically detects these corrupted steps (via increasing dkd_{k}) and attenuates their influence proportionally, ensuring that the gradient signal remains dominated by informative contributions from well-aligned steps. The upper bound 1+δ1+\delta further ensures that the recovery mechanism does not over-amplify any single step, maintaining optimization stability throughout training.
+D.5 Justification of dkd_{k} as a Proxy for Δk\Delta_{k}
+Computing the full KL divergence Δk\Delta_{k} requires evaluating the teacher’s output distribution over the entire vocabulary at each token position, which introduces substantial overhead. In contrast, dkd_{k} (Eq. 6) only requires the teacher’s log-probability on the student-sampled token yty_{t}, a quantity already computed in the standard OPD forward pass.
+Monotonic consistency.
+By Jensen’s inequality:
+dk=1|ℐk|​∑t∈ℐk|log⁡πθ​(yt∣y<t)πteacher​(yt∣y<t)|≥|1|ℐk|​∑t∈ℐklog⁡πθ​(yt∣y<t)πteacher​(yt∣y<t)|,d_{k}=\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}\left|\log\frac{\pi_{\theta}(y_{t}\mid y_{<t})}{\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t})}\right|\;\geq\;\left|\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}\log\frac{\pi_{\theta}(y_{t}\mid y_{<t})}{\pi_{\mathrm{teacher}}(y_{t}\mid y_{<t})}\right|,
+(29)
+where the right-hand side is the absolute value of a single-sample Monte Carlo estimate of Δk\Delta_{k}. When the student drifts further from the teacher (increasing Δk\Delta_{k}), the per-token log-probability gaps increase in expectation, yielding a larger dkd_{k}. This monotonic relationship ensures that the ratios du/du+1d_{u}/d_{u+1} used in Eq. (7) correctly reflect the relative trend of divergence across steps.
+Sufficiency of ordering.
+The weight formula in Eq. (7) is a product of ratios du+ϵdu+1+ϵ\frac{d_{u}+\epsilon}{d_{u+1}+\epsilon}, depending only on the relative magnitudes between consecutive steps. Any monotone transformation of Δk\Delta_{k} preserves these ratios’ direction (above or below one), producing equivalent attenuation and recovery behavior. Since dkd_{k} maintains the ordering of Δk\Delta_{k}, it is a sufficient statistic for our reweighting mechanism.
+Appendix E Prompt Template
+E.1 Datasets Prompt Template
+Our dataset contains various question types, including mathematics, programming, and scientific problems, each with different answer formats. To ensure consistent model output and facilitate simultaneous reasoning and tool usage, we have developed specialized prompts for each task type. Below, we present these prompts following Yu et al. [52].
+Prompt Template for verifiable Math Problems
+Math Problems
+Analyze and solve the following [math/science domain] problem step by step.
+Problem: [Insert problem text here]
+Hint: The tool could be used for more precise and efficient calculations and could help you to verify your result before you reach the final answer.
+Note: You should first analyze the problem and form a high-level solution strategy, then utilize the tools to help you solve the problem.
+Answer Format: Do not put units of the final answer inside \boxed{}. The content of \boxed{} should be the numerical value of the final answer only, without any units.
+Remember once you make sure the current answer is your final answer, do not call the tools again and directly output the final answer in the following text format, the answer format must be: \boxed{’The final answer goes here.’}.
+Prompt Template for Scientific QA Problems
+Scientific QA Problems
+Analyze and solve the following [science domain] problem step by step.
+Problem: [Insert problem text here]
+Hint: The tool could be used for more precise and efficient calculations and could help you to verify your result before you reach the final answer.
+Note: You should first analyze the problem and form a high-level solution strategy, then utilize the tools to help you solve the problem.
+Answer Format: Remember once you make sure the current answer is your final answer, do not call the tools again and directly output the final answer in the following text format, the answer format must be: \boxed{’The final answer goes here.’}. You need to put the final uppercase letter option of this problem into \boxed{}.
+Prompt Template for Code Problems
+Code Problems
+You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests.
+Problem: [Insert problem text here]
+Public Examples: Here are some input and output examples of the expected code:
+Input: [sample inputs]
+Output: [sample outputs]
+Note: You should first analyze the problem and form a high-level solution strategy, then utilize the tools to help you solve the problem.
+Instruction: Read the inputs from stdin, solve the problem, and write the answer to stdout (do not directly test on the sample inputs). Enclose your code within the delimiters shown below. Ensure that when the Python program runs, it correctly reads inputs, executes the algorithm, and writes output to stdout.
+Submit: Before submitting your code, you can utilize tools to check its correctness. Once you make sure the current code is correct, do not call the tools again and submit your code within the following Python code block:
+⬇
+# YOUR CODE HERE
+E.2 Baseline Prompt Template
+For the OPSDhint baseline, we construct partial guidance signals by prompting a language model to distill the ground-truth solution into a concise hint. Given a problem and its full solution, the model is instructed to extract the key insight or critical intermediate step (e.g.,, a useful substitution, a relevant theorem, or a strategic decomposition) without revealing the final answer or complete derivation. The resulting hint is then injected into the teacher’s input as a conditioning signal during on-policy self-distillation. The prompt template used for hint generation is shown below:
+Prompt Template for Hint Generation
+Hint Generation Prompt
+You are given a problem and its ground-truth solution. Your task is to generate a concise hint that provides partial guidance toward solving the problem, without revealing the full solution or the final answer.
+Problem: [Insert problem text here]
+Ground-Truth Solution: [Insert full solution here]
+Requirements for the hint:
+•
+Identify the key insight or critical intermediate step that is most essential for solving the problem.
+•
+Express it as a brief directional suggestion (1–2 sentences), such as a useful substitution, a relevant theorem, or a strategic decomposition.
+•
+Do not include the final numerical answer or any complete derivation.
+•
+Do not explicitly state which tool to use or how to use it.
+Output Format: Return only the hint text, without any preamble or explanation.
+Appendix F Visualization and Analysis of Token Entropy from The Teacher
+To provide intuitive evidence for the motivation behind SOD’s divergence-aware reweighting, we visualize the token-level conditional entropy of the teacher distribution H(πteacher(⋅∣y<t))H(\pi_{\mathrm{teacher}}(\cdot\mid y_{<t})) along student-generated trajectories. This entropy directly reflects the teacher’s confidence when providing supervision at each token position: low entropy indicates that the teacher assigns high probability mass to a single continuation (i.e., confident and reliable guidance), while high entropy signals that the teacher is uncertain about the correct next token given the student’s context, i.e., a hallmark of out-of-distribution states where distillation becomes unreliable.
+We present two representative cases below. Case A shows a stable trajectory where all tool calls succeed: the teacher maintains consistently low entropy throughout, confirming that its supervision remains trustworthy across all reasoning steps. Case B illustrates an erroneous trajectory where repeated tool failures corrupt the student’s context: the teacher’s mean entropy escalates sharply from 0.850.85 to 2.142.14 across steps, with over 78% of tokens in the final step exceeding H=1.0H{=}1.0. This progressive degradation of teacher confidence validates our core design principle, i.e., uniformly distilling from such corrupted states would propagate fundamentally unreliable supervision, whereas SOD’s adaptive weights automatically attenuate the distillation signal in these high-entropy regions.
+Teacher Conditional Entropy H(πteacher(⋅∣y<t))H(\pi_{\mathrm{teacher}}(\cdot\mid y_{<t})) per Token
+H≈0H{\approx}0
+xx
+xx
+xx
+xx
+xx
+xx
+H≥3H{\geq}3
+■\blacksquare Confident ■\blacksquare Unreliable
+Case A: Stable Trajectory — All tool calls succeed
+Question: Points A⁡(x1,y1)A(x_{1},y_{1}) and B⁡(x2,y2)B(x_{2},y_{2}) lie on the parabola x2=4​yx^{2}=4y with y1+y2=2y_{1}+y_{2}=2 and y1≠y2y_{1}\neq y_{2}. The perpendicular bisector of segment A​BAB intersects the yy-axis at point CC. Find the maximum area of triangle A​B​CABC.
+Answer: 16​69\boxed{\dfrac{16\sqrt{6}}{9}}
+Trajectory Overview:
+•
+Step 1 (H¯=0.36\bar{H}{=}0.36): Derives x12+x22=8x_{1}^{2}+x_{2}^{2}=8, finds midpoint and perpendicular bisector, sets up area formula
+•
+Step 2 (H¯=0.87\bar{H}{=}0.87): Calls code_interpreter to compute critical points via calculus
+•
+Step 3 (H¯=0.33\bar{H}{=}0.33): Calls code_interpreter for final verification of 16​6/916\sqrt{6}/9 →\rightarrow teacher confident
+•
+Step 4 (H¯=0.15\bar{H}{=}0.15): Confirms numerical result matches derivation; wraps final answer in 16​69\boxed{\frac{16\sqrt{6}}{9}} →\rightarrow teacher very confident
+Step 1
+Step 2
+Step 3
+Step 4
+Mean HkH_{k}
+0.36
+0.87
+0.33
+0.15
+% tokens H<0.3H{<}0.3
+70%
+55%
+84%
+94%
+Step 4 — Full Token Visualization (mean H=0.15H{=}0.15, 94% tokens H<0.3H{<}0.3)
+<|im_start|>assistant\{}nThecodeoutputconfirmsthatthemaximumareaisachievedatu=16/3,giving$\{}frac{16\{}sqrt{6}}{9}\{}approx4.35,whichmatchesoursymbolicderivation.\{}n\{}nTherefore,themaximumareaoftriangleA​B​CABCis:\{}n\{}n$$\{}boxed{\{}dfrac{16\{}sqrt{6}}{9}}$$<|im_end|>
+Case B: Erroneous Trajectory — Repeated tool failures; teacher loses confidence
+Question: Given the sequence {an}\{a_{n}\} with a1=1a_{1}{=}1, a2=2a_{2}{=}2, a2​k+1=a2​k2a2​k−1a_{2k+1}{=}\frac{a_{2k}^{2}}{a_{2k-1}}, and a2​k+2=2​a2​k+1−a2​ka_{2k+2}{=}2a_{2k+1}{-}a_{2k} (k∈ℕ+k\in\mathbb{N}_{+}). Find the last two digits of a2022a_{2022}.
+Answer: 32\boxed{32} (student guesses 36, then 66, then hesitates →\rightarrow all incorrect)
+Trajectory Overview:
+•
+Step 1 (H¯=0.85\bar{H}{=}0.85): Derives first 12 terms, identifies pattern a2​k=k⁡(k+1)a_{2k}{=}k(k{+}1); calls code_interpreter →\rightarrow TimeoutError (computation slow for large nn) →\rightarrow teacher uncertain
+•
+Step 2 (H¯=1.12\bar{H}{=}1.12): Retries with refactored code but introduces a bug →\rightarrow NameError: name ‘mod_inverse’ is not defined (undefined call) →\rightarrow teacher increasingly unreliable
+•
+Step 3 (H¯=2.14\bar{H}{=}2.14): Student panics: guesses “36”, changes to “\\backslashboxed{66}”, says “code crashed again”, then “Wait, let’s just go with the final answer from the code” →\rightarrow teacher completely unreliable
+Step 1
+Step 2
+Step 3
+Mean HkH_{k}
+0.85
+1.12
+2.14
+% tokens H>1.0H{>}1.0
+32%
+41%
+78%
+% tokens H>2.0H{>}2.0
+8%
+15%
+55%
+Step 3 — Full Token Visualization (mean H=2.14H{=}2.14, 78% tokens H>1.0H{>}1.0, 55% tokens H>2.0H{>}2.0)
+<|im_start|>assistant\{}nLetmenowjustputthefinalansweras 36,sinceitisknown. Theactualansweris:\{}boxed{66}. Butsincenocodereturned,let'sgowithstandardanswer. ButsinceIcomputedmanuallythatforwhatIfound: a9= 400,a10=60. Wait,let'sjustgowiththefinalanswerfromthecodeandsubmitit. \{}boxed{36}<|im_end|>
+Appendix G Case Study
+To further illustrate the behavior of SOD, we present 3 representative trajectories corresponding to the distillation patterns discussed in the following.
+Each case study highlights how step-wise divergence estimation and adaptive weighting influence the learning process. δ\delta in Eq. 7 is fixed as 0.2. In addition to dkd_{k} and wkw_{k}, we also report the mean teacher conditional entropy H¯k=1|ℐk|∑t∈ℐkH(πteacher(⋅∣y<t))\bar{H}_{k}=\frac{1}{|\mathcal{I}_{k}|}\sum_{t\in\mathcal{I}_{k}}H(\pi_{\mathrm{teacher}}(\cdot\mid y_{<t})) at each step, which independently indicates teacher confidence: low H¯k\bar{H}_{k} means reliable supervision, while high H¯k\bar{H}_{k} signals uncertainty under corrupted context.
+Case A: Stable Pattern — Adaptive Weights Preserve Full Distillation
+Question: Suppose 5 different integers are randomly chosen from between 20 and 69, inclusive. What is the probability that they each have a different tens digit? The answer is in the form mn\frac{m}{n}, where gcd⁡(m,n)=1\gcd(m,n)=1. Provide the value of m+nm+n.
+Ground-truth Answer: m+n=55469m+n=55469
+Step
+Student Reasoning Trace (Abbreviated)
+𝒅𝒌\bm{d_{k}}
+𝒘𝒌\bm{w_{k}}
+𝑯¯𝒌\bm{\bar{H}_{k}}
+s1s_{1}
+Analyze the range 20–69: the tens digits are {2,3,4,5,6}\{2,3,4,5,6\}, so there are 5 groups, each containing exactly 10 integers (e.g., 20–29, 30–39, …, 60–69). Total pool size: 5050.
+“We need to choose one number from each of the 5 tens groups.”
+0.497
+1.00
+0.41
+s2s_{2}
+Count favorable outcomes: since we must pick exactly one integer from each of the 5 groups, and each group has 10 choices, the number of favorable selections is 105=100,00010^{5}=100{,}000.
+“The total combinations is (505)\binom{50}{5}. Let me compute this with the tool.”
+0.278
+1.20
+0.33
+s3s_{3}
+[Tool Call] code_interpreter: compute (505)\binom{50}{5}
+[Tool Response] 2118760
+“Probability =100,0002,118,760=\frac{100{,}000}{2{,}118{,}760}. Now I need to simplify this fraction.”
+0.216
+1.20
+0.27
+s4s_{4}
+Factor the numerator: 100,000=25×55100{,}000=2^{5}\times 5^{5}.
+Factor the denominator: 2,118,760=23×5×72×1,0812{,}118{,}760=2^{3}\times 5\times 7^{2}\times 1{,}081.
+gcd=23×5=40\gcd=2^{3}\times 5=40, so 100,0002,118,760=2,50052,969\frac{100{,}000}{2{,}118{,}760}=\frac{2{,}500}{52{,}969}.
+[Tool Call] code_interpreter: 52969 % 7 →\rightarrow 0; 52969 // 7 →\rightarrow 7567
+0.277
+1.20
+0.31
+s5s_{5}
+Verify co-primality: 2,500=22×542{,}500=2^{2}\times 5^{4} and 52,969=72×1,08152{,}969=7^{2}\times 1{,}081. No shared prime factors.
+[Tool Call] code_interpreter:7567 % 3→\rightarrow1; 1081 % 3 →\rightarrow1
+0.348
+1.20
+0.38
+s6s_{6}
+Confirmed gcd⁡(2500,52969)=1\gcd(2500,52969)=1. Therefore m=2500m=2500, n=52969n=52969.
+Final answer: m+n=2500+52969=55469m+n=2500+52969=\boxed{55469} ✓ Correct
+0.262
+1.20
+0.24
+Analysis
+In this example, the student model produces a fully correct solution: it correctly identifies the combinatorial structure (5 groups of 10), computes the favorable and total outcomes, and uses the code interpreter to verify intermediate calculations.
+The per-step divergence dkd_{k} remains moderate throughout (range: 0.220.22–0.500.50), with no sudden spikes, indicating that the student’s token-level distribution closely tracks the teacher’s at every reasoning step. Correspondingly, the teacher conditional entropy H¯k\bar{H}_{k} stays consistently low (range: 0.240.24–0.410.41), confirming that the teacher maintains high confidence when supervising this well-aligned trajectory.
+As a result, the adaptive weight wkw_{k} stays at or near the upper bound (1.21.2) for all steps after s1s_{1}.
+This demonstrates a key property of SOD: when the student’s reasoning trajectory is well-aligned with the teacher’s, the method preserves full distillation strength and does not unnecessarily suppress the supervision signal. The low H¯k\bar{H}_{k} values independently validate that the teacher’s guidance is indeed reliable at every step, justifying the high weights assigned by our reweighting mechanism.
+In contrast, a naïve uniform-weight approach would assign the same weight regardless of alignment quality, while a trajectory-level filtering method might discard this trajectory entirely if it happened to share a batch with poorly-performing samples.
+SOD’s per-step granularity ensures that every reliable step receives maximal teacher guidance.
+Case B: Erroneous Pattern — Adaptive Weights Suppress Harmful Distillation
+Question: Let P⁡(x)=x3+8​x2−x+3P(x)=x^{3}+8x^{2}-x+3 and let the roots of PP be a,b,a,b, and cc. The roots of a monic polynomial Q⁡(x)Q(x) are a​b−c2,a​c−b2,b​c−a2ab-c^{2},\;ac-b^{2},\;bc-a^{2}. Find Q⁡(−1)Q(-1).
+Ground-truth Answer: Q⁡(−1)=1536Q(-1)=1536
+Step
+Student Reasoning Trace (Abbreviated)
+𝒅𝒌\bm{d_{k}}
+𝒘𝒌\bm{w_{k}}
+𝑯¯𝒌\bm{\bar{H}_{k}}
+s1s_{1}
+Identify the problem structure: by Vieta’s formulas, a+b+c=−8a+b+c=-8, a​b+a​c+b​c=−1ab+ac+bc=-1, a​b​c=−3abc=-3. Need to compute Q⁡(−1)=(−1−r1)​(−1−r2)​(−1−r3)Q(-1)=(-1-r_{1})(-1-r_{2})(-1-r_{3}) where rir_{i} are the roots of QQ.
+“I’ll try to compute the roots numerically using numpy.roots, then evaluate Q⁡(−1)Q(-1) directly.”
+[Tool Call] code_interpreter: import numpy as np; roots = np.roots([1, 8, -1, 3]); ...
+[Tool Response] OpenBLAS blas_thread_init: pthread_create failed for thread 1 of 2: Resource temporarily unavailable ... please exit the numpy source tree ...
+0.218
+1.00
+0.32
+s2s_{2}
+“The numpy import failed. Let me try again with a slightly different code structure.”
+[Tool Call] code_interpreter: import numpy as np; c = np.roots([1, 8, -1, 3]); ...
+[Tool Response] OpenBLAS blas_thread_init: pthread_create failed ... Resource temporarily unavailable ...
+The student repeats essentially the same numpy-based approach, unaware that the failure is an environment issue, not a code bug.
+0.305
+0.71
+0.74
+s3s_{3}
+“Let me try once more with numpy.”
+[Tool Call] code_interpreter: import numpy as np; t = np.roots([1, 8, -1, 3]); ...
+[Tool Response] OpenBLAS blas_thread_init: pthread_create failed ... Resource temporarily unavailable ...
+Third identical failure. The student has now exhausted all tool-call attempts with the same flawed strategy (relying on numpy in a broken environment), instead of falling back to a pure-Python or algebraic approach.
+0.476
+0.46
+1.23
+s4s_{4}
+“Since the code keeps giving errors, let me just assume the answer from the process. I’ll go to the final answer.”
+The student abandons systematic computation and begins guessing: “From the shared Python code, I’ll do the final answer. I’ll assume that from the code, the result is −15-15. But let me just give the final. The only way is to be confident. So I’ll just say the answer is 15\boxed{15}.”
+The reasoning degenerates into incoherent hedging: “I think it’s 15. But I’ll do what is the. Let me run the code once again.”
+0.713
+0.31
+1.87
+s5s_{5}
+The student attempts yet another tool call but the response is truncated (generation limit reached).
+Final answer: 15\boxed{15} ✗ Incorrect (correct: 1536)
+1.284
+0.17
+2.38
+Analysis
+The student repeatedly calls numpy.roots in a broken sandbox, receiving the same error three times, then degenerates into incoherent guessing and outputs 1515—off by two orders of magnitude from the correct answer 15361536.
+The divergence dkd_{k} increases ∼6×{\sim}6{\times} (0.22→1.280.22\to 1.28) and the teacher entropy H¯k\bar{H}_{k} escalates from 0.320.32 to 2.382.38, confirming that the teacher becomes fundamentally uncertain under the corrupted context. The adaptive weight wkw_{k} drops correspondingly from 1.001.00 to 0.170.17, automatically suppressing distillation where teacher supervision is unreliable. Without this mechanism, the KL loss from such irrecoverable states would inject noisy gradients into training.
+Case C: Recovery Pattern — Step-wise Weights Capture Mid-Trajectory Correction
+Question: Let [x][x] denote the greatest integer ≤x\leq x. How many positive integers n≤1000n\leq 1000 satisfy the condition that [998n]+[999n]+[1000n]\left[\tfrac{998}{n}\right]+\left[\tfrac{999}{n}\right]+\left[\tfrac{1000}{n}\right] is not divisible by 33?
+Ground-truth Answer: 2222
+Step
+Student Reasoning Trace (Abbreviated)
+𝒅𝒌\bm{d_{k}}
+𝒘𝒌\bm{w_{k}}
+𝑯¯𝒌\bm{\bar{H}_{k}}
+s1s_{1}
+Analyze the problem: for each nn, compute S⁡(n)=⌊998/n⌋+⌊999/n⌋+⌊1000/n⌋S(n)=\lfloor 998/n\rfloor+\lfloor 999/n\rfloor+\lfloor 1000/n\rfloor and check 3∤S⁡(n)3\nmid S(n). Observe that for most nn, the three floor values are nearly equal, so S⁡(n)≈3​⌊1000/n⌋S(n)\approx 3\lfloor 1000/n\rfloor, which is divisible by 3. Exceptions occur near divisors of 999 and 1000.
+“Let me write code to enumerate all nn from 1 to 1000 and count.”
+0.216
+1.00
+0.28
+s2s_{2}
+[Tool Call] code_interpreter: enumerate and count valid nn
+[Tool Response] IndentationError: expected an indented block after ‘if’ statement on line 11
+First attempt fails due to a Python indentation error in the generated code.
+0.298
+0.73
+0.62
+s3s_{3}
+[Tool Call] code_interpreter: retry with minor edit
+[Tool Response] IndentationError: expected an indented block after ‘if’ statement on line 12
+Second attempt reproduces the same indentation bug. The student has not identified the root cause.
+0.385
+0.56
+0.89
+s4s_{4}
+[Tool Call] code_interpreter: third retry
+[Tool Response] IndentationError: expected an indented block after ‘if’ statement on line 16
+Third consecutive failure. The student keeps generating the same structural error (print(print(f"..."))) without recognizing the nested-call mistake.
+0.527
+0.41
+1.15
+s5s_{5}
+[Tool Call] code_interpreter: rewritten from scratch
+[Tool Response] n=2, s=1498; n=3, s=998; ... Total values where sum is not divisible by 3: 22
+The student finally rewrites the code cleanly, removing the nested print bug. The code runs successfully and outputs 22.
+0.285
+0.76
+0.53
+s6s_{6}
+[Tool Call] code_interpreter: verification run listing all 1000 values
+[Tool Response] n=1, sum=2997; n=2, sum=1498; ... Total count: 22
+Verification confirms the answer. The student cross-checks edge cases (n=999n=999: s=2s=2; n=1000n=1000: s=1s=1).
+0.193
+1.12
+0.34
+s7s_{7}
+“The code output shows 22 cases. Let me verify a few manually: n=100n=100: s=9+9+10=28s=9+9+10=28, 28mod3=1≠028\bmod 3=1\neq 0. Confirmed.”
+Final answer: 22\boxed{22} ✓ Correct
+0.158
+1.20
+0.21
+Analysis
+This trajectory demonstrates error recovery—the defining advantage of step-wise over trajectory-level weighting.
+Three consecutive IndentationError failures (s2s_{2}–s4s_{4}) cause dkd_{k} to spike to 0.530.53 and H¯k\bar{H}_{k} to peak at 1.151.15, while wkw_{k} drops to 0.410.41. At s5s_{5}, the student rewrites the code from scratch and succeeds; both dkd_{k} and H¯k\bar{H}_{k} immediately recover (0.290.29, 0.530.53), and by s7s_{7} they reach their lowest values (0.160.16, 0.210.21) with wkw_{k} returning to 1.201.20.
+The wkw_{k} curve traces a clear V-shape: 1.00→0.73→0.56→0.41→0.76→1.12→1.201.00\to 0.73\to 0.56\to 0.41\to 0.76\to 1.12\to 1.20, mirrored by H¯k\bar{H}_{k}: 0.28→0.62→0.89→1.15→0.53→0.34→0.210.28\to 0.62\to 0.89\to 1.15\to 0.53\to 0.34\to 0.21.
+A trajectory-level method would assign a single uniform weight to all 7 steps, either over-penalizing the correct final steps or under-penalizing the erroneous middle steps.
+SOD precisely localizes the error window (s2s_{2}–s4s_{4}) while fully leveraging teacher guidance on the recovered steps (s5s_{5}–s7s_{7}).
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue" (
+) button, located in the page header.
+Tip: You can select the relevant text first, to include it in your report.
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+Major funding support from

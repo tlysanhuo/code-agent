@@ -1,0 +1,38 @@
+{
+  "gpu_uuids": [
+    "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062"
+  ],
+  "gpu_indices": [
+    3
+  ],
+  "allocated_by": "User in this task: 1-2优先空闲的; interpreted as authorization to select 1–2 idle H100 cards, preferring two.",
+  "allocated_utc": "2026-09-09T08:04:05.090537+00:00",
+  "note": "Current SWE-Gym 20-task development baseline, protocol V2 infrastructure rerun. User idle-card authorization; GPU 3 currently idle, TP1 frozen from successful 32K facility test. Preflight rechecks before launch; stop all owned services after run.",
+  "swe_goal_authorized_utc": "2026-09-09T07:11:26.126222+00:00",
+  "previous_allocation": {
+    "gpu_uuids": [
+      "GPU-2e106654-3f26-8440-e5de-e9eb3b87f38f",
+      "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062"
+    ],
+    "gpu_indices": [
+      2,
+      3
+    ],
+    "released_utc": "2026-09-09T06:32:53Z",
+    "release_evidence": "runtime/metadata/gpu-tool-acceptance.json"
+  },
+  "swe_allocation_history": [
+    {
+      "gpu_indices": [
+        3,
+        5
+      ],
+      "gpu_uuids": [
+        "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062",
+        "GPU-6327fc04-0617-42ec-59ae-e374aa66b4e8"
+      ],
+      "reason_released": "GPU5 acquired by another task during startup; owned service stopped; no model requests."
+    }
+  ],
+  "revalidated_utc": "2026-09-09T09:48:09.792431+00:00"
+}

@@ -1,0 +1,37 @@
+# Deployment configuration only: retain the official sdk-minimal composition.
+- id: llm-deepseek
+  disabled: true
+
+- insert:
+    - id: llm-pi-ai
+      name: '@deepseek-ai/dsh-llm-pi-ai'
+      config:
+        providers:
+          qwen-local:
+            apiKeyEnv: QWEN_LOCAL_API_KEY
+            api: openai-completions
+            baseURL: !!js process.env.QWEN_BASE_URL ?? 'http://127.0.0.1:18080/v1'
+            streamIdleTimeoutMs: 60000
+            retryPolicy:
+              mode: normal
+              maxRetries: 0
+            compat:
+              supportsDeveloperRole: false
+              supportsStore: false
+              maxTokensField: max_tokens
+            models:
+              - id: Qwen3.5-27B
+                name: Qwen3.5-27B local BF16
+                # pi-ai 0.84.2 reserves 4096 tokens before applying the cap.
+                contextWindow: 8192
+                maxTokens: 256
+                reasoningEfforts: false
+                input: [text]
+
+- id: persistent-bash
+  config:
+    timeoutMs: 30000
+
+- id: terminal-bash
+  config:
+    timeoutMs: 30000

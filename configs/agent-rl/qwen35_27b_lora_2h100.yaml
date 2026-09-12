@@ -1,0 +1,176 @@
+# Review candidate, NOT a validated two-GPU training recipe.
+# Field-by-field provenance and remaining GPU integration: provenance.json / README.
+defaults:
+  - ppo_trainer
+  - _self_
+
+hydra:
+  searchpath:
+    - file://${oc.env:CODE_AGENT_ROOT}/vendor/verl-agent-rl/verl/trainer/config
+  run:
+    dir: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/hydra/${now:%Y%m%d-%H%M%S}
+  job:
+    chdir: false
+
+data:
+  train_files: ${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train.parquet
+  # Framework loader plumbing only. All validation is disabled below.
+  val_files: ${oc.env:CODE_AGENT_ROOT}/data/agent-rl/train.parquet
+  train_batch_size: 2
+  max_prompt_length: 4096
+  max_response_length: 4096
+  filter_overlong_prompts: true
+  filter_overlong_prompts_workers: 1
+  dataloader_num_workers: 0
+  truncation: error
+  shuffle: true
+  seed: 42
+  return_raw_chat: true
+  use_shm: false
+  apply_chat_template_kwargs:
+    enable_thinking: true
+
+actor_rollout_ref:
+  hybrid_engine: true
+  model:
+    path: ${oc.env:CODE_AGENT_ROOT}/models/Qwen3.5-27B/fc05daec18b0a78c049392ed2e771dde82bdf654
+    use_shm: false
+    trust_remote_code: false
+    enable_gradient_checkpointing: true
+    # Initial correctness candidate: padded SDPA, avoids unverified GDN packing.
+    use_remove_padding: false
+    use_fused_kernels: false
+    use_liger: false
+    override_config:
+      attn_implementation: sdpa
+    lora_rank: 16
+    lora_alpha: 32
+    # Text FFNs only; avoids native hybrid-attention LoRA mapping assumptions.
+    target_modules: 'model.language_model.layers.\d+.mlp.(gate_proj|up_proj|down_proj)'
+    lora:
+      merge: true
+  actor:
+    strategy: fsdp2
+    ppo_mini_batch_size: 2
+    ppo_micro_batch_size_per_gpu: 1
+    ppo_epochs: 1
+    use_dynamic_bsz: false
+    use_kl_loss: false
+    entropy_coeff: 0.0
+    clip_ratio: 0.2
+    clip_ratio_low: 0.2
+    clip_ratio_high: 0.2
+    loss_agg_mode: token-mean
+    optim:
+      optimizer: AdamW
+      optimizer_impl: torch.optim
+      lr: 1.0e-6
+      betas: [0.9, 0.999]
+      weight_decay: 0.01
+      lr_warmup_steps: 0
+      lr_scheduler_type: constant
+    grad_clip: 1.0
+    fsdp_config:
+      fsdp_size: 2
+      model_dtype: bf16
+      dtype: bfloat16
+      param_offload: true
+      optimizer_offload: true
+      offload_policy: true
+      reshard_after_forward: true
+      ulysses_sequence_parallel_size: 1
+      use_torch_compile: false
+      entropy_from_logits_with_chunking: true
+      entropy_checkpointing: true
+    checkpoint:
+      save_contents: [model, optimizer, extra]
+      load_contents: [model, optimizer, extra]
+  rollout:
+    name: vllm
+    mode: async
+    dtype: bfloat16
+    tensor_model_parallel_size: 2
+    data_parallel_size: 1
+    n: 2
+    temperature: 1.0
+    top_p: 1.0
+    top_k: -1
+    seed: 42
+    max_model_len: 8192
+    max_num_seqs: 1
+    max_num_batched_tokens: 8192
+    gpu_memory_utilization: 0.6
+    enforce_eager: true
+    enable_prefix_caching: false
+    free_cache_engine: true
+    load_format: safetensors
+    layered_summon: true
+    calculate_log_probs: true
+    log_prob_micro_batch_size_per_gpu: 1
+    log_prob_use_dynamic_bsz: false
+    logprobs_mode: processed_logprobs
+    multi_turn:
+      enable: true
+      max_assistant_turns: 12
+      max_user_turns: 12
+      max_parallel_calls: 1
+      max_tool_response_length: 1024
+      tokenization_sanity_check_mode: strict
+    agent:
+      num_workers: 1
+      # +training_runtime=local registers DSH; --launch still refuses before Ray.
+      default_agent_loop: dsh_agent
+    checkpoint_engine:
+      backend: naive
+      update_weights_bucket_megabytes: 512
+    prometheus:
+      file: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/prometheus.yml
+
+algorithm:
+  adv_estimator: grpo
+  norm_adv_by_std_in_grpo: true
+  use_kl_in_reward: false
+
+trainer:
+  use_v1: true
+  v1:
+    trainer_mode: sync
+  project_name: code_agent_rl
+  experiment_name: qwen35_27b_lora_2h100_candidate
+  logger: [console, tensorboard]
+  nnodes: 1
+  n_gpus_per_node: 2
+  total_epochs: 1
+  total_training_steps: 1
+  val_before_train: false
+  test_freq: -1
+  save_freq: 1
+  max_actor_ckpt_to_keep: 2
+  resume_mode: disable
+  default_hdfs_dir: null
+  default_local_dir: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/checkpoints/qwen35_27b_lora_2h100_candidate
+  rollout_data_dir: ${oc.env:CODE_AGENT_ROOT}/logs/agent-rl/rollouts
+
+ray_kwargs:
+  ray_init:
+    num_cpus: 8
+    object_store_memory: 2147483648
+
+transfer_queue:
+  enable: true
+  backend:
+    storage_backend: SimpleStorage
+    SimpleStorage:
+      total_storage_size: 16
+      num_data_storage_units: 1
+
+skip:
+  rollout:
+    enable: false
+    dump_dir: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/rollout-cache
+  rollout_tq:
+    enable: false
+    dump_dir: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/rollout-cache-tq
+  async_rollout:
+    enable: false
+    dump_dir: ${oc.env:CODE_AGENT_ROOT}/runtime/agent-rl/async-rollout-cache

@@ -1,0 +1,30 @@
+{
+  "repo": "ByteDance/Ouro-2.6B-Thinking",
+  "revision": "f1edd81e7ac41355db670500ceaf204e0f73af68",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://huggingface.co/ByteDance/Ouro-2.6B-Thinking/resolve/f1edd81e7ac41355db670500ceaf204e0f73af68/README.md",
+      "bytes": 5007,
+      "sha256": "12861a1397ac17f0fc7898e61961d5048769b93b0385f5e0e2377654d89eed35"
+    },
+    {
+      "path": "config.json",
+      "url": "https://huggingface.co/ByteDance/Ouro-2.6B-Thinking/resolve/f1edd81e7ac41355db670500ceaf204e0f73af68/config.json",
+      "bytes": 1999,
+      "sha256": "ad4b51dffae60bebeeac5e1d5055e78d01fc01b1a29cd89cd2e50edb848f645a"
+    },
+    {
+      "path": "configuration_ouro.py",
+      "url": "https://huggingface.co/ByteDance/Ouro-2.6B-Thinking/resolve/f1edd81e7ac41355db670500ceaf204e0f73af68/configuration_ouro.py",
+      "bytes": 11595,
+      "sha256": "ba60253335cecc5bd9cb3e5f8cfbd214aa7e865fc97a98208976fb2517811de6"
+    },
+    {
+      "path": "modeling_ouro.py",
+      "url": "https://huggingface.co/ByteDance/Ouro-2.6B-Thinking/resolve/f1edd81e7ac41355db670500ceaf204e0f73af68/modeling_ouro.py",
+      "bytes": 35495,
+      "sha256": "263c097a2ed6870ce549a65ef6d6bb9e8e167423f87d2c494e0988b9a4f63f4b"
+    }
+  ]
+}

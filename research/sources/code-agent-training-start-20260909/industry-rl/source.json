@@ -1,0 +1,26 @@
+{
+  "retrieved_at": "2026-09-09T12:12:13.935328+00:00",
+  "purpose": "primary-source research only; no training launched",
+  "files": [
+    {
+      "file": "deepswe.html",
+      "url": "https://www.together.ai/blog/deepswe",
+      "sha256": "f47505783dd6f431a90a0be9bf79571983f42b72559ea155780693e9c6a678f4"
+    },
+    {
+      "file": "qwen3-coder-next-v1.html",
+      "url": "https://arxiv.org/html/2603.00729v1",
+      "sha256": "ec44adc490703cd037344c72584932cd6791d56b68ee699a27167070bf63b88f"
+    },
+    {
+      "file": "on-policy-distillation.html",
+      "url": "https://thinkingmachines.ai/blog/on-policy-distillation/",
+      "sha256": "cb5fa519968fdf3dae3f7007c9700d46a217b20ae9bf6ca31a726dbb0465c3ab"
+    },
+    {
+      "file": "lora-without-regret.html",
+      "url": "https://thinkingmachines.ai/blog/lora/",
+      "sha256": "250d858fafc38bf886b811e8ee1878704d8b3c8b111e275f5e938575dc92baba"
+    }
+  ]
+}

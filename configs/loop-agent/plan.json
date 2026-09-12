@@ -1,0 +1,488 @@
+{
+ "updated_utc": "2026-09-10T03:30:00Z",
+ "status": "main_line_dense_opd_replication_loop_demoted_to_stretch_arm_2026-09-10",
+ "purpose": "resume-interview project; frozen design record for the LoopLM + OPD mainline",
+ "user_decisions": {
+  "decided_utc": "2026-09-10",
+  "framing": "resume/interview project; hot-topic coverage required",
+  "student": "self-loopified Qwen3.5-9B (not Ouro, not loopified 27B)",
+  "teacher": "Qwen3.5-27B kept in project as Stage-B teacher and zero-shot baseline; original dense 9B is Stage-A teacher",
+  "grpo_comparison_line": true,
+  "decision_provenance": "user answered structured questions on 2026-09-10; recorded in AGENTS.md and README loop-agent-design section"
+ },
+ "hot_topic_provenance": {
+  "looplm": [
+   "arXiv:2510.25741 Ouro (ByteDance) open-sourced LoopLM family",
+   "arXiv:2606.18023 LoopCoder-v2 (loop 2 carries principal gains)",
+   "arXiv:2605.07721 MELT (looped KV memory)",
+   "arXiv:2603.19714 LoopRPT (RL pre-training for looped LMs)",
+   "arXiv:2410.20672 RRT (layer-wise LoRA recursion, surgery template)",
+   "arXiv:2604.12946 Parcae (looped scaling laws)"
+  ],
+  "opd": [
+   "thinkingmachines.ai/blog/on-policy-distillation (seminal)",
+   "arXiv:2605.07725 SOD (step-wise OPD for small agents; method template)",
+   "arXiv:2607.05804 TurnOPD (turn-aware long-horizon agent OPD)",
+   "arXiv:2607.04037 Reward-Gated OPD"
+  ],
+  "differentiation": "no public work combines a looped architecture student with agent OPD; Ouro is pretrain/reasoning-only, SOD/TurnOPD use dense students",
+  "local_snapshots": "research/sources/opd-dsh-looplm-20260909/papers-manifest.json"
+ },
+ "surgery_spec": {
+  "source_model": "Qwen/Qwen3.5-9B",
+  "source_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+  "source_layout": {
+   "num_hidden_layers": 32,
+   "layer_types": "24 linear_attention + 8 full_attention, period 4 (full at 3,7,...,31)",
+   "hidden_size": 4096,
+   "attention": "16 heads / 4 kv heads / head_dim 256 per public config fetch 2026-09-10",
+   "multimodal": "vision tower present; surgery touches text decoder layers only"
+  },
+  "plan": {
+   "keep_first": 4,
+   "keep_last": 4,
+   "middle_layers": [
+    4,
+    27
+   ],
+   "loops": 2,
+   "share_offset": 12,
+   "unique_layers": "20 of 32 = 62.5%",
+   "effective_params_estimate_b": 5.6,
+   "pattern_alignment_check": "offset 12 % period 4 == 0, so shared pairs keep identical layer_types"
+  },
+  "per_loop_lora": {
+   "phase": "P2+",
+   "rank": 32,
+   "targets": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate/up/down mlp"
+   ]
+  },
+  "export_trick": "training keeps compact shared-base + per-loop LoRA; export merges W_base + B_l A_l per loop and expands back to the standard 32-layer dense layout so vLLM/SGLang serve it as a plain Qwen3.5 with zero framework changes; student inherits Qwen tokenizer/tool-call format so DSH drives it unchanged"
+ },
+ "training_spec": {
+  "trainer": "self-built compact trainer (FSDP2), OPD reverse-KL and GRPO as switchable loss heads; slime/Megatron path does not support the custom looped architecture and the LoRA PR #1865 gap only affected 27B",
+  "stage_a_recovery": {
+   "teacher": "original dense Qwen3.5-9B",
+   "student_sampling": "code/reasoning corpora (Klear/OpenHands/R2E-Gym trajectories already downloaded)",
+   "objective": "token-level reverse KL"
+  },
+  "stage_b_agent_opd": {
+   "teacher": "Qwen3.5-27B (fc05daec18b0a78c049392ed2e771dde82bdf654, already downloaded and verified)",
+   "rollout": "DSH SDK in project-local execution backend (streaming protocol already verified)",
+   "objective": "reverse KL with SOD-style step-wise divergence reweighting"
+  },
+  "grpo_baseline": "same student, same task pool, outcome reward (tests pass); reports sample-efficiency curves vs OPD"
+ },
+ "evaluation": {
+  "headline": "SWE-bench Verified frozen 20-25 tasks, official harness",
+  "recovery_metric": "HumanEvalPlus",
+  "training_pool": "SWE-Gym / SWE-smith subsets under existing exclusion audit",
+  "cost_reporting": "H100-hours recorded for every measured step"
+ },
+ "phases": [
+  {
+   "id": "P1",
+   "name": "surgery",
+   "deliverables": [
+    "layer grouping table",
+    "weight remap script",
+    "expanded dense export",
+    "vLLM serving verification (GPU, needs authorization)",
+    "zero-shot degradation numbers (GPU, needs authorization)"
+   ]
+  },
+  {
+   "id": "P2",
+   "name": "recovery distillation",
+   "deliverables": [
+    "OPD trainer running",
+    "recovery-rate curve on HumanEvalPlus and code benchmarks"
+   ]
+  },
+  {
+   "id": "P3",
+   "name": "agent OPD",
+   "deliverables": [
+    "DSH multi-turn trajectories distilled",
+    "naive vs step-wise OPD delta on SWE subset"
+   ]
+  },
+  {
+   "id": "P4",
+   "name": "GRPO baseline",
+   "deliverables": [
+    "OPD vs GRPO vs SFT comparison table",
+    "sample-efficiency curves"
+   ]
+  },
+  {
+   "id": "P5",
+   "name": "release",
+   "deliverables": [
+    "github/code-agent-rl sanitized repo updated",
+    "results table",
+    "architecture diagram"
+   ]
+  }
+ ],
+ "resource_rules": {
+  "gpu_budget": "2-4 H100 80GB per user 2026-09-10 (was at most 2); explicit per-step authorization still required",
+  "storage": "everything project-local under code-agent/ per standing user instruction",
+  "official_benchmark_rule": "official benchmarks keep official protocols; custom-training results never labeled official"
+ },
+ "p1_status": {
+  "layer_map_validated": {
+   "checked_utc": "2026-09-10",
+   "result": "plan subcommand passed: 24 linear_attention + 8 full_attention; keep 0-3 and 28-31; donor block 4-15; shared 16-27 -> donor-12; unique 20/32; shared pairs preserve layer_types"
+  },
+  "download": {
+   "command": "scripts/download_qwen.py --repo Qwen/Qwen3.5-9B --revision c202236235762e1c871ad0ccb60c8ee5ba337b9a --meta data/metadata/Qwen__Qwen3.5-9B.json --dest models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a --manifest runtime/metadata/qwen-9b-download-manifest.json",
+   "planned_bytes": 19329393661,
+   "verification": "per-file LFS sha256; manifest written incrementally",
+   "log": "logs/download-qwen-9b.log"
+  },
+  "surgery_script": "scripts/loopify_qwen.py (plan / surgery / verify subcommands, CPU-only, streaming safetensors)",
+  "surgery_done": {
+   "completed_utc": "2026-09-10T05:05:00Z",
+   "outputs": {
+    "models/loop-qwen/compact": "616 tensors, 4 shards, ~14G: shared-base training form (layers 16-27 weights dropped)",
+    "models/loop-qwen/expanded": "775 tensors, 4 shards, ~19G: standard dense layout, shared slots duplicated from donor layers 4-15, non-weight files copied verbatim, directly servable by vLLM/SGLang as plain Qwen3.5"
+   },
+   "verification": {
+    "download": "16/16 files sha256-verified against upstream LFS hashes, 19.33GB, manifest runtime/metadata/qwen-9b-download-manifest.json complete=true",
+    "tensor_equality": "verify subcommand: 563 sampled tensors (all non-layer + all boundary + all 159 duplicated + 24 random) equal source/donor, 0 mismatches",
+    "structure": "all 775 index entries present in their shards; logs/loopify-surgery.log, logs/loopify-verify.log"
+   },
+   "not_done": [
+    "vLLM serving smoke of models/loop-qwen/expanded (requires GPU authorization)",
+    "zero-shot degradation measurement vs original 9B (requires GPU authorization)",
+    "per-loop LoRA and training (P2)"
+   ]
+  },
+  "p1_completed": {
+   "completed_utc": "2026-09-10T05:55:00Z",
+   "gpu_use": "one idle H100 (GPU-6046be75, index 1) under the standing at-most-2 pattern; sequential services; stopped and verified released",
+   "serving_smoke": "expanded checkpoint served by unmodified vLLM 0.19.1 as a plain Qwen3.5 checkpoint; chat/tool-call routes functional; serving mechanics verified correct",
+   "zero_shot_degradation": {
+    "protocol": "HumanEvalPlus v0.1.10 first 32 problems, base-check, greedy, identical template and server params for both models",
+    "dense_qwen3.5_9b_pass_rate": 0.9688,
+    "loopified_hard_tied_pass_rate": 0.0,
+    "headline": "96.9% -> 0%: complete collapse under hard tying without recovery training; quantifies the P2 recovery gap",
+    "record": "runtime/loop-agent/p1-degradation.json"
+   },
+   "p2_implications": [
+    "recovery training is mandatory before any capability returns (consistent with RRT/LoopRPT)",
+    "ablate shared-block initialization: donor-copy (current) vs pair-average; cheap weight-math variants",
+    "per-loop LoRA (r=32) starts from this collapsed state; recovery target >=90% of dense 9B on the same protocol"
+   ]
+  }
+ },
+ "retirement_note": {
+  "user_correction_utc": "2026-09-10",
+  "reason": "user clarified LoopLM means the real Ouro model family and demanded research-first; the loopify-Qwen bridge was an unrequested invention",
+  "kept_artifacts": [
+   "models/Qwen3.5-9B (verified download, reusable as OPD student candidate)",
+   "models/loop-qwen + runtime/loop-agent (evidence of hard-tying collapse, 96.9%->0%)"
+  ],
+  "key_research_facts": [
+   "pinned slime 4c193f1f has native OPD (--use-opd, sglang/megatron teacher modes, additive-KL over GRPO)",
+   "Ouro-2.6B-Thinking is servable by the project vLLM (native ouro.py)",
+   "arXiv 2608.18171 evaluates (not trains) Ouro on compositional tool calling",
+   "SOD: SFT and GRPO both fail to beat vanilla at 0.6B scale; step-wise reweighted OPD +18.5-20.9% over naive OPD"
+  ]
+ },
+ "confirmed_direction": {
+  "user_decision_utc": "2026-09-10",
+  "looplm": "borrow the ideas (shared-weight recurrent blocks), train ourselves; not off-the-shelf Ouro, not research-only",
+  "opd": "slime native pipeline (--use-opd, sglang teacher mode, additive KL over GRPO); no custom trainer",
+  "student": "loopified Qwen3.5-9B, 20/32 unique layers (~5.6B); P1 surgery/equivalence/0% baseline reused as the foundation",
+  "e_plan": [
+   "E1 looped model into Megatron via --spec + GPT subclass; compact->mcore conversion; CPU test compact-forward == expanded-forward",
+   "E2 rollout path: weight sync maps compact -> expanded layout; SGLang serves it as plain Qwen3.5 (GPU smoke, per-step authorization)",
+   "E3 OPD recovery: teacher = Qwen3.5-27B (sole teacher, external SGLang server on a dedicated card); target >=90% of dense-9B 96.9% reference on HumanEvalPlus base-check from the 0% baseline",
+   "E4 agent stage: teacher = Qwen3.5-27B, DSH multi-turn via verified custom-generate path, --use-opd stacked with GRPO; SOD/TurnOPD weighting as later refinement",
+   "E5 eval+release: frozen subset official protocol; baseline rows = Qwen3.5-27B, Qwen3.8-27B (2026-08 flagship open weights, generation-only use), optionally Qwen3-Coder-Next, plus Ouro-2.6B-Thinking LoopLM comparison row"
+  ],
+  "verified_mount_points": [
+   "scripts/models/qwen3.5-9B.sh exists in pinned slime",
+   "--spec slime_plugins.models.qwen3_5 get_qwen3_5_spec plugin mechanism",
+   "--use-opd/--opd-type sglang/megatron/--opd-kl-coef/--opd-teacher-load present in slime/utils/arguments.py",
+   "freeze/only_train_params_name_list in model_provider.py"
+  ],
+  "known_risks": [
+   "looped forward needs a custom model-provider subclass (small slime patch, not config-only)",
+   "weight sync compact->expanded mapping adapter",
+   "5.6B full-param Megatron + SGLang colocate within 2xH100 needs empirical check",
+   "recovery outcome has no guaranteed precedent at this scale",
+   "Ouro-style adaptive depth (early exit) out of first-version scope"
+  ],
+  "gpu_budget": "2-4 H100 80GB (user raised from <=2 on 2026-09-10)",
+  "teacher": "Qwen3.5-27B is the sole OPD teacher for both E3 recovery and E4 agent stages (same tokenizer; decided with the 2-4 card budget); dense 9B 96.9% remains the recovery reference metric, not the teacher",
+  "memory_arithmetic": {
+   "27B full-param state ~432GB": "infeasible at 4 cards; upstream slime 27B RL recipe defaults to 32 cards",
+   "loopify-27B ~251GB": "~78GB/card at TP2xDP2 with zero headroom; needs 6-8 cards realistically",
+   "loopify-9B ~90GB": "comfortable on 3 cards (~40GB/card) leaving room for colocated rollout",
+   "opd_note": "OPD adds no optimizer memory; teacher runs as an external SGLang server (one card, 54GB BF16 weights)"
+  },
+  "teacher_rationale": {
+   "teacher": "Qwen3.5-27B stays the OPD teacher: same tokenizer/vocab as the Qwen3.5-9B-derived student (248,320), weights downloaded and verified, 54GB fits one H100",
+   "qwen3.8_check_2026-09-10": "Qwen3.8-27B is open (dense 27B multimodal, vocab 262,144) but tokenizer differs from Qwen3.5 (248,320), so token-level OPD distillation cannot use it as teacher; no small dense Qwen3.8 seen for a loopify student",
+   "use_instead": "Qwen3.8-27B added as an E5 zero-shot baseline row (generation eval has no tokenizer constraint); Qwen3-Coder-Next optional second baseline row if budget allows"
+  }
+ },
+ "e1_status": {
+  "e1a_forward_equivalence": {
+   "completed_utc": "2026-09-10T06:06:33Z",
+   "script": "scripts/check_loop_equiv.py",
+   "result": "PASS: shared-block-twice (module-object sharing, compact semantics) vs duplicated 32-layer dense (expanded semantics) produce bitwise-identical logits (max abs diff 0.0) on CPU bf16, sdpa attention, torch reference path for GDN linear attention",
+   "sanity": "module sharing verified active; expanded modules distinct objects; full state_dict equality per shared layer",
+   "record": "runtime/loop-agent/e1a-loop-equivalence.json",
+   "implication": "the looped student can train in compact form and serve in expanded form with zero numerical divergence; basis for E1.b Megatron integration"
+  },
+  "e1b_pending": "looped spec (20 layers) + GPT subclass provider patch + compact->mcore weight conversion + CPU forward check inside slime/Megatron utilities",
+  "e1b_progress": {
+   "updated_utc": "2026-09-10T06:25:45Z",
+   "hf_compact": {
+    "path": "models/loop-qwen/hf-compact",
+    "built": "20-layer config (layer_types remapped from {3,7,11,15,31}->kept order), tail tensors renamed 28-31->16-19, 616 tensors, tokenizer/misc copied",
+    "verified": "loads in transformers 5.5.4 as 20 layers, all weights equal kept order (0-15 original, 16-19 from 28-31), clean forward, no missing/unexpected keys",
+    "role": "weight container feeding slime tools/convert_hf_to_torch_dist.py for Megatron"
+   },
+   "plugin_skeleton": "loop_agent_plugins/models/{qwen3_5_loop,loop_forward}.py — project-local (vendor/slime untouched); --spec mount path + looped layer-order mixin; provider patch deferred to training image (patches/0001-looped-model-provider.patch to be authored against the pinned Megatron)",
+   "remaining": [
+    "author + apply provider patch against pinned Megatron (needs megatron-core install in a training-prep venv)",
+    "run convert_hf_to_torch_dist.py on hf-compact",
+    "E1.b acceptance: compact-looped forward logits == expanded logits under Megatron utilities"
+   ],
+   "megatron_source_pinned": {
+    "updated_utc": "2026-09-10T06:33:48Z",
+    "facts": [
+     "slime training uses git Megatron-LM (Dockerfile ARG MEGATRON_COMMIT=1dcf0dafa884ad52ffb243625717a3471643e087) + docker/patch/latest/megatron.patch, NOT pip megatron-core",
+     "vendor/megatron-lm-src now holds that pinned commit (codeload tarball; github git protocol unreachable from this host, codeload worked)",
+     "verified: slime megatron.patch applies cleanly to the pinned commit",
+     "loop-forward patch target identified: megatron/core/transformer/transformer_block.py layer iteration (~line 427); our provider patch will be layer 3 on top of slime patch stack, applied only in training image"
+    ],
+    "remaining_e1b": [
+     "author patches/0001-looped-model-provider.patch (looped layer order into TransformerBlock + provider routing via loop_agent_plugins)",
+     "megatron-prep venv install (CPU) for structural validation",
+     "convert_hf_to_torch_dist.py on hf-compact",
+     "acceptance: looped-vs-expanded logits equality under Megatron forward"
+    ]
+   }
+  }
+ },
+ "borrowed_from_pretraining_looplm": {
+  "updated_utc": "2026-09-10T07:26:25Z",
+  "principle": "transfer published pretraining-time LoopLM techniques into our post-training retrofit; no self-invented machinery",
+  "e3_auxiliary_supervision": {
+   "source": "Ouro cross-step consistency (intermediate recurrent outputs trained as proxies for final answers)",
+   "adaptation": "optional E3 arm: apply shared tail+lm_head to the hidden state after shared-block pass 1, add auxiliary reverse-KL vs teacher; per-pass gradient for the shared block, easing two-pass division-of-labor recovery; run as ablation arm (aux vs no-aux)"
+  },
+  "e4_stepwise_design_reference": {
+   "source": "LoopRPT (arXiv 2603.19714): step-wise rewards with EMA teacher, exit-step distribution",
+   "adaptation": "design reference for GRPO+OPD on the looped student in E4 (each loop pass as a latent step; EMA teacher stabilizes credit assignment)"
+  },
+  "not_borrowed": [
+   "adaptive per-token depth / early exit (Ouro): out of scope for fixed R=2; LoopCoder-v2 (arXiv 2606.18023) shows R=2 is the principal-gain operating point; future work with citation",
+   "7.7T-token pretraining itself: infeasible at 2-4xH100 by definition"
+  ]
+ },
+ "replan_2026_09_10": {
+  "decided_utc": "2026-09-10T07:31:06Z",
+  "main_line": "CONFIRMED PIPELINE: SFT cold-start (Klear-66k/OpenHands/R2E-Gym trajectories) -> Agentic RL (DSH multi-turn on SWE-Gym/SWE-smith tasks, GRPO test-pass rewards) -> OPD (Qwen3.5-27B teacher, slime native --use-opd sglang mode, additive KL over GRPO). Student = dense Qwen3.5-9B. Eval = HumanEvalPlus base-check + SWE-bench Verified frozen subset official harness + baselines (27B, Qwen3.8-27B, Ouro-2.6B-Thinking).",
+  "loop_arm": {
+   "role": "stretch experiment on top of the main line; E1 assets (surgery, equivalence, hf-compact, plugin skeleton, Megatron anchors) retained",
+   "pilot_rule": "before any full E3: bounded recovery pilot, at most 8 GPU-hours; kill criterion = looped student below 50% of dense-9B 96.9% HumanEvalPlus reference at pilot end -> park loop, ship dense results; honest failure data still reported",
+   "aux_supervision_note": "Ouro-style auxiliary loss only as ablation inside the pilot, never a dependency",
+   "sequence": "user decision 2026-09-10: LoopLM experiments go LAST, framed as an exploratory question, after the dense main line is delivered; Tier0 ablations may be prepared CPU-side earlier"
+  },
+  "opensource_landscape_2026_09_10": {
+   "snapshots": "research/sources/opensource-landscape-20260910/manifest.json (7 items)",
+   "framework_decision": "keep slime (sole native-OPD trainer, CPU-verified here); NeMo-RL SWE recipe is 24-node/192+ GPU scale without OPD; ART/ARES lack OPD or are not trainers",
+   "format_problem_new_solutions": {
+    "polar_arxiv_2605.24220": "gateway-proxy token-faithful RL through any harness (deployment harness = training environment); Qwen3.5-4B SWE-Gym GRPO -> Verified 3.8->26.4% on unfamiliar-harness (Codex), ~0 on already-familiar harness (Qwen Code) - gain size tracks format unfamiliarity, confirming PIPE; open ProRL-Agent-Server code + 122B-teacher SWE-Gym tool-call-format trajectory dataset (Apache-2.0, HF page unverified via proxy - download-verify before use); our slime_dsh adapter is the same pattern already CPU-verified",
+    "nemo_rl_pivot_stage": "cheap single-step no-sandbox RL teaching tool-call format (argument-matching reward from expert-trajectory pivots) before full agentic RL; 23.6->30.4% pass@1 warm-start; composable with option A as a low-cost mitigation for SFT diluting native tool-calls",
+    "openthinkeragent": "published instance of our option B: teacher (GLM-4.7-AWQ) generates trajectories INSIDE deployment harness (Terminus-2), >=5 turns filter, 9437-pair cold-start + 5000 RL tasks, all open"
+   },
+   "eval_note": "ARES runs SWE-bench Verified in ~20 min but bundles its own environment - official-protocol rule keeps official harness primary",
+   "scale_reality_confirmed": "no public project has done SWE agent RL on 2-4 GPUs; small-budget OPD story remains an open niche"
+  },
+  "prior_art_research_2026_09_10": {
+   "trigger": "user directive: research first; this pipeline has many public replications",
+   "snapshots": "research/sources/prior-art-pipeline-20260910/papers-manifest.json (7 papers)",
+   "key_findings": {
+    "sft_format": "Klear-AgentForge (arXiv 2511.05951, official usage of Klear-66k) trains on a SINGLE unified scaffold format, no harness mixing; PIPE (arXiv 2602.01611) shows trajectory-SFT mostly teaches interface familiarity and degrades under interface rewrites; Open-SWE-Traces (arXiv 2606.16038, NVIDIA) studies cross-harness generalization",
+    "sft_curation": "SWE-Prime (arXiv 2608.27449): 10% curated subset beats full resolved set (+12.2% rel); SWE-Gym (arXiv 2412.21139): rejection-sampling SFT",
+    "context_length": "DeepSWE (arXiv 2508.17146): gains beyond 32k context ~2% (16k->128k ablation); long-context SWE agents (arXiv 2508.03501) run RL from 65k; our 2-4 card budget realistically caps ~32k - acceptable per DeepSWE saturation",
+    "rl_recipe": "AgentForge RL = GRPO with KL removed, DAPO asymmetric clip, truncated IS, truncation oversample+mask; slime official SWE recipe (8x8 GPUs): eps-clip 0.2/0.28, kl-loss-coef 0, colocate, CPU optimizer offload, harness-side auto-compact",
+    "scale_reality": "smallest public success configs are 8-node x 8-GPU class even for 8B models; our 2-4xH100 is far below public practice - expect small batches/few steps; OPD sample-efficiency is the differentiation (SOD: GRPO fails at 0.6B where OPD works)",
+    "opd_risk": "OPD survey (arXiv 2604.00626): aggressive reverse-KL raises Pass@1 but degrades Pass@k - conflicts with GRPO group diversity; opd-kl-coef needs tuning with group-reward-variance monitoring (any change requires user consent)",
+    "eval_gap": "SWE-bench Verified official harness REQUIRES Docker (x86_64, >=120GB storage, 16GB RAM, 8 cores); the platform docker-proxy probe failed 2026-09-09 (cannot use job_queue) - platform-layer blocker to resolve before the eval stage; Epoch AI optimized images exist but third-party images deviate from the official protocol"
+   },
+   "open_design_decision": {
+    "question": "SFT data format strategy: current pool mixes 3 harness formats (mini-swe-agent/OpenHands/R2E) but rollout/eval harness is DSH (a 4th interface)",
+    "options": {
+     "A": "SFT on Klear-66k single format only (conservative official-recipe replication; accept interface transfer to DSH at RL stage) - recommended default, zero extra cost",
+     "B": "generate DSH-format trajectories via 27B teacher rejection sampling on SWE-Gym/SWE-smith (AgentForge/SWE-Gym distillation practice; requires task environments ready + teacher rollout cost)",
+     "C": "keep the 3-format mixed pool (no literature support; PIPE documents the risk)"
+    },
+    "status": "awaiting user decision; no further SFT-stage building until resolved"
+   },
+   "slime_small_gpu": "no official 2-4 GPU recipe exists; single-node-8-GPU is the documented floor; our draft params are inference - first GPU smoke must validate feasibility"
+  },
+  "cpu_prep_status": {
+   "completed_utc": "2026-09-10T09:20:00Z",
+   "sft_pool": "data/sft-pool/sft-trajectories-000..008.parquet, 69705 rows (klear66k 65994 / openhands 480 / r2e 3231), exclusions applied, audit runtime/prompt-pool/prompt-pool-audit.json",
+   "sft_token_lengths": "chat-templated full-trajectory: p50~19k p90~30k p99~42k max~54k; 40%<=16k, 93.5%<=32k; ALL 69705 rows annotated with metadata.n_tokens (annotation completed 2026-09-10T10:03Z, process stopped; counts cross-checked equal to slime qwen3_5 mask-generator tokenization)",
+   "sft_trainset_built": "data/sft-pool/train-16k.parquet: 30666 rows <=16k tokens (klear 28231 / openhands 238 / r2e 2197), stats runtime/prompt-pool/sft-trainset-train-16k.json",
+   "opd_pool": "data/opd-pool/opd-prompts.parquet, 13255 deduped task descriptions, p50 1442 / max 2609 tokens",
+   "trainset_tool": "scripts/make_sft_trainset.py --max-tokens 16384",
+   "config_drafts": "scripts/train_sft_coldstart.sh (sft_loss via slime.rollout.sft_rollout) + scripts/train_opd_stage.sh (--use-opd sglang, OPD_MODE=prompt-smoke|agent); both print-only by default, --launch exits 2 until GPU authorization; hyperparameters = official example defaults pending user review",
+   "pipeline_record": "configs/slime/dense-mainline-pipeline.json",
+   "paper_snapshots": "research/sources/looplm-exploratory-20260910/papers-manifest.json (2605.23872 Training-Free Looped Transformers; 2609.02702 Trace as State, Z.ai/Tsinghua)",
+   "gpu_gaps_remaining": [
+    "RESOLVED 2026-09-10: megatron-prep environment exists = .venv-agl-cpu (numpy 1.26.4 + torch 2.13 cpu + transformers + ray) + triton 3.6.0 copied from .venv-train-rl (same py3.12 ABI) + vendor/megatron-lm-src patched with slime's megatron.patch and megatron-sglang-aligned.patch (Dockerfile recipe, both applied cleanly); all converter imports pass; CPU accelerator shim at scripts/cpu_accel_shim.py + guards at scripts/convert_9b_cpu.py",
+    "RELOCATED to GPU phase step 0: 9B HF->mcore conversion. CPU conversion is structurally blocked: the qwen3_5 conversion mapping assumes the TE build layout (norms fused into projections: self_attention.linear_qkv.layer_norm_weight, mlp.linear_fc1.layer_norm_weight; dense TE spec has NO layer-level input_layernorm - defaults to IdentityOp), while the apex/TE-less local spec builds a separate layer-level norm layout - a local-spec checkpoint would be name-incompatible with TE training. CPU converters also hit hard deps in sequence: accelerator registry (shimmed), torch.cuda RNG (guarded), apply_rope_fusion/TE (disabled), TESpecProvider (needs TE), WrappedTorchNorm asserts (patched), fla stubs (done), grad-accum fusion (disabled), and finally the layout mismatch (fundamental). Emulating TE modules by stub risks silent weight corruption; conversion must run inside the real training environment (upstream documented path)",
+    "GPU training environment bring-up (slime image or equivalent deps incl. transformer_engine/apex/fla) - first GPU-phase action, then conversion runs there",
+    "DSH agent environment wiring (stage 2) incomplete",
+    "WANDB_API_KEY not present in current shell - user must provide at GPU phase (per training discipline; never switch to offline)",
+    "Polar SWE-Gym trajectory dataset (B' standby) unfetchable 2026-09-10: HF + proxy returning 503/timeout; retry when network recovers",
+    "per-step GPU authorization unchanged (UUID record -> configs/gpu-allocation.json)"
+   ]
+  },
+  "updated_utc": "2026-09-12T03:24:56Z",
+  "gpu_env_2026_09_11": {
+   "status": "BUILT and VERIFIED end-to-end (user choice b: local deps)",
+   "env": ".venv-train-rl + TE 2.16.1 (prebuilt cu12 wheel from tuna mirror, sha256 verified vs PyPI; torch-ext sdist compiled sm90-only in 1.5min - TE 2.16.1 CUDA-12 build target IS 12.3 = system nvcc) + fla 0.5.2 + numpy 1.26.4 + scripts/env-train-gpu.sh (venv nvidia lib dirs first in LD_LIBRARY_PATH; system /usr/local/cuda-12.3 cudart otherwise shadows torch cu129's)",
+   "apex": "not installed; mcore torch fallbacks + TE norms cover it; --no-gradient-accumulation-fusion disables the one hard assert (training-time optimization, no checkpoint semantics)",
+   "conversion": "DONE 2026-09-11: upstream converter unmodified on GPU 0 (GPU-8c4bac00, recorded+released, 0 MiB verified), exit 0, 17G torch_dist release checkpoint at models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a/torch_dist",
+   "conversion_verification": "DCP metadata: 477 keys; 8 qkv fused norms (full-attn layers) + 24 plugin input_layernorm + 216 GDN params (9/linear-attn layer) + 32 fc1 fused norms = 8+24=32 layers reconciled; TE training layout confirmed",
+   "remaining_gpu_phase": [
+    "SFT smoke: 3 cards + WANDB_API_KEY (user to provide; online mode locked)",
+    "agent rollout smoke (DSH wiring pending)",
+    "OPD first round (teacher 27B on 1 card)",
+    "eval baselines"
+   ]
+  },
+  "sft_smoke_2026_09_11": {
+   "status": "COMPLETE",
+   "result": "2xH100 TP1/DP2 + cpu-offloaded optimizer, klear-only 8k 256-row slice, 3 optimizer steps, loss 0.296->0.196, torch_dist checkpoint (117G incl optimizer) at models/dense-9B-sft/smoke, GPUs 0+6 released and verified 0 MiB",
+   "wandb": "online, project code-agent-dense-mainline, group dense-9b-sft-smoke, run dp0hxmty",
+   "env_final_stack": "torch 2.11.0+cu129 (SJTU mirror) + TE 2.16.1 (prebuilt cu12 core wheel + sm90-built torch ext) + sglang 0.5.15.post1 (PyPI wheel --no-deps) + transformers 5.12.1 + flash-attn 2.8.3 (official sha256-pinned wheel via gh-proxy mirror) + fla 0.4.2 + triton 3.7.1 + wandb 0.19.10 + numpy 1.26.4 + torch-memory-saver",
+   "env_source_of_truth": "vendor/slime/build_conda.sh (official non-Docker env script; user directive 'look at how others implemented it' resolved the dependency churn)",
+   "env_missing_until_rollout": [
+    "sglang-kernel==0.4.4",
+    "sgl-deep-gemm==0.1.4",
+    "torchaudio 2.11+cu129",
+    "cudnn 9.16.0.29",
+    "apex (compile, optional)",
+    "tilelang"
+   ],
+   "ray_hygiene_incident": "launcher previously did GLOBAL ray stop --force (violates shared-machine discipline; may have killed other users' ray). FIXED: dedicated ports 16379/8266 + RAY_ADDRESS + scoped PID-only teardown by session-dir match; verified others' 142 ray procs untouched after scoped cleanup",
+   "memory_note": "16k-length rows OOM on 2 cards (fp32 logits of 248320-vocab = 14.3G/seq); smoke used 8k-bounded slice; 16k needs 3+ cards or TP2 at full SFT time"
+  },
+  "frontier_tr_research_2026_09_11": {
+   "snapshots": "research/sources/base-model-trs-20260911/manifest.json (GLM-5 TR 2602.15763, Qwen3-Coder-Next TR 2603.00729, DeepSeek-V4 TR 2606.19348)",
+   "headline": "DeepSeek-V4 (DSH maker): 'mixed RL stage entirely replaced by On-Policy Distillation' - specialists via SFT+GRPO, consolidation via OPD reverse-KL; our 3-stage pipeline is the same family; strongest industry validation of the OPD selling point",
+   "glam5": "post-train order SFT->ReasoningRL->AgenticRL->GeneralRL->OPD-cross-stage-distillation; 10k+ SWE envs (RepoLaunch); Harbor terminal envs; binary rewards + pad-or-drop group noise rule; TITO token-faithful gateway (= Polar = our slime_dsh); error segments loss-masked in SFT",
+   "qwen3cn": "807k+852k verifiable tasks; teacher trajectories across 6 harnesses + verifier filtering (multi-harness OK if filtered hard); RL rewards: completion + unfinished penalty + invalid-toolcall token penalty + anti-cheat; SWE-bench Verified 70.6-71.3; baseline rows GLM-4.7 74.2 / Kimi-K2.5 73.2 / DSV3.2 70.2 / Opus-4.5 78-79",
+   "pipeline_revisions": [
+    "OPD stage repositioned: core design same-family as DSV4 consolidation, not an add-on",
+    "SFT trajectory rule-filtering before full run (drop missing-termination/failed/malformed-toolcall; consider error-segment masking)",
+    "agent-RL reward checklist consolidated from three TRs",
+    "16k-on-2-cards: defer (TP2 vs 8k pool) until card count known at full-SFT time"
+   ],
+   "frontier_landscape": "GLM-5.3 (newest open coding SOTA, post-training-only gains on 5.2 base), GLM-5.2 753B/1M, Qwen3.8-Max (no full TR yet), Kimi-K2.5/K2.6, DSV4.1-Flash"
+  },
+  "formal_sft_run": {
+   "status": "TRAINING STOPPED (2026-09-12T03:18Z) + HF CONVERSION DONE; EVAL PENDING USER GO",
+   "run": "formal stage-1 SFT, 2xH100 TP2/DP1 (GPUs 0+5, UUIDs in configs/gpu-allocation.json), launcher scripts/run_sft_formal.sh, detached (setsid) so it survives conversations",
+   "data": "data/sft-pool/sft-klear-filtered-16k.parquet (28,208 rows, Qwen3CN-rule filtered; stats runtime/prompt-pool/sft-klear-filtered-16k.json)",
+   "config": "1 EPOCH DECIDED by user; job configured with num-epoch 2 (882 steps) but STOP at the step-500 checkpoint (epoch1=441; first checkpoint past it is 500; stop right after its save lands, then scoped-ray cleanup + GPU release verification)",
+   "progress_at_handover": "step ~190/500, loss 0.289->0.186, grad_norm 13.4->~0.7, ~108s/step, 56.7GB/card stable, ETA step500 ~2026-09-12 00:30 UTC",
+   "wandb": "https://wandb.ai/3120252125-/code-agent-dense-mainline/runs/46hg4r4a (group dense-9b-sft-formal-2card)",
+   "after_checkpoint": [
+    "stop after step-500 checkpoint lands (models/dense-9B-sft/formal-2card/iter_0000500), scoped ray cleanup (see run_sft_formal.sh scoped_ray_stop; NEVER global ray stop on this shared machine - dedicated ports 20379/28266 already used)",
+    "convert mcore->HF: python vendor/slime/tools/convert_torch_dist_to_hf.py --input-dir <iter dir> --output-dir <out> --origin-hf-dir models/Qwen3.5-9B/<rev> --force (VALIDATED end-to-end on smoke ckpt; transformers loads 8.95B/32L clean; causal-conv1d missing only affects transformers fast path, not vLLM)",
+    "eval: HumanEvalPlus base-check vs 96.9% baseline (P1 protocol) + held-out trajectory NLL (script TODO) + later mini-swe-agent-format small eval and DSH rollout format-error-rate watchdog"
+   ],
+   "also_done_during_run": [
+    "eval pipeline dry-run validated",
+    "sglang-kernel 0.4.4 + sgl-deep-gemm 0.1.4 installed (additive)",
+    "fla 0.4.2/triton 3.7.1/flash-attn 2.8.3 already pinned per official build_conda.sh"
+   ],
+   "deferred": [
+    "cudnn 9.16.0.29 + torchaudio 2.11+cu129 upgrades AFTER training stops (touch existing deps)",
+    "Polar B' dataset fetch (HF network blocked, retry)",
+    "stage-2 DSH env wiring (main CPU work)",
+    "RL task list freeze + exclusion audit"
+   ],
+   "watcher": {
+    "deployed_utc": "2026-09-11T14:36:02Z",
+    "script": "scripts/stop_sft_formal_at_500.sh (detached setsid, flock-guarded, PID at deploy 2564846)",
+    "behavior": "polls iter_0000500 (.metadata + latest_checkpointed_iteration>=500 + size stable 90s) -> scoped teardown (/tmp/ray-sft-smoke session-dir match + transitive children incl. job driver; SIGTERM->8s->SIGKILL; foreign ray sessions verified excluded) -> GPU release evidence snapshot -> CPU-forced convert_torch_dist_to_hf to models/dense-9B-sft/formal-2card/hf-iter500 -> runtime/sft-formal/stop-report.json",
+    "not_automated": "any GPU eval/serving (operator runs HumanEvalPlus + NLL after reviewing stop-report)",
+    "failure_mode_covered": "training lost before step 500 -> FAILED_EARLY_TRAINING_LOST report, no conversion"
+   },
+   "progress_at_2026_09_11T14_30Z": "step ~145/500, loss 0.178, ~108s/step stable, GPUs 0+5 ~57-62GB",
+   "eval_runbook": {
+    "script": "scripts/eval_sft_formal.sh <gpu-uuid> (one command: preflight stop-report -> allocation roll -> vLLM serve hf-iter500 with exact P1 params port 18092 -> HumanEvalPlus first-32 base-check vs 96.9% -> NLL score base+sft on prepared 800 rows -> teardown + release evidence)",
+    "phases": "A=HumanEvalPlus (P1 protocol identical), B=held-out NLL via eval_sft_nll.py --score"
+   },
+   "final_state": {
+    "target_checkpoint": "models/dense-9B-sft/formal-2card/iter_0000499 (step 500; Megatron saves are 0-indexed, 'step 500' = iteration 499), landed 2026-09-12T02:14Z, 135G, .metadata+latest=499 complete",
+    "hf_dir": "models/dense-9B-sft/formal-2card/hf-iter500 (17G, 427 tensors/4 shards verified 03:22Z; watcher's auto-conversion failed on missing PYTHONPATH, rerun manually with PYTHONPATH=vendor/megatron-lm-src:vendor/slime)",
+    "training_end": "stopped 03:17-03:18Z scoped (68 TERM -> 7 KILL, session-dir matched, foreign sessions verified untouched); GPUs 0+5 verified 0 MiB",
+    "incident_1": "watcher waited for iter_0000500 which never exists (0-indexed naming) -> 63 min overrun to step 533 (epoch2 ~93 steps wasted); checkpoint validity unaffected",
+    "incident_2": "monitoring command containing the session-dir string got swept by scoped cleanup (self-match); lesson recorded",
+    "loss": "0.289 -> ~0.18 (epoch1 end) -> 0.124 (last logged step 533)",
+    "extra_checkpoints": "iter_0000249, iter_0000439 (135G each, cleanup candidates pending confirmation)"
+   }
+  },
+  "stage2_cpu_prep_2026_09_11": {
+   "status": "CPU-side queue item complete",
+   "dsh_harness_recheck": "scripts/slime_rl.sh --harness-check: 7 passed (was 6 at handover; pinned tree unchanged)",
+   "rl_task_freeze": {
+    "script": "scripts/freeze_rl_tasklist.py",
+    "record": "configs/agent-rl/rl-task-freeze-v1.json",
+    "pools": "SWE-Gym 2438 -> 2357 eligible (61 old-audit blocked + 20 held-out; 0 Verified/full-test hits, independently recomputed); SWE-smith 59133 eligible (3 frozen repair tasks excluded)",
+    "order_files": "data/agent-rl/rl-freeze-v1-{gym,smith}-{eligible,order}.txt (sha256 in record)",
+    "round_rule": "round-N consumes first unused prefix of *-order.txt; env validation still required per task before rollout",
+    "sft_overlap_note": "10894/59133 smith-eligible already in klear SFT set (intentional curriculum, recorded)"
+   },
+   "nll_eval_assets": {
+    "script": "scripts/eval_sft_nll.py (two-phase: prepare CPU in .venv-train-rl, score GPU in .venv-runtime vLLM 0.19.1 via prompt_logprobs; loss mask = training-identical slime qwen3_5 generator, imported standalone)",
+    "splits": "data/sft-pool/eval-nll/{klear-long,openhands-16k,r2e-16k}.parquet + train-sample from sft-klear-filtered-16k.parquet; 200 rows each",
+    "prepared": "runtime/sft-formal/nll-sft-formal-prepared.jsonl (800 rows, mask==training semantics)",
+    "tokenizer_drift_finding": "2/800 rows differ from 2026-09-10 metadata.n_tokens (+108/+10 tokens, transformers upgrade to 5.12.1 changed apply_chat_template on rare rows); benign: annotations only fed the <=16k length filter, both rows far from the boundary; training used the current mask generator directly, zero mismatches in the training parquet itself"
+   }
+  },
+  "deferred_updates_2026_09_11": {
+   "polar_b_dataset": {
+    "status": "BLOCKED UPSTREAM (not our network)",
+    "detail": "HF direct connectivity restored 2026-09-11 (proxy still fails); dataset nvidia/polar-swegym-pi-qwen35-122b-a10b-trajectories (exact id verified against arXiv 2605.24220 paper snapshot) returns 401 on both API and page without auth; ProRL-Agent-Server GitHub README does not link it either. Needs user HF account acceptance + token, or upstream public release. Paper facts remain snapshot-backed.",
+    "retry_hint": ".venv-download/bin/python; metadata capture pattern ready (data/metadata/nvidia__*.json)"
+   }
+  }
+ },
+ "exploratory_arch_menu": {
+  "updated_utc": "2026-09-10T07:43:28Z",
+  "top_pick": {
+   "name": "Training-Free Looped Transformers",
+   "source": "arXiv 2605.23872 (snapshot to be archived)",
+   "idea": "inference-time wrapper on a FROZEN pretrained model: re-execute a contiguous middle block, treating it as one ODE-solver step with damped iterative refinement; no training of any kind",
+   "fit": "GPT-6-like recurrent depth with zero training resources; can wrap the OPD-distilled dense 9B student and the 27B baseline; combinable with the main line"
+  },
+  "other_items": [
+   "RRT retrofit arm (existing E1 assets; needs bounded recovery pilot)",
+   "adaptive depth / early exit (Ouro-style; needs training; future-work citation only)",
+   "Alibaba MeSH-style loop-ratio adjustment (pretraining-time; citation only)"
+  ],
+  "sequence": "user decision: architecture exploration is the final exploratory chapter; training-free shell is the cheapest first entry"
+ }
+}

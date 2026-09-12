@@ -1,0 +1,161 @@
+{
+  "_id": "681135686873bfa1cd321a8a",
+  "id": "SWE-bench/SWE-bench",
+  "author": "SWE-bench",
+  "sha": "c6fe717fd7a4c3ac1daa4055a4fd082c6a1d28a2",
+  "lastModified": "2026-08-16T04:23:42.000Z",
+  "private": false,
+  "gated": false,
+  "disabled": false,
+  "tags": [
+    "size_categories:1K<n<10K",
+    "format:parquet",
+    "modality:text",
+    "library:datasets",
+    "library:pandas",
+    "library:polars",
+    "library:mlcroissant",
+    "arxiv:2310.06770",
+    "region:us"
+  ],
+  "description": "\n\t\n\t\t\n\t\n\t\n\t\tDataset Summary\n\t\n\nSWE-bench is a dataset that tests systems\u2019 ability to solve GitHub issues automatically. The dataset collects 2,294 Issue-Pull Request pairs from 12 popular Python repositories. Evaluation is performed by unit test verification using post-PR behavior as the reference solution.\nThe dataset was released as part of SWE-bench: Can Language Models Resolve Real-World GitHub Issues?\n\n\t\n\t\t\n\t\n\t\n\t\tWant to run inference now?\n\t\n\nThis dataset only contains the\u2026 See the full description on the dataset page: https://huggingface.co/datasets/SWE-bench/SWE-bench.",
+  "downloads": 16694,
+  "likes": 36,
+  "cardData": {
+    "dataset_info": {
+      "features": [
+        {
+          "name": "base_commit",
+          "dtype": "string"
+        },
+        {
+          "name": "created_at",
+          "dtype": "string"
+        },
+        {
+          "name": "environment_setup_commit",
+          "dtype": "string"
+        },
+        {
+          "name": "eval_type",
+          "dtype": "string"
+        },
+        {
+          "name": "image",
+          "dtype": "string"
+        },
+        {
+          "name": "instance_id",
+          "dtype": "string"
+        },
+        {
+          "name": "log_parser",
+          "dtype": "string"
+        },
+        {
+          "name": "repo",
+          "dtype": "string"
+        },
+        {
+          "name": "version",
+          "dtype": "string"
+        },
+        {
+          "name": "patch",
+          "dtype": "string"
+        },
+        {
+          "name": "test_patch",
+          "dtype": "string"
+        },
+        {
+          "name": "eval_script",
+          "dtype": "string"
+        },
+        {
+          "name": "problem_statement",
+          "dtype": "string"
+        },
+        {
+          "name": "hints_text",
+          "dtype": "string"
+        },
+        {
+          "name": "FAIL_TO_PASS",
+          "list": "string"
+        },
+        {
+          "name": "PASS_TO_PASS",
+          "list": "string"
+        },
+        {
+          "name": "difficulty",
+          "dtype": "string"
+        }
+      ],
+      "splits": [
+        {
+          "name": "test",
+          "num_bytes": 52163976,
+          "num_examples": 2294
+        },
+        {
+          "name": "dev",
+          "num_bytes": 5776352,
+          "num_examples": 225
+        }
+      ],
+      "download_size": 36593200,
+      "dataset_size": 57940328
+    },
+    "configs": [
+      {
+        "config_name": "default",
+        "data_files": [
+          {
+            "split": "test",
+            "path": "data/test-*"
+          },
+          {
+            "split": "dev",
+            "path": "data/dev-*"
+          }
+        ]
+      }
+    ]
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "1ef325f1b111266a6b26e0196871bd78baa8c2f3",
+      "size": 2461
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "846bb0856ddc8d118ea34099504b16df4aed3336",
+      "size": 3974
+    },
+    {
+      "rfilename": "data/dev-00000-of-00001.parquet",
+      "blobId": "c9ec02b30c35d0006ad7585190442e67a37a96e0",
+      "size": 3299303,
+      "lfs": {
+        "sha256": "7812438935be9cbe36049b93c73412d523fb07251bd255813168c38c5fc92454",
+        "size": 3299303,
+        "pointerSize": 132
+      }
+    },
+    {
+      "rfilename": "data/test-00000-of-00001.parquet",
+      "blobId": "f6f0342c4483efb0cb994847ad20183728d40b27",
+      "size": 33293897,
+      "lfs": {
+        "sha256": "d4f5a245c75319fa8240c540674958c4d491e82edf274b144d43836bdcbc4567",
+        "size": 33293897,
+        "pointerSize": 133
+      }
+    }
+  ],
+  "createdAt": "2025-04-29T20:24:08.000Z",
+  "usedStorage": 416398217
+}

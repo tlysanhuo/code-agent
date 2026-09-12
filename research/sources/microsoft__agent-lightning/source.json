@@ -1,0 +1,14 @@
+{
+  "repo": "microsoft/agent-lightning",
+  "sha": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/pyproject.toml"
+    }
+  ]
+}

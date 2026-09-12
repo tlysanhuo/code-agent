@@ -1,0 +1,142 @@
+[
+  {
+    "repo": "SWE-agent/mini-swe-agent",
+    "sha": "04d809ceab9df28f9adaed044884180159172930",
+    "file": "src/minisweagent/agents/default.py",
+    "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/agents/default.py",
+    "bytes": 8043
+  },
+  {
+    "repo": "SWE-agent/mini-swe-agent",
+    "sha": "04d809ceab9df28f9adaed044884180159172930",
+    "file": "src/minisweagent/environments/docker.py",
+    "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/environments/docker.py",
+    "bytes": 6427
+  },
+  {
+    "repo": "SWE-agent/mini-swe-agent",
+    "sha": "04d809ceab9df28f9adaed044884180159172930",
+    "file": "src/minisweagent/config/benchmarks/swebench_backticks.yaml",
+    "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/config/benchmarks/swebench_backticks.yaml",
+    "bytes": 9113
+  },
+  {
+    "repo": "SWE-agent/mini-swe-agent",
+    "sha": "04d809ceab9df28f9adaed044884180159172930",
+    "file": "src/minisweagent/models/utils/actions_text.py",
+    "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/models/utils/actions_text.py",
+    "bytes": 2629
+  },
+  {
+    "repo": "microsoft/agent-lightning",
+    "sha": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+    "file": "examples/swe_smith/README.md",
+    "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/README.md",
+    "bytes": 203
+  },
+  {
+    "repo": "microsoft/agent-lightning",
+    "sha": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+    "file": "examples/swe_smith/train_smith_agent.py",
+    "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/train_smith_agent.py",
+    "bytes": 9870
+  },
+  {
+    "repo": "microsoft/agent-lightning",
+    "sha": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+    "file": "examples/swe_smith/run.sh",
+    "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/run.sh",
+    "bytes": 4667
+  },
+  {
+    "repo": "microsoft/agent-lightning",
+    "sha": "218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4",
+    "file": "examples/swe_smith/agents/smith_agent.py",
+    "url": "https://raw.githubusercontent.com/microsoft/agent-lightning/218f1f7c0bac0800de4d5a4e5e6f61cf7b5038b4/examples/swe_smith/agents/smith_agent.py",
+    "bytes": 39030
+  },
+  {
+    "repo": "NovaSky-AI/SkyRL",
+    "sha": "2df6c2f284635579be200aabce846a754e1e7975",
+    "file": "examples/train/mini_swe_agent/README.md",
+    "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/2df6c2f284635579be200aabce846a754e1e7975/examples/train/mini_swe_agent/README.md",
+    "bytes": 3926
+  },
+  {
+    "repo": "NovaSky-AI/SkyRL",
+    "sha": "2df6c2f284635579be200aabce846a754e1e7975",
+    "file": "examples/train/mini_swe_agent/run_mini_swe_8B.sh",
+    "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/2df6c2f284635579be200aabce846a754e1e7975/examples/train/mini_swe_agent/run_mini_swe_8B.sh",
+    "bytes": 2814
+  },
+  {
+    "repo": "NovaSky-AI/SkyRL",
+    "sha": "2df6c2f284635579be200aabce846a754e1e7975",
+    "file": "examples/train/mini_swe_agent/mini_swe_generator.py",
+    "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/2df6c2f284635579be200aabce846a754e1e7975/examples/train/mini_swe_agent/mini_swe_generator.py",
+    "bytes": 11376
+  },
+  {
+    "repo": "NovaSky-AI/SkyRL",
+    "sha": "2df6c2f284635579be200aabce846a754e1e7975",
+    "file": "examples/train/on_policy_distillation/README.md",
+    "url": "https://raw.githubusercontent.com/NovaSky-AI/SkyRL/2df6c2f284635579be200aabce846a754e1e7975/examples/train/on_policy_distillation/README.md",
+    "bytes": 1929
+  },
+  {
+    "repo": "verl-project/verl",
+    "sha": "7cb65014d3a6c84f59458367df768999e4f36c67",
+    "file": "docs/algo/opd.md",
+    "url": "https://raw.githubusercontent.com/verl-project/verl/7cb65014d3a6c84f59458367df768999e4f36c67/docs/algo/opd.md",
+    "bytes": 35227
+  },
+  {
+    "repo": "verl-project/verl",
+    "sha": "7cb65014d3a6c84f59458367df768999e4f36c67",
+    "file": "examples/on_policy_distillation_trainer/run_qwen3_5_4b_fsdp.sh",
+    "url": "https://raw.githubusercontent.com/verl-project/verl/7cb65014d3a6c84f59458367df768999e4f36c67/examples/on_policy_distillation_trainer/run_qwen3_5_4b_fsdp.sh",
+    "bytes": 5692
+  },
+  {
+    "repo": "verl-project/verl",
+    "sha": "7cb65014d3a6c84f59458367df768999e4f36c67",
+    "file": "examples/on_policy_distillation_trainer/README.md",
+    "url": "https://raw.githubusercontent.com/verl-project/verl/7cb65014d3a6c84f59458367df768999e4f36c67/examples/on_policy_distillation_trainer/README.md",
+    "bytes": 1478
+  },
+  {
+    "repo": "rllm-org/rllm",
+    "sha": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+    "file": "design/sft-distillation.md",
+    "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/design/sft-distillation.md",
+    "bytes": 15864
+  },
+  {
+    "repo": "rllm-org/rllm",
+    "sha": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+    "file": "examples/math_distill/README.md",
+    "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/examples/math_distill/README.md",
+    "bytes": 3811
+  },
+  {
+    "repo": "rllm-org/rllm",
+    "sha": "3b40c37cf6a262cf4d28cc987ebe4f4cf797956c",
+    "file": "rllm/harnesses/mini_swe_agent.py",
+    "url": "https://raw.githubusercontent.com/rllm-org/rllm/3b40c37cf6a262cf4d28cc987ebe4f4cf797956c/rllm/harnesses/mini_swe_agent.py",
+    "bytes": 7294
+  },
+  {
+    "repo": "collinear-ai/spider",
+    "sha": "6567293f723a6ab11d79091e4cdbc3aa0b19961b",
+    "file": "config/train_on_policy_swe.yaml",
+    "url": "https://raw.githubusercontent.com/collinear-ai/spider/6567293f723a6ab11d79091e4cdbc3aa0b19961b/config/train_on_policy_swe.yaml",
+    "bytes": 583
+  },
+  {
+    "repo": "collinear-ai/spider",
+    "sha": "6567293f723a6ab11d79091e4cdbc3aa0b19961b",
+    "file": "scripts/train_on_policy_swe.py",
+    "url": "https://raw.githubusercontent.com/collinear-ai/spider/6567293f723a6ab11d79091e4cdbc3aa0b19961b/scripts/train_on_policy_swe.py",
+    "bytes": 790
+  }
+]

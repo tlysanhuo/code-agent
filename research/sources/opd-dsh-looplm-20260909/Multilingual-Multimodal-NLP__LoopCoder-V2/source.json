@@ -1,0 +1,36 @@
+{
+  "repo": "Multilingual-Multimodal-NLP/LoopCoder-V2",
+  "revision": "b87cf3aa2186937b0d0362a684d7d30f234543e3",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://huggingface.co/Multilingual-Multimodal-NLP/LoopCoder-V2/resolve/b87cf3aa2186937b0d0362a684d7d30f234543e3/README.md",
+      "bytes": 5386,
+      "sha256": "e301aa970c2e248bd63f0733c881e4456322831ae439e4e66e23bb9defe50a87"
+    },
+    {
+      "path": "config.json",
+      "url": "https://huggingface.co/Multilingual-Multimodal-NLP/LoopCoder-V2/resolve/b87cf3aa2186937b0d0362a684d7d30f234543e3/config.json",
+      "bytes": 949,
+      "sha256": "b95302a5af03c9320dbc7131cfb639ba07c8a2140d4631e5c9279d03047d9176"
+    },
+    {
+      "path": "configuration_iquestcoder.py",
+      "url": "https://huggingface.co/Multilingual-Multimodal-NLP/LoopCoder-V2/resolve/b87cf3aa2186937b0d0362a684d7d30f234543e3/configuration_iquestcoder.py",
+      "bytes": 8984,
+      "sha256": "cd06cb8c71c1c986abab2740fe24f4a1235bde6e103c918eb5041db27f36ba27"
+    },
+    {
+      "path": "configuration_iquestpltcoder.py",
+      "url": "https://huggingface.co/Multilingual-Multimodal-NLP/LoopCoder-V2/resolve/b87cf3aa2186937b0d0362a684d7d30f234543e3/configuration_iquestpltcoder.py",
+      "bytes": 9136,
+      "sha256": "0a499f52c0fafce5a6ca582032f1842a9682c22ef49ee92ff8b116af230f3b3f"
+    },
+    {
+      "path": "tokenization_iquestcoder.py",
+      "url": "https://huggingface.co/Multilingual-Multimodal-NLP/LoopCoder-V2/resolve/b87cf3aa2186937b0d0362a684d7d30f234543e3/tokenization_iquestcoder.py",
+      "bytes": 22571,
+      "sha256": "e57ec4c6e775d53b4a0e1bd1da945aa1b6c49b04751f5bd6ddd46fee1859b44a"
+    }
+  ]
+}

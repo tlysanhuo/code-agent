@@ -1,0 +1,14 @@
+{
+  "repo": "allenai/SERA",
+  "sha": "1ca8673bd527b164dc9eb89841c96416ec8ce1a7",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/allenai/SERA/1ca8673bd527b164dc9eb89841c96416ec8ce1a7/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/allenai/SERA/1ca8673bd527b164dc9eb89841c96416ec8ce1a7/pyproject.toml"
+    }
+  ]
+}

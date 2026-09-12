@@ -1,28 +1,41 @@
 {
-  "status": "cpu_integration_verified_training_not_ready",
+  "updated_utc": "2026-09-09T17:09:12.433529+00:00",
+  "status": "slime_selected_cpu_agent_tests_and_dsh_protocol_passed",
+  "preparation_scope": "slime architecture and project entry migrated; independent CPU environment verified; full training integration incomplete",
   "selected_framework": "slime",
+  "architecture_manifest": "configs/slime/architecture.json",
   "training_launch_ready": false,
+  "implementation_hold": false,
+  "gpu_training_hold": true,
+  "upstream_training_entrypoint": "vendor/slime/train.py",
+  "verified_entrypoint_scope": "Project --check dispatches unchanged upstream agent CPU tests; --dsh-check launches real DSH against original slime OpenAIAdapter with fake tokenizer/model; --harness-check exercises DSH BaseHarness hook through unchanged coding_agent_rl orchestration, including separate agent/eval sandbox boundaries. No trainer launch. Import/load_function smoke also passed for slime_dsh.generate.generate, binding the pinned upstream callable.",
   "upstream_agent_tests": {
     "passed": 64,
     "skipped": 1,
-    "skip_reason": "SGLang reasoning parser dependency absent in lean CPU environment"
+    "junit": "runtime/slime/upstream-check-1/junit.xml",
+    "skip_reason": "Qwen reasoning parser test requires SGLang, absent in upstream-style lean CPU environment"
   },
-  "dsh_harness_tests": {
-    "passed": 7,
-    "skipped": 0,
-    "scope": "Real SDK and fixed harmless tool; fake tokenizer/model/sandbox/evaluator boundaries"
-  },
-  "custom_generate_function_path": "slime_dsh.generate.generate",
+  "dsh_protocol_check": "runtime/slime/dsh-latest.json",
+  "training_environment_protocol": "Not connected: upstream example uses E2B-compatible sandbox; project-local backend remains required.",
+  "official_benchmark_result": false,
   "qualified_training_tasks": 0,
   "historical_custom_qualified_tasks": 2,
   "expanded_candidates": 24,
   "expanded_candidates_qualified": 0,
   "missing_conditions": [
-    "Project-local real task execution provider and upstream evaluation environment are not connected. Upstream /tmp and /home/agent paths require project-local mounts and lifecycle cleanup.",
-    "Real Qwen tokenizer, SGLang reasoning/tool parser and multiround sampled probabilities remain unverified in the training path.",
-    "Pinned slime mainline lacks a verified Qwen3.5-27B BF16 LoRA recipe. PR #1865 is unmerged and its patch does not apply.",
-    "No GPU update, memory, weight-sync or checkpoint recovery check has run. At most two H100 80GB cards; do not substitute full fine-tuning.",
-    "Training data must be requalified by the selected upstream protocol and historical evaluation/development exclusions retained."
+    "Pinned slime mainline has no verified Qwen3.5-27B BF16 LoRA recipe. PR #1865 remains open and is not adopted; do not substitute full-parameter training.",
+    "The DSH BaseHarness hook is CPU-tested but not deployed: connect the project-local execution provider and mount contract to an actual upstream rollout worker before real tasks.",
+    "Connect a project-local execution provider through the upstream Sandbox contract and validate upstream task preparation/scoring; do not resume custom task runners. Current example creates E2B-compatible sandboxes.",
+    "Validate real Qwen tokenizer, reasoning/tool parsing, multi-turn sampled IDs/logprobs and observation masks with the upstream SGLang path. The CPU reasoning-parser test was skipped.",
+    "Provide a pinned compatible Megatron/SGLang/LoRA stack and verify <=2 H100 memory, update, weight synchronization, checkpoint save/restore and owned-process cleanup.",
+    "Requalify training data using the selected upstream protocol and preserve all historical benchmark/development exclusions.",
+    "Before real rollout/update: explicit training authorization, fresh <=2 idle H100 allocation, reviewed budgets and platform Training Task execution. No GPU launcher is enabled.",
+    "Current search also finds slime PR #1140 (FSDP LoRA) open and unrelated to the pinned Megatron/Qwen3.5 path; no open PR was treated as a released recipe."
   ],
-  "evidence": "reports/verification.json"
+  "legacy_evidence": "runtime/slime/legacy",
+  "historical_agl_acceptance": "runtime/agent-rl/agl-integration/acceptance.json",
+  "research_manifest": "research/sources/upstream-pipeline-review-20260909/source.json",
+  "dsh_hook_check": "runtime/slime/harness-check-2/junit.xml (6 passed)",
+  "lora_compatibility": "runtime/slime/lora-compatibility.json",
+  "custom_generate_function_path": "slime_dsh.generate.generate (load_function/import smoke passed)"
 }

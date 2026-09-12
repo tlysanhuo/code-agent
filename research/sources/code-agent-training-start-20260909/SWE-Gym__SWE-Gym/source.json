@@ -1,0 +1,21 @@
+{
+  "repo": "SWE-Gym/SWE-Gym",
+  "commit": "b681068ca20628c6987b7416cc4cf03f06b77ba5",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/README.md",
+      "sha256": "97df54c2ecfe311fc1b8e4eed345fdeffbbb1d93dc4adf82a8252e1145bc825a"
+    },
+    {
+      "path": "docs/OpenHands.md",
+      "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/docs/OpenHands.md",
+      "sha256": "3544e15b90b59e1deca587f43218c3297f03e0e419d9958a0cf77078621c2a92"
+    },
+    {
+      "path": "scripts/training/openhands/configs/policy/1116-sonnet-4o-491i-32k-qwen25_coder_32b_full-lr1e-4.yaml",
+      "url": "https://raw.githubusercontent.com/SWE-Gym/SWE-Gym/b681068ca20628c6987b7416cc4cf03f06b77ba5/scripts/training/openhands/configs/policy/1116-sonnet-4o-491i-32k-qwen25_coder_32b_full-lr1e-4.yaml",
+      "sha256": "773801af555bfb48f55f5a885e9b7a3d93ccec81249eb748400bdc5f610893e4"
+    }
+  ]
+}

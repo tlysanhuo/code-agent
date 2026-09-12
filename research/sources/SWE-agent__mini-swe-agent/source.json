@@ -1,0 +1,14 @@
+{
+  "repo": "SWE-agent/mini-swe-agent",
+  "sha": "04d809ceab9df28f9adaed044884180159172930",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/pyproject.toml"
+    }
+  ]
+}

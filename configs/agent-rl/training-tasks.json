@@ -1,0 +1,259 @@
+{
+  "protocol": "custom-training-pytest-v1",
+  "official_benchmark_result": false,
+  "training_pool_source": "data/agent-rl/manifest.json",
+  "tasks": {
+    "Project-MONAI__MONAI-1010": {
+      "task_spec": null,
+      "repo": "Project-MONAI/MONAI",
+      "base_commit": "f5b81aa7b49d986bcf87884264e875ada7f481d1",
+      "state": "source_dependencies_and_buggy_gold_qualification_pending"
+    },
+    "Project-MONAI__MONAI-1011": {
+      "task_spec": null,
+      "repo": "Project-MONAI/MONAI",
+      "base_commit": "74a89f8eb2e1aa376e32b481f1bf5ffe11caca92",
+      "state": "source_dependencies_and_buggy_gold_qualification_pending"
+    },
+    "bokeh__bokeh-12779": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-12779/task.json",
+      "repo": "bokeh/bokeh",
+      "base_commit": "0da7e85d29e529c2e5278d5021cc75ecbf4b0d3c",
+      "state": "prepared_unqualified",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-12779.json"
+    },
+    "bokeh__bokeh-12841": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-12841/task.json",
+      "repo": "bokeh/bokeh",
+      "base_commit": "78dc3e238194302b5daadf11d47bdd69bd07a2b8",
+      "state": "prepared_unqualified",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-12841.json"
+    },
+    "conan-io__conan-10213": {
+      "task_spec": null,
+      "repo": "conan-io/conan",
+      "base_commit": "106e54c96118a1345899317bf3bebaf393c41574",
+      "state": "source_dependencies_and_buggy_gold_qualification_pending"
+    },
+    "conan-io__conan-10686": {
+      "task_spec": null,
+      "repo": "conan-io/conan",
+      "base_commit": "606ff7ca246a44cec3fdb5b1abe9863dbf0298d3",
+      "state": "source_dependencies_and_buggy_gold_qualification_pending"
+    },
+    "dask__dask-10009": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10009/task.json",
+      "repo": "dask/dask",
+      "base_commit": "216c7c9393d8df1014a911eceb797502999e8a51",
+      "state": "qualified"
+    },
+    "dask__dask-10027": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10027/task.json",
+      "repo": "dask/dask",
+      "base_commit": "c9a9edef0c7e996ef72cb474bf030778189fd737",
+      "state": "qualified"
+    },
+    "dask__dask-10159": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10159/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "e3aa15e54600659ddc1b7139143a70ef1c1c05c6",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10159.json"
+    },
+    "dask__dask-10211": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10211/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "e9845aadc7c32078e55354b61f5626ac759e8b28",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10211.json"
+    },
+    "dask__dask-10422": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10422/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "7ace31f93ddc0b879f14bb54755b9f547bf60188",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10422.json"
+    },
+    "dask__dask-10509": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10509/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "d86545992a7b81fc92a8bd63e0f02c6d95419585",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10509.json"
+    },
+    "dask__dask-10521": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10521/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "da256320ef0167992f7183c3a275d092f5727f62",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10521.json"
+    },
+    "dask__dask-10695": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10695/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "51f90b62bee920bdd84e9c210fcddbea6c7c43a0",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10695.json"
+    },
+    "dask__dask-10765": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10765/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "63b6bb84015975c8466e80d1d498a293835ae936",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10765.json"
+    },
+    "dask__dask-10921": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/dask__dask-10921/task.json",
+      "state": "prepared_unqualified",
+      "repo": "dask/dask",
+      "base_commit": "76b255e3f3b8b116b6046d03105e3ceae40386b6",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/dask__dask-10921.json"
+    },
+    "bokeh__bokeh-12867": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-12867/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "51aca94a6a4a9f3084e7f1b7924215873a54aa9f",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-12867.json"
+    },
+    "bokeh__bokeh-12902": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-12902/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "00fd457ddb08027915d25a2fed7368bbbae95807",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-12902.json"
+    },
+    "bokeh__bokeh-13041": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-13041/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "865dda806b83dd04498e61f4f3478569dfaa4687",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-13041.json"
+    },
+    "bokeh__bokeh-13147": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-13147/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "969079b8d319074023a6f28a7374d7f36ff1516a",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-13147.json"
+    },
+    "bokeh__bokeh-13239": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-13239/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "06a6bf5d7544500431d0fa106c9fec50f15436bf",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-13239.json"
+    },
+    "bokeh__bokeh-13258": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/bokeh__bokeh-13258/task.json",
+      "state": "prepared_unqualified",
+      "repo": "bokeh/bokeh",
+      "base_commit": "3348f65bb545a16523942cbb751ea7384556c53b",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/bokeh__bokeh-13258.json"
+    },
+    "facebookresearch__hydra-1006": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1006/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "94bbaaad028678166896cf139f778240e02d0a69",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1006.json"
+    },
+    "facebookresearch__hydra-1276": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1276/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "67b9cadd1122f12b428bc6fe322eff98146a825a",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1276.json"
+    },
+    "facebookresearch__hydra-1422": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1422/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "1df6e295301df0eef3dec9b1f5080c6344eeebf3",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1422.json"
+    },
+    "facebookresearch__hydra-1450": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1450/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "de03d15a259999f2dc53d506a7de825f93cb5d78",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1450.json"
+    },
+    "facebookresearch__hydra-1488": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1488/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "d217c86b9061bb502d00fa971b3ea15a70e3299b",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1488.json"
+    },
+    "facebookresearch__hydra-1661": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1661/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "76f1d799720a0209313afc2faac270d50a415165",
+      "split": "train",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1661.json"
+    },
+    "facebookresearch__hydra-1695": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1695/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "8640a921f571275d2c48d787efbb76d45fc89d7f",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1695.json"
+    },
+    "facebookresearch__hydra-1725": {
+      "task_spec": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/training-environments/facebookresearch__hydra-1725/task.json",
+      "state": "prepared_unqualified",
+      "repo": "facebookresearch/hydra",
+      "base_commit": "27ab477ef1976725e1d3a583e3f0c35966dac198",
+      "split": "development",
+      "source_manifest": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/manifest.json",
+      "private_record": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/data/agent-rl/expansion-v1/private/facebookresearch__hydra-1725.json"
+    }
+  }
+}

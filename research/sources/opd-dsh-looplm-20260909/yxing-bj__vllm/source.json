@@ -1,0 +1,25 @@
+{
+  "repo": "yxing-bj/vllm",
+  "revision": "2608cc7dd5462bcb27c3f7acf3b187a29902d965",
+  "retrieved_at": "2026-09-09T07:41:49.103702+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/yxing-bj/vllm/2608cc7dd5462bcb27c3f7acf3b187a29902d965/README.md",
+      "sha256": "075420934b367e45ed3fcade1f1a4e4cdd906ad37916bb0704ba3b6378f4b2b6",
+      "bytes": 4837
+    },
+    {
+      "path": "vllm/model_executor/models/registry.py",
+      "url": "https://raw.githubusercontent.com/yxing-bj/vllm/2608cc7dd5462bcb27c3f7acf3b187a29902d965/vllm/model_executor/models/registry.py",
+      "sha256": "0ce8fe35ebb4481d8fe840474fc1c116ddbcb0440c3b1ac77219a1d267f63641",
+      "bytes": 51606
+    },
+    {
+      "path": "vllm/model_executor/models/iquest_loopcoder.py",
+      "url": "https://raw.githubusercontent.com/yxing-bj/vllm/2608cc7dd5462bcb27c3f7acf3b187a29902d965/vllm/model_executor/models/iquest_loopcoder.py",
+      "sha256": "3dd490c1d7e3a9b99306c1c01f95bed3f02eb6c2b6b0c6b4c2301d0219fc430c",
+      "bytes": 29437
+    }
+  ]
+}

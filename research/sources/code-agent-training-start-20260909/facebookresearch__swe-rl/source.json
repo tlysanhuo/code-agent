@@ -1,0 +1,16 @@
+{
+  "repo": "facebookresearch/swe-rl",
+  "commit": "5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "f948bda1fdbc6e70dd8cdb7ce4cc46fa0d43d1ec05a914594abfee7cb664d7cd",
+      "url": "https://raw.githubusercontent.com/facebookresearch/swe-rl/5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9/README.md"
+    },
+    {
+      "path": "src/swerl/core/reward.py",
+      "sha256": "d74ee99342d8b43a086ff765646c0cb254a408e9c25b7af297d67eb7cceb5797",
+      "url": "https://raw.githubusercontent.com/facebookresearch/swe-rl/5aa10d67f1db07ecd3a20483d63fe2d5029ac9c9/src/swerl/core/reward.py"
+    }
+  ]
+}

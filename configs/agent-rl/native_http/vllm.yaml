@@ -1,0 +1,7 @@
+# @package actor_rollout_ref.rollout.engine_kwargs.vllm
+# Add +native_http=vllm to the existing primary config. No training values change.
+# This is not a launch authorization or a verified GPU configuration.
+served_model_name: Qwen3.5-27B
+enable_auto_tool_choice: true
+tool_call_parser: qwen3_coder
+reasoning_parser: qwen3

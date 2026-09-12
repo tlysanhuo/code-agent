@@ -1,0 +1,505 @@
+{
+  "frozen_utc": "2026-09-09T09:48:16.368680+00:00",
+  "purpose": "20-task SWE-Gym development baseline; not official leaderboard or final test set",
+  "tasks": [
+    {
+      "instance_id": "dask__dask-6683",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-6683-1788946804417173391",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/0bcab4e63e0b/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.384239174891263,
+      "gold_seconds": 3.89223852311261
+    },
+    {
+      "instance_id": "dask__dask-10380",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-10380-1788946815886400033",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/254b898f723e/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.890409528044984,
+      "gold_seconds": 5.8815561009105295
+    },
+    {
+      "instance_id": "dask__dask-8501",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-8501-1788946835559093058",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.4082065229304135,
+      "gold_seconds": 5.891876267036423
+    },
+    {
+      "instance_id": "dask__dask-8954",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-8954-1788946852465495918",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/825d33781273/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.393976304214448,
+      "gold_seconds": 5.895862070843577
+    },
+    {
+      "instance_id": "dask__dask-6815",
+      "repo": "dask/dask",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/dask__dask-6815-1788946868766035986",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/0bcab4e63e0b/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.386022038059309,
+      "gold_seconds": 3.887344299815595
+    },
+    {
+      "instance_id": "pydantic__pydantic-5529",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5529-1788946880497312326",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/e0a0370a75f5/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.8943512809928507,
+      "gold_seconds": 3.4147682629991323
+    },
+    {
+      "instance_id": "pydantic__pydantic-9082",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-9082-1788946890265986443",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/ef23086bc62f/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 5.898854831932113,
+      "gold_seconds": 5.398184187011793
+    },
+    {
+      "instance_id": "pydantic__pydantic-4920",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-4920-1788946906970881450",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/637dc1ee35f5/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.894843462854624,
+      "gold_seconds": 3.3859216710552573
+    },
+    {
+      "instance_id": "pydantic__pydantic-5272",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5272-1788946916948733225",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/dc61e81cb77e/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.392126450082287,
+      "gold_seconds": 3.389153502881527
+    },
+    {
+      "instance_id": "pydantic__pydantic-5138",
+      "repo": "pydantic/pydantic",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/pydantic__pydantic-5138-1788946927646680873",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/ff176a23f7e0/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.9102436369284987,
+      "gold_seconds": 3.39261093782261
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1560",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-1560-1788946937733816380",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/9e002a0545d6/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.894582784967497,
+      "gold_seconds": 7.898835852043703
+    },
+    {
+      "instance_id": "facebookresearch__hydra-677",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-677-1788946963805175980",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/e6c761d940d9/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 7.388855945784599,
+      "gold_seconds": 6.895100998925045
+    },
+    {
+      "instance_id": "facebookresearch__hydra-1741",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-1741-1788946983748755943",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/51a15701e623/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.3857496690470725,
+      "gold_seconds": 2.8880015260074288
+    },
+    {
+      "instance_id": "facebookresearch__hydra-2011",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-2011-1788947000638231231",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/6cdad8981d3c/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 3.392999915871769,
+      "gold_seconds": 2.892878691898659
+    },
+    {
+      "instance_id": "facebookresearch__hydra-2062",
+      "repo": "facebookresearch/hydra",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/facebookresearch__hydra-2062-1788947018973192509",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/51a15701e623/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 2.8865375861059874,
+      "gold_seconds": 2.882393325911835
+    },
+    {
+      "instance_id": "bokeh__bokeh-13636",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13636-1788947036561815535",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 4.392347092973068,
+      "gold_seconds": 4.440205376828089
+    },
+    {
+      "instance_id": "bokeh__bokeh-13422",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13422-1788947084409484437",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.89971281401813,
+      "gold_seconds": 6.391087274998426
+    },
+    {
+      "instance_id": "bokeh__bokeh-13757",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13757-1788947134333732479",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 12.750799233093858,
+      "gold_seconds": 5.889109035022557
+    },
+    {
+      "instance_id": "bokeh__bokeh-13370",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13370-1788947191721806619",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 6.8870858021546155,
+      "gold_seconds": 6.394390634028241
+    },
+    {
+      "instance_id": "bokeh__bokeh-13198",
+      "repo": "bokeh/bokeh",
+      "passed": true,
+      "evidence_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/env-validation/bokeh__bokeh-13198-1788947241115005880",
+      "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/4f5c95f92f96/bin/python",
+      "checks": {
+        "expected_buggy_failures": true,
+        "expected_buggy_passes": true,
+        "gold_all_passed": true,
+        "gold_exit_zero": true,
+        "all_nodes_collected": true
+      },
+      "baseline_seconds": 5.888761630980298,
+      "gold_seconds": 5.895466255955398
+    }
+  ],
+  "excluded_candidates": [
+    {
+      "instance_id": "pydantic__pydantic-9023",
+      "reason": "Dataset gold patch does not apply to the specified pristine base commit; missing source context includes _needs_apply_discriminated_union/_has_invalid_schema. No model attempt."
+    }
+  ],
+  "data_revisions": {
+    "SWE-Gym/SWE-Gym": [
+      "bb94ed9e39bbeb96a7fcbfb533b80f25a7fd59cb"
+    ],
+    "SWE-bench/SWE-bench_Verified": [
+      "78f471bf655a3137b2e8a75af1501690ec009ec3"
+    ]
+  },
+  "protocol": {
+    "tasks": 20,
+    "repositories": 4,
+    "attempts_per_task": 1,
+    "concurrency": 1,
+    "max_model_requests": 30,
+    "timeout_seconds": 600,
+    "total_output_tokens": 16384,
+    "per_request_output_tokens": 2048,
+    "context_window": 32768,
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 0,
+    "thinking": false,
+    "tool_per_message_bytes": 4096,
+    "tool_history_total_bytes": 16384,
+    "pagination_bytes": 3072,
+    "tool_timeout_seconds": 30,
+    "tensor_parallel_size": 1,
+    "new_modified_symlink_patches": "record but do not apply; count as failure",
+    "existing_test_modifications": "count as failure",
+    "unknown_stream_usage": "reserve full requested output ceiling; no budget refund without usage",
+    "no_silent_retries": true,
+    "statistical_interval": "Wilson 95%, descriptive for this selected dev subset"
+  },
+  "facility_cpu": "runtime/gym-baseline/facility/20260909T082552Z-cpu-681cce/verification.json",
+  "facility_real": "runtime/gym-baseline/facility/20260909T083250Z-real-329627/verification.json",
+  "budget_gate": "runtime/gym-baseline/budget-check/1788944727909369990/verification.json",
+  "export_gate": "runtime/gym-baseline/export-probes/1788944278304926163/verification.json",
+  "file_sha256": {
+    "configs/gym-candidate-policy.json": "fb160b7152764f138f7e6516876b5f772129b6ff90d8b5bb397615f6c30fafd6",
+    "configs/gym-dsh.patch.yml": "42072a9efe853b7a09fbf5fb65a276d3ba063939564a7b0f2c4e0d3f3a69c5fb",
+    "configs/gym-qwen-server.json": "1511a51233610ef8cca353c55d152b6099d84955cb7156e634bfb7c74a0906ef",
+    "configs/gym-selected-candidates.json": "a42d13d3fe46cb28481a4e6a849ae22185fa5d8b1504c55750c5670809f947d8",
+    "configs/gym-training-exclusion.json": "645b3151fe96650341a29d177c49551a489e155b8cae50b9e63ac27cbd3431f2",
+    "configs/qwen-server.json": "186763b94dc845dd8a2537f998c7b051f6e36d834299168f9ab506829b95c880",
+    "configs/tool-smoke.json": "ad4b51cd3d3c7a5ebba81784914d88d7ad2d7d50c785b37d29682dbac0fe33cc",
+    "data/metadata/SWE-Gym__SWE-Gym.json": "81e3f0c7c3204377d00c95cb9379886974f342902aa1f21db61618e1a601f0c4",
+    "data/metadata/SWE-bench__SWE-bench_Verified.json": "f348b14ae3d176252486155adce5a80943243b61e1b4dff640033bfcdf154083",
+    "data/metadata/supplement_download_manifest.json": "b893796810b388dfac791698029937bba52af029bc6f5b4a86b0a5bde321686e",
+    "runtime/gym-baseline/bin/dot": "8fce3ffe9b84bf848bc6deafa287894734df56133ffe8799f32eb9f63ad3da61",
+    "runtime/gym-baseline/bin/gym-shell": "a4bd16e9b15c2a6ea53cbba89efac57fa501147c690ecc6966cc4565397daea4",
+    "runtime/gym-baseline/bin/read_output": "649d1dafa4967a8b883e4802d7e7aab9ab10f8d59348f51f2f4f79ac12c5ff0c",
+    "runtime/gym-baseline/environment-runtime-manifest.json": "a31f35760248eeb539e1c6c4cec06425e8194dade9cdafad7560af646a2e1150",
+    "runtime/gym-baseline/envs/0bcab4e63e0b.freeze.txt": "d1e5d5931af0b3f4c54c9cb6ce4f69d9f72a7ef67d6c8818b81862e7bab6c253",
+    "runtime/gym-baseline/envs/0bcab4e63e0b.json": "28fcd3568982ad9bf8073a700a9b85e0a461574f72611b2a652a9b6eadcb5f53",
+    "runtime/gym-baseline/envs/0bcab4e63e0b.lock": "7d52cc656b5333312fea4021b721ef33faf0a86b7df608818baa81a58df98c4e",
+    "runtime/gym-baseline/envs/254b898f723e.freeze.txt": "857c18238cf4cd9470dc15c5d01179c77e38b353810dc4f21154ccd931475172",
+    "runtime/gym-baseline/envs/254b898f723e.json": "1db1ea976cb145d3e6f96dac4e9369f8f705538a2f221a2c92b3c19253a0caa0",
+    "runtime/gym-baseline/envs/254b898f723e.lock": "0ed4564eb231a72e7f6bf2a2c03fd65e90b104b9117cdbb98fd755e9735d391b",
+    "runtime/gym-baseline/envs/2b9f866d37bb.freeze.txt": "71c2d318a6cec77c5a156dd555862bb6c76f67aa89dade3289987c562ad6d065",
+    "runtime/gym-baseline/envs/2b9f866d37bb.json": "dbd4232cf89d61f10963f2c862cbfbaf0aed5858fd9c3e27ec0ae056105fac27",
+    "runtime/gym-baseline/envs/2b9f866d37bb.lock": "e569f120a36b7887d22f74dea00645b088271e5006c81d6420aad25e1ab6f409",
+    "runtime/gym-baseline/envs/4f5c95f92f96.freeze.txt": "47940484802b1b5f59d5c301c9f84449e47fd8961128d46e55c15f2d37c59da3",
+    "runtime/gym-baseline/envs/4f5c95f92f96.json": "4145e633957a68611f66354b0141de8a59a5edca9811e3d0c7ab4b1a44885238",
+    "runtime/gym-baseline/envs/4f5c95f92f96.lock": "ed96cc514020cc2c9509839536e1f390bf6ce6abd2d39e86d231faa3bae06c46",
+    "runtime/gym-baseline/envs/51a15701e623.freeze.txt": "d6139ca473305c2e6cab12b445a684cb970656ffcedd42bb38bcb3c6cdee87a6",
+    "runtime/gym-baseline/envs/51a15701e623.json": "68b8fafa8e58728adf784a0a92af39ac574f80dbe98b7731eb2ba42755c7bbbc",
+    "runtime/gym-baseline/envs/51a15701e623.lock": "af5f46171d38a4788e2920d2ae65fc468c9d438eb8bd0d2609723a1f48a1ec87",
+    "runtime/gym-baseline/envs/637dc1ee35f5.freeze.txt": "7acaea78c23c6daa7575f384a7537e59a3ccde159089d0e05f1aaaa56962607d",
+    "runtime/gym-baseline/envs/637dc1ee35f5.json": "1d9c4a0d87becda16f33d2fd3c992ee64bd6403e15f727eb6fd5b24896ed9fe6",
+    "runtime/gym-baseline/envs/637dc1ee35f5.lock": "4b28394c5cda4e74e4939e26108f9d5d4f44ab1ecf02b24a1aef00354cf3292c",
+    "runtime/gym-baseline/envs/6cdad8981d3c.freeze.txt": "31fb298bdc903a5e46d14e8ac47730638919edd2135eb6ac719c0b987155c71e",
+    "runtime/gym-baseline/envs/6cdad8981d3c.json": "97f7cfee0f5079ede7b8a946655de31688c332f522ff2947ecbec969bc8ad0cc",
+    "runtime/gym-baseline/envs/6cdad8981d3c.lock": "049a6eceeda62a49fc88d67652095f5a1ab209e66fefe1408e01dd2ee752ac12",
+    "runtime/gym-baseline/envs/825d33781273.freeze.txt": "a7f39456b81b4a027c4958c9ca2e3a83a22b30f2f1b4d3f9b4bc6a5945539c88",
+    "runtime/gym-baseline/envs/825d33781273.json": "deb93c8fa3b72c9c908467acc99d275c7d69722c59cc170785c15129c2a5832f",
+    "runtime/gym-baseline/envs/825d33781273.lock": "63a5979446db09effaba2794b25a715991351746d970ece0fe08ea540d0cb6fc",
+    "runtime/gym-baseline/envs/9e002a0545d6.freeze.txt": "8cbc86c8c9a6f8ae6202a1d0e64508ff033af69c4c0e5a4a6303956bced74980",
+    "runtime/gym-baseline/envs/9e002a0545d6.json": "dfd14c00efa8940625b3310297aa76d2b2fa066f3a5aa4877870c4a12c635751",
+    "runtime/gym-baseline/envs/9e002a0545d6.lock": "f58fba09daa9bc12b1bc97656ed457ef8c92f4f671425ad2ee526e3b85cf5beb",
+    "runtime/gym-baseline/envs/dc61e81cb77e.freeze.txt": "625ee42024f36dcd9456e6899f99e1161a795543073a98a9ae1318eb12a190ea",
+    "runtime/gym-baseline/envs/dc61e81cb77e.json": "aa670918373c7bdd3472c973aed0c0fb7c9217e4b1df9843c7da66439c2a8e40",
+    "runtime/gym-baseline/envs/dc61e81cb77e.lock": "07afd2d1a380d8d982e677b8ff0b2f7459aa49f70c70b8313cd5396895a93afc",
+    "runtime/gym-baseline/envs/e0a0370a75f5.freeze.txt": "01289f1c5d18d77099433c557c504cebc9b237c927123447a64404e1697a9691",
+    "runtime/gym-baseline/envs/e0a0370a75f5.json": "bf6d7328e1ac94115aa41cec5d22ff2a8843f79c3348a26722a765e482cea766",
+    "runtime/gym-baseline/envs/e0a0370a75f5.lock": "40a82201adce54cb5a778f09f9835f234448fc413768e380726585f918b01a9a",
+    "runtime/gym-baseline/envs/e6c761d940d9.freeze.txt": "a2970f4c93d4f38ed173aff1f5400dd461a8b3cada7848e91457d296ce6cc0c1",
+    "runtime/gym-baseline/envs/e6c761d940d9.json": "069614aabe41d5384cf773555b37c1e2806c95d3fc6123717c47f091624cd3af",
+    "runtime/gym-baseline/envs/e6c761d940d9.lock": "25f31097f0c977fa6a4e4d95f9298959e069db780e8c50fb67eea7e375c25a9d",
+    "runtime/gym-baseline/envs/ef23086bc62f.freeze.txt": "1100946f7bab7c9bccb7918629ccfbc81a80e99eda692ce93bb6ada3cd870ced",
+    "runtime/gym-baseline/envs/ef23086bc62f.json": "2e76132ed076a0434ecb6f89aa8b07308fe4963cb2f4e81f0a45fe357f9b98c0",
+    "runtime/gym-baseline/envs/ef23086bc62f.lock": "aae10b9db9b793455b8159f71f76089d09d3287b4c365a8b3a2b55b0edda7d8a",
+    "runtime/gym-baseline/envs/ff176a23f7e0.freeze.txt": "460df4e6b03316ec36a22849ba1b67f609cf45042ce0ff88adfbf0f80105d1b6",
+    "runtime/gym-baseline/envs/ff176a23f7e0.json": "2d6bc0cbf39e79c0c2c93ec704ab98689d9ac47324471ac307fd23f4af4fdf6b",
+    "runtime/gym-baseline/envs/ff176a23f7e0.lock": "67971bf803d174de665a99b8593d3b4038ce209eb06aeead65d65706834073cb",
+    "runtime/gym-baseline/graphviz/fonts.conf": "f63d0ed58e61336926b24efb0414e4061d4c36c8ee4f7e4612d175e69fa37914",
+    "runtime/gym-baseline/private/bokeh__bokeh-13198.json": "1dc16e00c935aac61f430d29eb0dd01d6c0470f3f074d5e04683f3a95513cf71",
+    "runtime/gym-baseline/private/bokeh__bokeh-13370.json": "c8e68da43d52b5c6edc77b5f9d3fb185d542d4fff1da85cf6ad82a01e836e561",
+    "runtime/gym-baseline/private/bokeh__bokeh-13422.json": "e6813398652576a270ba96d7f2c7947d21a5e763e6b376e39223118cfedfc9fb",
+    "runtime/gym-baseline/private/bokeh__bokeh-13636.json": "371c06a9c191e1c5651d65a7d16cdeeb367e7059c9712152cc09a7ca6c18f82e",
+    "runtime/gym-baseline/private/bokeh__bokeh-13757.json": "18b2971b1589307390967be2e98336e024b19f5e3ab15e26eb01eb648b8673db",
+    "runtime/gym-baseline/private/dask__dask-10380.json": "ca642a306a2fa4d3d7d1101e027d7cf063a7e398e4c22fcc9edcad5a9928e2b7",
+    "runtime/gym-baseline/private/dask__dask-6683.json": "c96ff222b914986215fda9c5da87e80168c2c6f455688d37bf5a1e804d53990e",
+    "runtime/gym-baseline/private/dask__dask-6815.json": "3397f003fbc71f46858d9af7efd2631baa45e6758cb110d2e19800a2c6ddaabb",
+    "runtime/gym-baseline/private/dask__dask-8501.json": "633b039e4639bad4e0a61ad83a5b9761cb3bfb4dff1b83685e7ab561d7803059",
+    "runtime/gym-baseline/private/dask__dask-8954.json": "9280c1feb75bba1ff10e05f8a9a4f84fe59a4a30c03fa65867189f1989a5a648",
+    "runtime/gym-baseline/private/facebookresearch__hydra-1560.json": "83ad60a1eb0c387161ed073bc3c3168c29b452b64ac698b2e4ba79dc74dc0ab7",
+    "runtime/gym-baseline/private/facebookresearch__hydra-1741.json": "95b5005e65baf0e95786dbe3d0e2a3331bed32caa97d7f11ac311ec04a5133bb",
+    "runtime/gym-baseline/private/facebookresearch__hydra-2011.json": "29fd8932cf8dfa52e413b58bb1d88be355e2ebcaac1b964ab48d687244cecc87",
+    "runtime/gym-baseline/private/facebookresearch__hydra-2062.json": "6ac364e9ff9b90c45b6a0e04db645d0542ec297fd6fd99f7fdb38b346b06e38d",
+    "runtime/gym-baseline/private/facebookresearch__hydra-677.json": "c053db484df80bb3b92cba0050033a3c9a866d96b1ba06ff29ac72f69c7d298f",
+    "runtime/gym-baseline/private/pydantic__pydantic-4920.json": "2eb77c8fc61a17d754ec5e1b2a4614b0a85e0235163b7b5889ecef11c98b381c",
+    "runtime/gym-baseline/private/pydantic__pydantic-5138.json": "98c1e749c40a2b738c6221d8e2662eb9b7f2d7d7af687848c5a1fa19f5efdafe",
+    "runtime/gym-baseline/private/pydantic__pydantic-5272.json": "779af9aeb0d8a04d2e0455d3f3b02d8897d5cb7919cba697ff83d13dfb74fefa",
+    "runtime/gym-baseline/private/pydantic__pydantic-5529.json": "a022ff9fcaa63e20f8d2382b97a7f14856a990feacac70b8ace221130543ba21",
+    "runtime/gym-baseline/private/pydantic__pydantic-9082.json": "73ea5e4115f9220427e84b44d06eef8b8e0ba2ca4a1d8475d88fa93e6eddf860",
+    "runtime/gym-baseline/sources/bokeh__bokeh-13198.json": "40326e0061b45f2fabfaf4ba84e75c1731a2598a6d3e4e0819035c4b0cf99171",
+    "runtime/gym-baseline/sources/bokeh__bokeh-13370.json": "a359efd4b4bcc777320cae4367de58618b53859e6a60d2d3faeb1be2a494ed27",
+    "runtime/gym-baseline/sources/bokeh__bokeh-13422.json": "dff3f55f3108ba08e5b64547913481d464be96b427ed9bdcb44e4976b9c4a6a1",
+    "runtime/gym-baseline/sources/bokeh__bokeh-13636.json": "907d81d6f98d0d95cb144964a1c68d86c07dc7728bc2c0f10db2973ded6408ae",
+    "runtime/gym-baseline/sources/bokeh__bokeh-13757.json": "3ebf92340416fd2f9da79e34b19eedb104bc2c627dff4c5821fe65f8e172ca77",
+    "runtime/gym-baseline/sources/dask__dask-10380.json": "543d4a5e5a005f2e242307bdd084c683a80d546ed0c0d71b052f29cff0069107",
+    "runtime/gym-baseline/sources/dask__dask-6683.json": "7604dd65e8208995802d47c1304d1936b99bccd4b1732e235cf24f874775af68",
+    "runtime/gym-baseline/sources/dask__dask-6815.json": "f0f90edd3c7cad3a8aa0a3207099f67c00f58de70d6bb82331d145348a52b034",
+    "runtime/gym-baseline/sources/dask__dask-8501.json": "c6f9fe7c29e62c7ab5b469cecabd80d3417f6405e70badd96f2d94409bec34e2",
+    "runtime/gym-baseline/sources/dask__dask-8954.json": "d9288820811415c1ca414c92022136c5905180580dbda6fb09fb0d88b36cdc1b",
+    "runtime/gym-baseline/sources/facebookresearch__hydra-1560.json": "3160e45cc736a78ee349cd25fc0e05802104105bf22ce8a6d39de23221783010",
+    "runtime/gym-baseline/sources/facebookresearch__hydra-1741.json": "2c8f0a5996a1c45a3aec9bc327142b7db1454557dc016d9ef87c0328b27fbb2a",
+    "runtime/gym-baseline/sources/facebookresearch__hydra-2011.json": "ddf15939983d835bc799b8223b0efacb3d9483923ccce92612712a0eee4ec343",
+    "runtime/gym-baseline/sources/facebookresearch__hydra-2062.json": "d6de97c8f4f5047e2f7e3ee1b3227b46f4a348f2e36217b3f7fd42909c7804b9",
+    "runtime/gym-baseline/sources/facebookresearch__hydra-677.json": "3fa222f8681680b0850daf7223908ca8eac84d29e6f7b9efd617246937115d44",
+    "runtime/gym-baseline/sources/pydantic__pydantic-4920.json": "17ff55bb5ef1e6af974b9d0e7b81f50c2a547c35156ed8344bd086290d86f087",
+    "runtime/gym-baseline/sources/pydantic__pydantic-5138.json": "758535fb5a8e25ec10d5bd339219389cfc5a4c429386e7aef90e246fb7b3572e",
+    "runtime/gym-baseline/sources/pydantic__pydantic-5272.json": "51841d6a55d1b93b37ab5f7a3bb1ebacfb55bd5ab3299439af8eb284b501ed85",
+    "runtime/gym-baseline/sources/pydantic__pydantic-5529.json": "6b26bafad158ec25d856076f44830219b3a3a06f8e9dc3e19d72b0da653465ed",
+    "runtime/gym-baseline/sources/pydantic__pydantic-9082.json": "1bfc8ed0f4657a8432a4e40ced244d0eab8ce3efb3d27150110734c433bf4dc0",
+    "runtime/metadata/dsh-source.json": "b96aef482445acec4dafe697475e26e27350c9073c7a48b17b92c1ec49d4b4d4",
+    "runtime/metadata/qwen-download-manifest.json": "725076feecd1984c31d4ded4f82a961a579051a71f9bb75f4ab5ad56f8435b5a",
+    "runtime/metadata/runtime-versions.json": "df1ff1f58e08d501016babd06e7304626f4f02a7dd27f44c72167f7d7ed2eaac",
+    "runtime/tools/swe-atomic-compat.so": "cc3cc7e54af0d88fd61405908fdbeb942181770f998fcfdc58d4d075f8dc94f7",
+    "scripts/env.sh": "08de5a76914614b2c240340495de940cca94f52561732dcdf886e85e0556a3c9",
+    "scripts/gym_default_pytest_probe.py": "6f1b4920baa4af65ee1665584fcfa0115c494d58a1a801182e7338f3d9f4a985",
+    "scripts/gym_facility.py": "07f603d9a2f67868eeb1f4d889a3067b439617402a5bbd939be8ee5fc59c5017",
+    "scripts/gym_holdout.py": "be8b482e001b252f9dbccced4a23d90d3ba5af537e0ce04944b60a0da16695b9",
+    "scripts/gym_prepare.py": "3aef211f8e04d64e6a7a62e42669e1a45f227709667d39bf027d4b1111251e6e",
+    "scripts/gym_relay.py": "0b4f2f329cedf122f603da6317cbe0e4eb199f5052ca44d2d9c561d927385a22",
+    "scripts/gym_restore_envs.py": "91da40acd59ae03d92d9c6aa535bec09108c2a5a0f88fbf080f54ee4c03ec1d7",
+    "scripts/gym_run.py": "e46e0f66927d4bb54f790adde7a031f767fbc7eb5c4307cd1c097c6466e61f85",
+    "scripts/gym_task_env.py": "a65266c27ee65c292c4a25d1f0afded96df9b11a507150cbb95aa9d8c2f73f1f",
+    "scripts/launch_qwen.py": "e9dbca2edb37a70266215e753056a0bd5a6b222998c215d7520b44a312f18dd0",
+    "scripts/qwen_connectivity_smoke.py": "4064b21703251bf2372fc6535e1172eeb6dc2072da74272fac7e1f475fc6b6a8",
+    "scripts/qwen_tool_suite.py": "bbb62e2df31ec85296b52b053483ba882acdff0178274278a4c3a3f21688a9d8",
+    "scripts/start_qwen.sh": "0dcbd9a304d6597a6ecccf0e08610706946727267b79e20177ae7e33d3be67cf",
+    "scripts/swe_prepare.py": "3ac5f59d5f2bd3365b578c9171c054f6088f435ccf5b3d44192b1143f6c59cfa",
+    "scripts/swe_task_env.py": "792ba9de99b4def86c6a2c6f3a6d2bcdb12a1924381ec61da971e699b73dabbb"
+  },
+  "pre_run_metadata_note": "Verified revision completed from the supplemental acquisition manifest before any formal model attempt.",
+  "protocol_revision": 2,
+  "supersedes_infrastructure_run": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/runs/20260909T090911Z-4fa3d3",
+  "infrastructure_repair": {
+    "reason": "Repository default pytest options require missing pytest-cov and pytest-benchmark plugins; initial qualification cleared addopts and hid this gap.",
+    "changes": [
+      "Add pytest-cov 4.1.0 and coverage 7.4.4 to Dask 10380",
+      "Add pytest-benchmark 4.0.0 and py-cpuinfo 9.0.0 to Pydantic 9082; default --benchmark-disable remains effective",
+      "Honor repository addopts during buggy/gold and independent acceptance",
+      "Label the full rerun explicitly; preserve V1 first attempts and all costs"
+    ],
+    "unchanged": "Same 20 tasks/order, original installed dependency versions, model, prompt, DSH, paging, context, sampling, budgets and hardware count. No score-based selection or best-of-two scoring.",
+    "cpu_dsh_default_pytest_gate": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/default-pytest-probes/1788947149439410942/verification.json",
+    "changed_v1_frozen_files": [
+      "scripts/gym_prepare.py",
+      "scripts/gym_run.py"
+    ]
+  }
+}

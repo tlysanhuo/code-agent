@@ -1,0 +1,301 @@
+{
+  "repo": "agentica-project/R2E-Gym",
+  "revision": "353348a0ff690f2592025eff41b3fef4201a4d8b",
+  "retrieved_at": "2026-09-09T12:25:47.355751+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/README.md",
+      "bytes": 12133,
+      "sha256": "3372dd9a73c88780f4073040f92ee3abf17c2a05bab93c6da2e5b141a182db4f"
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/pyproject.toml",
+      "bytes": 1070,
+      "sha256": "fd1ab85d36e12133b3a1bbb2b58ac35d9327c43f117d37f71fe99b2734d82b08"
+    },
+    {
+      "path": "reproduction/DEEPSWE_REPRODUCTION.MD",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/reproduction/DEEPSWE_REPRODUCTION.MD",
+      "bytes": 3939,
+      "sha256": "c121f0f5da2b587d66a69dfe3c8d1a70193b755964085a844973daa83c32dac5"
+    },
+    {
+      "path": "reproduction/DEEPSWE_TTS_REPRODUCTION.MD",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/reproduction/DEEPSWE_TTS_REPRODUCTION.MD",
+      "bytes": 5693,
+      "sha256": "639b3f85f8e18ae619cc6804e8da7c449cd64562b5f78203f5bb6d8f4f9015d3"
+    },
+    {
+      "path": "src/r2egym/agenthub/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/__init__.py",
+      "bytes": 1296,
+      "sha256": "f3c690e854ea61d1124e19ddb74db7398bea31ada7c493550d8353baa12454ae"
+    },
+    {
+      "path": "src/r2egym/agenthub/action/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/action/__init__.py",
+      "bytes": 71,
+      "sha256": "d766adbac0e79548d827cddca58d45c3706c26c0a13ad82fe87c5f7a63e3f2f7"
+    },
+    {
+      "path": "src/r2egym/agenthub/action/action.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/action/action.py",
+      "bytes": 5839,
+      "sha256": "26d66ceaf1ef70cec2ce6a4191fc15b4dcff1857159597481057c41ab2153514"
+    },
+    {
+      "path": "src/r2egym/agenthub/agent/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/agent/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/r2egym/agenthub/agent/agent.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/agent/agent.py",
+      "bytes": 24895,
+      "sha256": "adcfbe140e25a5663a96b9725a66ede652e9b15a01a1af775d45bbb1bdc0a6de"
+    },
+    {
+      "path": "src/r2egym/agenthub/agent/commands.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/agent/commands.py",
+      "bytes": 12021,
+      "sha256": "c2e96e243c9a3078fb4c8eb899679f6afdf0d24b76aee5196038d499d77f25a5"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/non_fn_calling.yaml",
+      "bytes": 7315,
+      "sha256": "e857d84f764e3a6af364fd4146871d33ea19497d4788f76f403d79ca4a58bd21"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/openhands/edit_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/openhands/edit_fn_calling.yaml",
+      "bytes": 6131,
+      "sha256": "85c87f3cc5ed1e1bd4c96dd20bc09cf6c4805bb272bc76d4601afc02ad960178"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/openhands/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/openhands/edit_non_fn_calling.yaml",
+      "bytes": 9680,
+      "sha256": "c625fdc8bd90f0aa802093b6495a4a5aac3da95903da53d5fd696ba1fee577a6"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/r2egym/edit_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/r2egym/edit_fn_calling.yaml",
+      "bytes": 3157,
+      "sha256": "1d4d9b3ff8e4db4ce29a56fdf088937b64a184e2cc4dc46b62d4406b6872d7d9"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/r2egym/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/r2egym/edit_non_fn_calling.yaml",
+      "bytes": 11883,
+      "sha256": "dc4bbb573863a73052ac584d4beb7979f7e4ebf8cd22e2a50502807b9cd9a258"
+    },
+    {
+      "path": "src/r2egym/agenthub/config/sweagent/edit_non_fn_calling.yaml",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/config/sweagent/edit_non_fn_calling.yaml",
+      "bytes": 5563,
+      "sha256": "20628ddb4afa19f46074369c22c363af9f9d4b5ff958daae4ce0bfb015ad71f2"
+    },
+    {
+      "path": "src/r2egym/agenthub/environment/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/environment/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/r2egym/agenthub/environment/env.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/environment/env.py",
+      "bytes": 8899,
+      "sha256": "5098d5237f3e761151285f4a9bb3d80fdd0cea2d34d1065d83ac1214f86ac718"
+    },
+    {
+      "path": "src/r2egym/agenthub/observation/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/observation/__init__.py",
+      "bytes": 91,
+      "sha256": "cd7ad15dc2cc212d1e3a219bd77203b0866fce4d483c678d4da7f241cac5b75d"
+    },
+    {
+      "path": "src/r2egym/agenthub/observation/observation.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/observation/observation.py",
+      "bytes": 1922,
+      "sha256": "f5cded489863e1197e0372a228432b3a921322a234f965e0c30884827a4490b2"
+    },
+    {
+      "path": "src/r2egym/agenthub/run/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/run/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/r2egym/agenthub/run/edit.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/run/edit.py",
+      "bytes": 16512,
+      "sha256": "f057688bfb8dc7f588a240daba652fa31c001a5f8ef442bb79896814a7d57577"
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/runtime/__init__.py",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/base.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/runtime/base.py",
+      "bytes": 359,
+      "sha256": "5681ccd5486698a55769f76de77e1fd1a0021a724e318094b880607a79df8132"
+    },
+    {
+      "path": "src/r2egym/agenthub/runtime/docker.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/runtime/docker.py",
+      "bytes": 48126,
+      "sha256": "a83b1d1daea4181e97bce2a3ea19f85144b7776403792783dc0b977adc69eb0a"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/__init__.py",
+      "bytes": 11483,
+      "sha256": "6372f0a25197100288dc668f59d6e9914bf6d5ac7c969c2bc34253670d4ad565"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/execute_bash.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/execute_bash.py",
+      "bytes": 1839,
+      "sha256": "063185fd6a830e9991e47071b7f330606248b96fa7151734363f23ed16c3c3b9"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/file_editor.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/file_editor.py",
+      "bytes": 27965,
+      "sha256": "b801e192848863132329c6ed3d28509b3a781a2cd60595bc31304c6527cd50ac"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/finish.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/finish.py",
+      "bytes": 1496,
+      "sha256": "fbf1d05339d74a9d89ae43fbd7c84aa67d9015f2e85a00bc051874f72e56ebff"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/r2egym/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/r2egym/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/r2egym/execute_bash.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/r2egym/execute_bash.py",
+      "bytes": 1797,
+      "sha256": "bb406c3e5dfef9f9030e5aa94b4f3bd8a569a9d5730da27137a6390a1de25980"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/r2egym/file_editor.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/r2egym/file_editor.py",
+      "bytes": 27802,
+      "sha256": "af37eb1713a0c170f3507f6ac6c06e03cd0932a92ed28e176dea459ca2966511"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/search.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/search.py",
+      "bytes": 8442,
+      "sha256": "45dd41c6df73019f37f889c107a41dd85bd80da0107292d638596cc8cb6ddc9c"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/search_dir.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/search_dir.py",
+      "bytes": 2764,
+      "sha256": "9bbb4d28ff07656559dd6f3052924b64290bd700ad65ae6b5560131d070e2b08"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/str_replace_editor.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/str_replace_editor.py",
+      "bytes": 22316,
+      "sha256": "d203d4debd6ff5720c294f4c41fa6147aa6887cdec319fa885321c780c77c8da"
+    },
+    {
+      "path": "src/r2egym/agenthub/tools/submit.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/tools/submit.py",
+      "bytes": 567,
+      "sha256": "27620f997ac7702dbd24d423a2ce1f5189f763a85664c16d451ce6254e956891"
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/__init__.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/trajectory/__init__.py",
+      "bytes": 120,
+      "sha256": "874586907757720f050dc676c2a91c454b768778687896b39695b968561fe85f"
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/analyze_logs.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/trajectory/analyze_logs.py",
+      "bytes": 26313,
+      "sha256": "d58cdf0587c648022f46a3c72b6bb927d9d1b876f334e5671e3fea33b0ac90c4"
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/create_swebench_submission.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/trajectory/create_swebench_submission.py",
+      "bytes": 868,
+      "sha256": "7b1951a8cf39dbf7e9b08978a8d6f9fe03752e17e53612e6623206758c0901a5"
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/swebench_utils.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/trajectory/swebench_utils.py",
+      "bytes": 2510,
+      "sha256": "9ecdb090e58471a39a2862f79e849ab025b2f9050c4495318c7bf3d809004031"
+    },
+    {
+      "path": "src/r2egym/agenthub/trajectory/trajectory.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/trajectory/trajectory.py",
+      "bytes": 17914,
+      "sha256": "b879612fbcde1db5a53bec0972c8d5346553b57a7fefee9849078bbe7054a5b4"
+    },
+    {
+      "path": "src/r2egym/agenthub/utils/log.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/utils/log.py",
+      "bytes": 1328,
+      "sha256": "cd7767585d3f7a16d75eee6487b376435a8366b4327039aaa6a15c386b9bb7b5"
+    },
+    {
+      "path": "src/r2egym/agenthub/utils/utils.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/utils/utils.py",
+      "bytes": 18552,
+      "sha256": "7e01408e5ed42b5388af6f4777fe5a9d22fd66750e2979156128c98eb4d82e44"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/create_bestofn_aggregate.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/create_bestofn_aggregate.py",
+      "bytes": 2942,
+      "sha256": "f71f9602c9382148347fb367a145312b7236c1cf80fc6f7ac00f42e5e3bca299"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/prepare_ef_verifier_input.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/prepare_ef_verifier_input.py",
+      "bytes": 7712,
+      "sha256": "c14ea03566e42484965abb703db27f57b6356d4cce9a692741eb7b16adedf7f2"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/run_eb_verifier.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/run_eb_verifier.py",
+      "bytes": 1039,
+      "sha256": "c71bbf1ed851a04698c8de86f160ea3599f5c0b2cd7436b447a3d1ab212e87db"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/run_ef_verifier.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/run_ef_verifier.py",
+      "bytes": 3541,
+      "sha256": "4f038ef3cc4eff54df801ce3dba8dfec25d83cb41076bf284263faf113bf501e"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/run_regression_tests.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/run_regression_tests.py",
+      "bytes": 2352,
+      "sha256": "1c307c8d935a963d22e25f07fbcf0391d5c2514a9bca06fa06703ae0224c26be"
+    },
+    {
+      "path": "src/r2egym/agenthub/verifiers/run_reproduction_tests.py",
+      "url": "https://raw.githubusercontent.com/agentica-project/R2E-Gym/353348a0ff690f2592025eff41b3fef4201a4d8b/src/r2egym/agenthub/verifiers/run_reproduction_tests.py",
+      "bytes": 6689,
+      "sha256": "dc2ac33f12f9e3ce6a4320b435ccc3ab25d1d16aaa956a57b99db85c69bc3d46"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "repo": "Kwai-Klear/mini-swe-agent-plus",
+  "sha": "3dfa5e26831306978ff3cfa2da15b49113ded0e6",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/README.md"
+    },
+    {
+      "file": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/pyproject.toml"
+    },
+    {
+      "file": "src/minisweagent/config/extra/swebench_add_edit_tool.yaml",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/config/extra/swebench_add_edit_tool.yaml"
+    },
+    {
+      "file": "src/minisweagent/agents/default.py",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/agents/default.py"
+    },
+    {
+      "file": "src/minisweagent/environments/docker.py",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/environments/docker.py"
+    },
+    {
+      "file": "src/minisweagent/run/extra/swebench.py",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/run/extra/swebench.py"
+    },
+    {
+      "file": "src/minisweagent/run/extra/swebench_pool_way.py",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/run/extra/swebench_pool_way.py"
+    },
+    {
+      "file": "src/minisweagent/environments/str_replace.py",
+      "url": "https://raw.githubusercontent.com/Kwai-Klear/mini-swe-agent-plus/3dfa5e26831306978ff3cfa2da15b49113ded0e6/src/minisweagent/environments/str_replace.py"
+    }
+  ]
+}

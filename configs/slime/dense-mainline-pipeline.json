@@ -1,0 +1,77 @@
+{
+  "updated_utc": "2026-09-10T09:10:00Z",
+  "status": "cpu_prep_complete_awaiting_gpu_authorization",
+  "mainline": "dense Qwen3.5-9B student; SFT cold-start -> agentic RL (GRPO, DSH multi-turn, SWE-Gym/SWE-smith) -> OPD (Qwen3.5-27B teacher, slime native --use-opd sglang mode, additive reverse-KL over GRPO); no loop surgery on the mainline",
+  "framework": {
+    "name": "slime",
+    "commit": "4c193f1f37509cca70f0e88807a9305b70f63f4e",
+    "checkout": "vendor/slime",
+    "working_tree": "must stay unmodified; all entry scripts live project-local",
+    "trainer": "slime native Megatron pipeline; no custom trainer",
+    "reference_recipes": [
+      "vendor/slime/examples/on_policy_distillation/run-qwen3-8B-opd.sh (sglang teacher mode)",
+      "vendor/slime/examples/retool/retool_qwen3_4b_sft.sh (sft_loss path)"
+    ]
+  },
+  "models": {
+    "student_hf": "models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "student_model_args": "vendor/slime/scripts/models/qwen3.5-9B.sh (sourced, unmodified)",
+    "student_mcore_dir": "models/Qwen3.5-9B/c202236235762e1c871ad0ccb60c8ee5ba337b9a/torch_dist",
+    "student_mcore_status": "pending: convert_hf_to_torch_dist.py run requires the megatron-prep environment (E1.b remaining item)",
+    "teacher_hf": "models/Qwen3.5-27B/fc05daec18b0a78c049392ed2e771dde82bdf654",
+    "teacher_serving": "external SGLang server on a dedicated H100, tp=1, ~54GB BF16 weights; sglang OPD mode fetches per-token logprobs via --rm-url <server>/generate",
+    "teacher_rule": "sole teacher for both any recovery-style use and the agent stage; same tokenizer family as student (vocab 248320)"
+  },
+  "data": {
+    "sft_pool": {
+      "path": "data/sft-pool/sft-trajectories-*.parquet (9 shards, 8000 rows each)",
+      "rows": 69705,
+      "schema": "messages (multi-turn) + metadata(source, instance_id, task_sha256, n_turns, n_tokens)",
+      "audit": "runtime/prompt-pool/prompt-pool-audit.json",
+      "length_profile": "chat-templated full-trajectory tokens p50~19k p90~30k p99~42k max~54k; 40% <=16k, 93.5% <=32k",
+      "trainset_builder": "scripts/make_sft_trainset.py --max-tokens 16384 (default cold-start cap)"
+    },
+    "opd_pool": {
+      "path": "data/opd-pool/opd-prompts.parquet",
+      "rows": 13255,
+      "content": "single-user-message task descriptions extracted from the same trajectories (deduped by task hash)",
+      "length_profile": "p50 1442 / p90 1591 / p99 2143 / max 2609 tokens",
+      "role": "prompt-only OPD smoke (no environments) and reference pool; the real agent-OPD stage runs on SWE-Gym/SWE-smith task environments"
+    },
+    "agent_task_pools": "SWE-Gym + SWE-smith under the existing buggy/gold validation and exclusion audit (configs/gym-training-exclusion.json, data/agent-rl/exclusion-audit.json, configs/swe-three-tasks.json)"
+  },
+  "stages": {
+    "1_sft_coldstart": {
+      "draft": "scripts/train_sft_coldstart.sh",
+      "loss": "slime native sft_loss via slime.rollout.sft_rollout.generate_rollout",
+      "required_flag": "--loss-mask-type qwen3_5 (default 'qwen' per-message rendering raises TemplateError 'No user query found' on this data; verified CPU-side)",
+      "cpu_acceptance": "runtime/prompt-pool/cpu-acceptance.json (Dataset load + loss-mask assistant-span correctness + token annotation cross-check)",
+      "defaults_from": "official retool SFT example (lr 1e-5 cosine, wd 0.1, dynamic batch); hyperparameter changes need user consent",
+      "gpus": "up to 3 H100 (TP1/DP3), full-param 9B BF16"
+    },
+    "2_agent_rl": {
+      "status": "pending environment wiring: DSH registered to upstream BaseHarness lifecycle (slime_dsh/ exists, CPU-verified) + SWE-Gym/SWE-smith task envs + test-pass rewards",
+      "gpus": "3 H100 student train+rollout (colocate) after stage 3 mechanics land"
+    },
+    "3_opd": {
+      "draft": "scripts/train_opd_stage.sh",
+      "mode_prompt_smoke": "pure OPD on opd-prompts.parquet (teacher KL only, scalar reward 0, GRPO estimator on zero rewards) - validates teacher server + rm plumbing without task envs",
+      "mode_agent": "DSH multi-turn + test-pass rewards + --use-opd additive KL (target state per frozen design)",
+      "gpus": "1 teacher + 3 student"
+    },
+    "4_eval": {
+      "protocol": "HumanEvalPlus base-check (dense 9B zero-shot reference 96.9% recorded) + SWE-bench Verified frozen subset official harness; baseline rows: Qwen3.5-27B, Qwen3.8-27B (generation-only), Ouro-2.6B-Thinking",
+      "rule": "official benchmarks keep official protocols; self-run results never labeled official without the official harness"
+    }
+  },
+  "gpu_discipline": {
+    "budget": "2-4 H100 80GB, per-step explicit authorization",
+    "record": "configs/gpu-allocation.json (UUID, purpose, time) before use; stop and verify release after",
+    "prerequisites_before_first_gpu_run": [
+      "megatron-prep environment (pinned Megatron-LM 1dcf0da + slime megatron.patch) built and verified CPU-side",
+      "convert_hf_to_torch_dist.py run on the 9B student with MODEL_ARGS from scripts/models/qwen3.5-9B.sh",
+      "training entry scripts reviewed by user (hyperparameters are official-example defaults, not user-approved yet)"
+    ]
+  },
+  "wandb": "online mode is the default and must not be changed without explicit user approval"
+}

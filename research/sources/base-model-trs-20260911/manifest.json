@@ -1,0 +1,38 @@
+{
+ "collection": "base-model-trs-20260911",
+ "purpose": "frontier base-model technical reports (user directive: focus on frontier, incl. base-model TRs) - agentic coding post-training practices",
+ "retrieved_at": "2026-09-11T09:15:07.118013+00:00",
+ "frontier_landscape_note": "GLM-5.3 (newest open SOTA coding; blog is JS-rendered, 598-byte shell snapshot; keeps 5.2 base, +50% Z.ai Code Bench via post-training), GLM-5.2 (753B MoE, 1M ctx, 2026-06), Qwen3.8-Max (2026-08 blog; no full TR yet), Kimi K2.5/K2.6, DeepSeek-V4.1-Flash; deepest open methodology = the three snapshotted TRs",
+ "items": [
+  {
+   "name": "glm5_tr",
+   "title": "GLM-5: from Vibe Coding to Agentic Engineering",
+   "identifier": "arXiv 2602.15763",
+   "org": "Z.ai / Zhipu",
+   "file": "glm5_tr.html",
+   "sha256": "b2d63ae2579632ac74ef3d370b117f12ef34ae5049b7253bec9fbab6a4fee949",
+   "bytes": 703873,
+   "takeaway": "slime team's frontier TR: SFT->Reasoning RL->Agentic RL->General RL->On-Policy Cross-Stage Distillation; 10k+ SWE envs via RepoLaunch; Harbor terminal envs; binary test rewards + noise filtering (pad-or-drop group rule); TITO Gateway token-faithful trajectories; GRPO+IcePop eps 0.2/0.28; error segments kept but loss-masked in SFT; async RL w/ weight push every K updates + optimizer reset"
+  },
+  {
+   "name": "qwen3_coder_next_tr",
+   "title": "Qwen3-Coder-Next Technical Report",
+   "identifier": "arXiv 2603.00729",
+   "org": "Qwen team, Alibaba",
+   "file": "qwen3_coder_next_tr.html",
+   "sha256": "ec44adc490703cd037344c72584932cd6791d56b68ee699a27167070bf63b88f",
+   "bytes": 301538,
+   "takeaway": "80A3 open coding agent: 807k PR-mined + 852k synthesized verifiable tasks (Docker envs); teacher trajectories across 6 harnesses + verifier/pairwise filtering; multi-turn RL: completion reward + unfinished penalty + invalid-tool-call token penalty + reward-hacking blocker; 262k ctx BFP packing; RL pushed avg turns 50->130; SWE-bench Verified 70.6-71.3; baseline table: GLM-4.7 74.2, Kimi-K2.5 73.2, DeepSeek-V3.2 70.2, Claude-Opus-4.5 78-79"
+  },
+  {
+   "name": "deepseek_v4_tr",
+   "title": "DeepSeek-V4: Towards Highly Efficient Million-Token (report)",
+   "identifier": "arXiv 2606.19348",
+   "org": "DeepSeek-AI (DSH maker)",
+   "file": "deepseek_v4_tr.html",
+   "sha256": "08eddfba64ff4833f66d5eb8d40c4dcc6bda37208fc95fa29ce3ef27abe1f494",
+   "bytes": 917988,
+   "takeaway": "FRONTIER VALIDATION OF OUR OPD DESIGN: 'the mixed RL stage was entirely replaced by On-Policy Distillation' - domain specialists via SFT+GRPO w/ domain-tailored reward models (incl. Generative Reward Model), then unified model consolidates via OPD (reverse-KL); Efficient Teacher Scheduling for Full-Vocabulary OPD (ZeRO-like teacher sharding, cache last-layer hidden states not logits); DSec sandbox: globally-ordered trajectory log, preemption-safe resumption via cached replay; seq curriculum 4K->16K->64K->1M"
+  }
+ ]
+}

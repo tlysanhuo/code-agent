@@ -1,0 +1,114 @@
+{
+  "status": "registered_dsh_loop_and_restricted_training_environment_cpu_verified_gpu_unverified",
+  "dsh_commit": "a66e4702047846cdaa10c66c9d3df3951f5ea70d",
+  "dsh_source_manifest": "runtime/metadata/dsh-source.json",
+  "dsh_release": "dsh-v0.1.2-rc.1",
+  "active_model_adapter": {
+    "plugin": "llm-pi-ai",
+    "provider": "qwen-local",
+    "api": "openai-completions",
+    "patch": "configs/dsh-qwen.patch.yml",
+    "endpoint_env": "QWEN_BASE_URL",
+    "disabled_plugin": "llm-deepseek",
+    "scope": "Existing smoke unchanged; separate RL patch exercised with real DSH and scripted CPU model",
+    "training_patch": "configs/agent-rl/dsh-qwen-rl.patch.yml"
+  },
+  "reuse": [
+    {
+      "interface": "DSH session lifecycle",
+      "source": "scripts/qwen_tool_suite.py:175; vendor/deepseek-harness/packages/api/session-controller",
+      "input": "DeepSeekHarness(provider, model, cwd, dsh_home, profile, patches, env); run(prompt, session_id, on_notification)",
+      "output": "Harness result finish_reason/final_response plus notifications; close() in finally",
+      "gap": "Implemented scripts/agent_rl_dsh_worker.py and agent_rl_dsh_loop.py; real DSH/tools/cleanup CPU fixture passed in restricted processes."
+    },
+    {
+      "interface": "Model/tool wire messages",
+      "source": "configs/dsh-qwen.patch.yml; vendor/deepseek-harness/packages/llm/llm-pi-ai/src/adapter.ts; context.ts; replay.ts; stream.ts",
+      "input": "messages with text/reasoning/tool-call/tool-result; JSON-schema tools, sampling budget",
+      "output": "Chat-completion SSE content/reasoning_content/tool_calls + usage + stop/tool_calls/length mapped reasons",
+      "gap": "Native upstream gateway with session admission and durable original/effective requests, SSE and traces implemented. Real Qwen token/logprob prefix behavior in training remains unverified."
+    },
+    {
+      "interface": "verl rollout",
+      "source": "vendor/verl-agent-rl/verl/workers/rollout/llm_server.py:LLMServerClient.generate; replica.py:TokenOutput",
+      "input": "request_id, exact prompt_ids:list[int], sampling_params:dict",
+      "output": "TokenOutput(token_ids, log_probs, stop_reason, extra_fields)",
+      "gap": "Native HTTP replica acquired/released through pinned LLMServerClient; abort wired to owned replica. Actual GPU sleep/wake/weight sync/cancel remains unverified."
+    },
+    {
+      "interface": "verl training trajectory",
+      "source": "vendor/verl-agent-rl/verl/experimental/agent_loop/agent_loop.py:AgentLoopBase.run, AgentLoopOutput; ToolAgentLoop",
+      "input": "sampling_params and row kwargs including extra_info environment/verifier references",
+      "output": "prompt_ids, response_ids, response_mask, response_logprobs, reward_score, num_turns, metrics, extra_fields",
+      "gap": "dsh_agent registered by +training_runtime=local; uses upstream rLLM trace/transform and verl AgentLoopOutput. CPU fixture passed; no model-sampled trajectories."
+    },
+    {
+      "interface": "Existing tools and task lifecycle",
+      "source": "vendor/verl-agent-rl/verl/tools/base_tool.py:create/execute/calc_reward/release; vendor/deepseek-harness/packages/shell/tool-bash-persistent/src; packages/fs/tool-str-replace-editor/src",
+      "input": "instance_id/session_id, schema-validated tool name+arguments, timeout and environment handle",
+      "output": "ToolResponse(text), tool metrics, terminal task reward; same worktree state for shell and editor",
+      "gap": "User-authorized custom training sandbox binds real DSH shell/editor to one workspace; independent custom-training-pytest-v1 verifier. Old benchmark runners not invoked."
+    },
+    {
+      "interface": "SWE-Gym official task evaluation",
+      "source": "vendor/SWE-Bench-Fork/swebench/harness/test_spec.py:make_test_spec; run_evaluation.py:run_instance; grading.py:get_eval_report",
+      "input": "Pinned task record kept private, candidate patch, clean upstream task environment",
+      "output": "Upstream report.resolved/test results and environment errors, retained separately",
+      "gap": "Official benchmark-only path remains blocked and unmodified. Custom training verifier does not claim official benchmark results."
+    },
+    {
+      "interface": "R2E reference environment (not selected data yet)",
+      "source": "vendor/R2E-Gym-DeepSWE/src/r2egym/agenthub/environment/env.py; runtime/docker.py",
+      "input": "Full upstream ds row, docker_image, problem_statement, parsed_commit_content, expected_output_json",
+      "output": "Env.reset/step/compute_reward/close; DockerRuntime._calculate_reward_r2e",
+      "gap": "Canonical repo+commit mapping and exclusion screening required before admitting any quarantined shard row; original reward/initialization semantics retained."
+    }
+  ],
+  "termination_contract": {
+    "normal": "Completed DSH session -> trusted candidate export -> independent custom training verifier; binary reward only for completed evaluated candidates.",
+    "truncated": "Truncated/budget/invalid token trajectories retain evidence and fail without training reward; no silent drop/zero reward.",
+    "infrastructure": "Model/process/verifier infrastructure failure aborts bounded trajectory without reward; candidate edit-policy violations are separately explicit reward=0.",
+    "cleanup": "finally close DSH session, release owned environment, cancel in-flight requests; trainer owns vLLM sleep/wake; only terminate owned services"
+  },
+  "record_required": [
+    "task/source revision",
+    "task environment digest",
+    "trajectory_id",
+    "request_id",
+    "policy_version/global_step",
+    "raw prompt_ids",
+    "sampled token_ids/log_probs",
+    "response_mask",
+    "tool call IDs/args/results/exit status",
+    "reward and independent training verifier report",
+    "termination/truncation/infra error",
+    "input/output token counts and elapsed time"
+  ],
+  "future_budgets": {
+    "concurrent_task_environments": 1,
+    "requests_per_trajectory": 12,
+    "assistant_turns": 12,
+    "trajectory_seconds": 600,
+    "response_region_including_observations_tokens": 4096,
+    "context_tokens": 8192,
+    "enforcement": "Implemented admission/token/time limits and process-wide file lease; CPU request rejection and verifier timeout checked; full real GPU lifecycle unverified."
+  },
+  "not_run": [
+    "real_model_rollouts",
+    "GPU training integration",
+    "benchmark",
+    "task containers",
+    "parameter updates"
+  ],
+  "integration_preference": {
+    "inference_compatibility": "DSH already interoperates with vLLM through its native OpenAI-compatible Chat Completions API; project real smoke passed on 0.19.1.",
+    "first_choice": "Implemented native HTTP/rLLM gateway + registered verl AgentLoop with durable session evidence and custom restricted training verifier; real DSH scripted CPU check passed.",
+    "custom_model_bridge": "Not the default. Consider only after demonstrating a concrete training-interface gap; reuse upstream parsing/SSE rather than rebuilding the inference protocol.",
+    "latest_upstream_version_checked": "0.29.0",
+    "installed_version": "0.19.1",
+    "upgrade_performed": false
+  },
+  "native_interface_implementation": "configs/agent-rl/native-interfaces.json",
+  "updated_utc": "2026-09-09T15:03:21.370760+00:00",
+  "training_engineering_manifest": "configs/agent-rl/training-engineering.json"
+}

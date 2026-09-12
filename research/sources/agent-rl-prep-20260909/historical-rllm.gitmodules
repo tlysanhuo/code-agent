@@ -1,0 +1,3 @@
+[submodule "verl"]
+	path = verl
+	url = https://github.com/agentica-project/verl.git

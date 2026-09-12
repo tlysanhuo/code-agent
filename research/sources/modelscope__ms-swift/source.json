@@ -1,0 +1,30 @@
+{
+  "repo": "modelscope/ms-swift",
+  "sha": "3f80ae012b80a438446a378279c1acc16fa0a3d4",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/README.md"
+    },
+    {
+      "file": "docs/source_en/Instruction/Distillation.md",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/docs/source_en/Instruction/Distillation.md"
+    },
+    {
+      "file": "examples/models/qwen3_5/transformers.sh",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/examples/models/qwen3_5/transformers.sh"
+    },
+    {
+      "file": "examples/train/rlhf/gkd/multi_turn.sh",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/examples/train/rlhf/gkd/multi_turn.sh"
+    },
+    {
+      "file": "docs/source_en/Instruction/GRPO/DeveloperGuide/multi_turn.md",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/docs/source_en/Instruction/GRPO/DeveloperGuide/multi_turn.md"
+    },
+    {
+      "file": "swift/rlhf_trainers/gkd_trainer.py",
+      "url": "https://raw.githubusercontent.com/modelscope/ms-swift/3f80ae012b80a438446a378279c1acc16fa0a3d4/swift/rlhf_trainers/gkd_trainer.py"
+    }
+  ]
+}

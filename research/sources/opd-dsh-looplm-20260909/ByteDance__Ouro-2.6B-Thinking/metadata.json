@@ -1,0 +1,171 @@
+{
+  "_id": "6901435c6b9d023f25308d41",
+  "id": "ByteDance/Ouro-2.6B-Thinking",
+  "private": false,
+  "pipeline_tag": "text-generation",
+  "library_name": "transformers",
+  "tags": [
+    "transformers",
+    "safetensors",
+    "ouro",
+    "text-generation",
+    "looped-language-model",
+    "reasoning",
+    "recurrent-depth",
+    "thinking",
+    "chain-of-thought",
+    "conversational",
+    "custom_code",
+    "arxiv:2510.25741",
+    "license:apache-2.0",
+    "region:us"
+  ],
+  "downloads": 17117,
+  "likes": 150,
+  "modelId": "ByteDance/Ouro-2.6B-Thinking",
+  "author": "ByteDance",
+  "sha": "f1edd81e7ac41355db670500ceaf204e0f73af68",
+  "lastModified": "2026-02-26T18:39:17.000Z",
+  "gated": false,
+  "disabled": false,
+  "widgetData": [
+    {
+      "text": "Hi, what can you help me with?"
+    },
+    {
+      "text": "What is 84 * 3 / 2?"
+    },
+    {
+      "text": "Tell me an interesting fact about the universe!"
+    },
+    {
+      "text": "Explain quantum computing in simple terms."
+    }
+  ],
+  "model-index": null,
+  "config": {
+    "architectures": [
+      "OuroForCausalLM"
+    ],
+    "auto_map": {
+      "AutoConfig": "configuration_ouro.OuroConfig",
+      "AutoModel": "modeling_ouro.OuroModel",
+      "AutoModelForCausalLM": "modeling_ouro.OuroForCausalLM"
+    },
+    "model_type": "ouro",
+    "tokenizer_config": {
+      "bos_token": "<|im_start|>",
+      "chat_template": "{%- if messages[0]['role'] == 'system' -%}{{- '<|im_start|>system\\n' + messages[0]['content'] + '<|im_end|>\\n' }}{%- else -%}{{- '<|im_start|>system\\nYou are a helpful assistant.<|im_end|>\\n' }}{%- endif -%}{%- for message in messages -%}{%- if message.role == 'system' and loop.first -%}{# Skip #}{%- else -%}{{- '<|im_start|>' + message['role'] + '\\n' + message['content'] + '<|im_end|>' + '\\n' }}{%- endif -%}{%- endfor -%}{%- if add_generation_prompt -%}{{- '<|im_start|>assistant\\n' }}{%- if enable_thinking is defined and enable_thinking is true -%}{{- '<think>\\n' }}{%- endif -%}{%- endif -%}",
+      "eos_token": "<|im_end|>",
+      "unk_token": "<|endoftext|>"
+    }
+  },
+  "cardData": {
+    "library_name": "transformers",
+    "license": "apache-2.0",
+    "pipeline_tag": "text-generation",
+    "tags": [
+      "looped-language-model",
+      "reasoning",
+      "recurrent-depth",
+      "thinking",
+      "chain-of-thought"
+    ]
+  },
+  "transformersInfo": {
+    "auto_model": "AutoModelForCausalLM",
+    "custom_class": "modeling_ouro.OuroForCausalLM",
+    "pipeline_tag": "text-generation"
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "30e097bb071d904a891045a2315a38376b57bd2a",
+      "size": 1632
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "e303b42c5d057e5d89c4891411ab979434958941",
+      "size": 5007
+    },
+    {
+      "rfilename": "assets/logo.png",
+      "blobId": "80de825cc16ab7fdae88f2b093a00e7e69e55e8f",
+      "size": 656922,
+      "lfs": {
+        "sha256": "b971dc437f16af7155034488be23ca64039d66a85348a24710d7c6459f984484",
+        "size": 656922,
+        "pointerSize": 131
+      }
+    },
+    {
+      "rfilename": "assets/ouro_thinking.png",
+      "blobId": "577da4032547f2e91a26e9a611636cbc94204255",
+      "size": 516109,
+      "lfs": {
+        "sha256": "79b5db34e6094ce62a3270dc4274403bdd7922140520b49240363e10983be841",
+        "size": 516109,
+        "pointerSize": 131
+      }
+    },
+    {
+      "rfilename": "config.json",
+      "blobId": "5de22fc1560f1c7d8245e4c0d70d5bb4011fdbf2",
+      "size": 1999
+    },
+    {
+      "rfilename": "configuration_ouro.py",
+      "blobId": "84590d670902673508f4a2b565a1994b9d2643ca",
+      "size": 11595
+    },
+    {
+      "rfilename": "merges.txt",
+      "blobId": "69503b13f727ba3812b6803e97442a6de05ef5eb",
+      "size": 466391
+    },
+    {
+      "rfilename": "model.safetensors",
+      "blobId": "8c10bfff7c53bc6637d5596a8250e0105698ce56",
+      "size": 5336011242,
+      "lfs": {
+        "sha256": "c506a79247dc51fc0400d789365c3d43932f718abce9810f3606ace47d0a3080",
+        "size": 5336011242,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "modeling_ouro.py",
+      "blobId": "3c117765ee158c994a0602dd1fee4f593e39bde1",
+      "size": 35495
+    },
+    {
+      "rfilename": "special_tokens_map.json",
+      "blobId": "f3c1c91caef5cac1620e8008b8e590b6d0289d52",
+      "size": 965
+    },
+    {
+      "rfilename": "tokenizer.json",
+      "blobId": "5046b313b3e16fa14cd3662ef70c105b08c92092",
+      "size": 3522644
+    },
+    {
+      "rfilename": "tokenizer_config.json",
+      "blobId": "b653407b285b06c5885e8af863b8630dde0c430a",
+      "size": 4303
+    },
+    {
+      "rfilename": "vocab.json",
+      "blobId": "6a22c055228041f2f7b055686644c157cb5d21fc",
+      "size": 800656
+    }
+  ],
+  "spaces": [],
+  "createdAt": "2025-10-28T22:27:40.000Z",
+  "safetensors": {
+    "parameters": {
+      "BF16": 2667974657
+    },
+    "total": 2667974657
+  },
+  "usedStorage": 5337184273
+}

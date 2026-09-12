@@ -1,0 +1,34 @@
+{
+  "repo": "deepseek-ai/deepseek-harness",
+  "sha": "c389f96bf3a9b6807cb71ed6bdad5849be0df6d8",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/README.md"
+    },
+    {
+      "file": "docs/architecture.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/docs/architecture.md"
+    },
+    {
+      "file": "docs/user/guide/providers.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/docs/user/guide/providers.md"
+    },
+    {
+      "file": "docs/user/guide/python-sdk.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/docs/user/guide/python-sdk.md"
+    },
+    {
+      "file": "packages/llm/llm-pi-ai/README.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/packages/llm/llm-pi-ai/README.md"
+    },
+    {
+      "file": "packages/session-query/session-log-export/README.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/packages/session-query/session-log-export/README.md"
+    },
+    {
+      "file": "docs/subsystems/compaction.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/c389f96bf3a9b6807cb71ed6bdad5849be0df6d8/docs/subsystems/compaction.md"
+    }
+  ]
+}
