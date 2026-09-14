@@ -133,3 +133,8 @@ bash scripts/train_agent_rl.sh            # GRPO 配置（print-only，超参需
 - Harness 即训练环境：Polar（arXiv 2605.24220，NVIDIA）
 - 同族工业设计：DeepSeek-V4 TR（arXiv 2606.19348）、GLM-5 TR（arXiv 2602.15763）
 - 完整文献地图见 [docs/research-log.md](docs/research-log.md)
+
+## 署名
+
+- **方案构思**：[Claude Code](https://claude.com/product/claude-code)（Anthropic）
+- **工程实现**：ZCode（GLM，智谱）——全部代码、调研、训练与评测执行
