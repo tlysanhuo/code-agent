@@ -1,5 +1,16 @@
 # Code-Agent-RL：小预算三段式训练 Coding Agent
 
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![PyTorch 2.11](https://img.shields.io/badge/PyTorch-2.11-EE4C2C?logo=pytorch&logoColor=white)
+![slime](https://img.shields.io/badge/trainer-slime%20%404c193f1f-375A7F)
+![Megatron-LM](https://img.shields.io/badge/Megatron--LM-TE_2.16-2CA5E0?logo=nvidia&logoColor=white)
+![SGLang 0.5.15](https://img.shields.io/badge/SGLang-0.5.15-764ABC)
+![vLLM 0.19.1](https://img.shields.io/badge/vLLM-0.19.1-FFB13B)
+![Harness: DeepSeek DSH](https://img.shields.io/badge/harness-DeepSeek%20DSH-4D6BFE)
+[![wandB: SFT run](https://img.shields.io/badge/wandB-SFT%20run%2046hg4r4a-FFCC33?logo=weightsandbiases&logoColor=black)](https://wandb.ai/3120252125-/code-agent-dense-mainline/runs/46hg4r4a)
+![Status](https://img.shields.io/badge/stage--2-Agentic%20RL%20in%20progress-yellow)
+
 > Qwen3.5-9B × DeepSeek Harness（DSH）× GRPO + On-Policy Distillation，
 > 在 2–4 张 H100 上完整复现工业级 coding-agent 训练管线。
 >
@@ -7,17 +18,29 @@
 > (SFT → agentic GRPO → on-policy distillation) for Qwen3.5-9B with the
 > DeepSeek Harness, engineered to fit a 2–4×H100 budget.
 
-**状态**：阶段① SFT 已完成并通过验收；阶段② DSH GRPO 接线完成、任务环境批验证中；阶段③ OPD 配置就绪。进度看 [PROGRESS.md](PROGRESS.md)，完整调研与决策记录看 [docs/research-log.md](docs/research-log.md)。
+**状态**：阶段① SFT 已完成并通过验收；阶段② 奖励栈四模块落地（11/11 单测）、任务池
+qualification+扩池完成（87+454）、27B 难度筛选批进行中；阶段③ OPD 配置就绪。
+进度看 [PROGRESS.md](PROGRESS.md)，决策叙事看 [docs/decision-log.md](docs/decision-log.md)，
+完整调研看 [docs/research-log.md](docs/research-log.md)。
 
 ## 这是什么
 
 从基座到 agent 的完整训练管线，对标 DeepSeek-V4 技术报告（arXiv 2606.19348）的
 「专家 GRPO + OPD 整合」设计的小预算复现：
 
+```mermaid
+flowchart LR
+    A["① SFT 冷启动 ✅<br/>Klear 66k→28k 轨迹<br/>1 epoch · 2×H100"] --> B["② Agentic RL 🔄<br/>DSH harness 内 rollout<br/>GSPO · 二值奖励 + DAPO"]
+    B --> C["③ OPD 整合 ⏳<br/>Qwen3.5-27B teacher<br/>逐 token reverse-KL"]
 ```
-① SFT 冷启动 ──→ ② Agentic GRPO ──→ ③ On-Policy Distillation
-  Klear 66k 轨迹     DSH 多轮 + 测试通过=奖励    27B teacher 逐 token reverse-KL
-  (完成 ✅)          (进行中)                   (叠加在 GRPO 上，slime 原生 --use-opd)
+
+任务侧的漏斗（阶段② 现在进行到的位置）：
+
+```mermaid
+flowchart LR
+    F["任务冻结 v1<br/>SWE-Gym 2,357 + SWE-smith 59,133 eligible<br/>sha256 + 防泄漏排重"] --> Q["环境 qualification ✅<br/>curated 87/291 + 扩池 454/588<br/>（mypy 198 + moto 256）"]
+    Q --> S["难度筛选 🔄<br/>27B teacher × k=4<br/>保留 1–3/4 解带内任务"]
+    S --> B2["任务带 ~百级<br/>→ GRPO 训练"]
 ```
 
 三个差异化点（开源 landscape 中无人同时做过）：
@@ -65,10 +88,11 @@
 - **训练栈**：THUDM/slime（钉 commit `4c193f1f`，工作树零修改）+ Megatron-LM +
   SGLang；环境按官方 `build_conda.sh` 收敛（torch 2.11+cu129 / TE 2.16.1 /
   flash-attn 2.8.3）。
-- **DSH 接入**：`slime_dsh/` 薄适配层——`BaseHarness` 生命周期（上游 CPU 测试 7 passed）
+- **DSH 接入**：`slime_dsh/` 薄适配层——`BaseHarness` 生命周期（`--dsh-check` 通过）
   + **LocalProcessSandbox**（slime Sandbox 协议的本地后端：每任务工作区、进程组隔离、
   并发 marker 防串扰，9/9 验收）+ 冻结判分器作为 RL 奖励（金标=1.0 / 空 patch=0.0
-  集成测试通过）。
+  集成测试通过）+ **奖励栈四模块**（二值核 / GLM-5 组修复+组归一化 / 格式罚字节级
+  token 定位 / 防作弊拦截，11/11 单测，系数默认零/关走环境变量）。
 - **2×H100 训练显存术**：TP2 + 优化器 CPU 卸载 + 精度感知优化器 + 全重计算；
   RL 阶段 4 卡解耦布局（TP2 训练 + TP2 rollout）。
 - **数据纪律**：训练/评估互斥的排除审计（SWE-bench Verified 500 / held-out /
@@ -93,8 +117,9 @@ PROGRESS.md           进度单一入口
 ```bash
 source scripts/env.sh
 bash scripts/slime_rl.sh --check          # 上游 CPU 测试
-bash scripts/slime_rl.sh --harness-check  # DSH 生命周期（7 tests）
+bash scripts/slime_rl.sh --dsh-check      # DSH 生命周期检查
 .venv-train-rl/bin/python scripts/check_local_sandbox.py   # 本地沙箱（9 tests）
+.venv-train-rl/bin/python scripts/check_reward_stack.py    # 奖励栈（11 tests）
 bash scripts/train_sft_coldstart.sh       # SFT 配置（print-only，--launch 受权限保护）
 bash scripts/train_agent_rl.sh            # GRPO 配置（print-only，超参需人工批准）
 ```
