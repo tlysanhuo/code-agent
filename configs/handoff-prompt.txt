@@ -1,35 +1,40 @@
-接手 code-agent 项目（简历面试项目）。先读三个文件再动手：
+接手 code-agent 项目(简历面试项目)。先读三个文件再动手:
 /lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/ 下的
-PROGRESS.md（进度单一入口）、docs/research-log.md（完整调研与决策）、
-configs/loop-agent/plan.json（机器可读状态）。
-纪律在 docs/workspace-discipline.md；结果证据在 reports/；GitHub =
-tlysanhuo/tlysanhuo-code-agent-rl（作品集级 README，推送前过访客视角）。
-source scripts/env.sh 后再跑任何东西。
+PROGRESS.md(进度单一入口)、docs/decision-log.md(讲解主线:D1-D17 决策叙事,
+PPT 按此展开)、configs/loop-agent/plan.json(机器可读状态)。
+调研全文在 docs/research-log.md(第一至十二轮);纪律在 docs/workspace-discipline.md;
+奖励设计已锁定:research/reward-design-stage2-grpo.md(六家 TR 权威集+ScaleRL 标尺);
+TR 分析附录:research/code-agent-tr-analysis-202604plus.md;结果证据在 reports/。
+source scripts/env.sh 后再跑任何东西;起批一律绝对路径 --out。
 
-【立即事项】阶段② GRPO 奖励设计（未完成，当前最高优先）：
-- 用户裁定：奖励设计只认基模大厂 TR（DeepSeek-V4 / Qwen3-Coder-Next / GLM-5），
-  Klear 等只当数据用不算配方权威；不许自创规则
-- 三份 TR 全文快照：research/sources/base-model-trs-20260911/；
-  奖励章节已提取为纯文本 tmp/{qwen3cn,glm5,dsv4}_tr.txt（含逐字引文：
-  Qwen3CN 未完成惩罚+工具格式 token 级惩罚+防作弊拦截器；GLM-5 环境崩溃剔除+
-  组填充/丢弃；DSV4 专家 GRPO+GRM→OPD 整合）——综合设计文档未写，
-  先写完（research/ 下）并给用户过目再实现
-- slime 原生机制已核实：remove_sample→零 loss_mask（=GLM-5 剔除/Klear 掩码通道）、
-  token 级 loss_mask 原生、advantage 支持 grpo/gspo/cispo+custom 钩子
+【当前在飞】round1b 扩池 prep 批(mypy 255+moto 333=588 候选,2 并行 worker,
+logs/prepare-rl-round1b-{full,w1,w2}.log;09-13 14:36 UTC 时 414/588;预计 UTC 17
+点前后收尾→合并三份 registry+汇总报告)。
 
-【已完成】qualification：87/291 合格（registry + 87 行 parquet 已落盘），首轮 GRPO 规模足够。
+【本轮完成】奖励栈 slime_dsh 四模块实现(设计锁定 §3 全项):reward(二值核+未完成
+惩罚开关+失败四分类)/group_repair(GLM-5 组剔除+填充/丢弃+组归一化钩子)/
+format_penalty(Qwen3CN 规则校验+字节级精确 token 定位+custom advantage 钩子)/
+blocker(防作弊拦截器:违规命令改写为无害 echo+反馈回注,轨迹可继续)。单测
+scripts/check_reward_stack.py 11/11 PASS(含真实 Qwen3.5 tokenizer 对齐验证)。
+系数/开关全部默认零/关走环境变量,数值本体=GRPO smoke 超参单待呈批(含格式罚需关
+--normalize-advantages 的注记)。顺带定位先存问题:harness-check 3 lifecycle 用例
+自本地后端绑定起即失效(fixture 的 E2BSandbox patch 已成死代码,git 对照验证非本轮
+引入),待改 local 契约。
 
-【已完成待续】阶段① SFT 验收全过（HumanEvalPlus 96.88% 持平基线、NLL 交叉验证、
-A/B 解决率 15%→30%，见 reports/）；阶段②接线：LocalProcessSandbox（9/9 测试）、
-本地 RL 后端（金标=1.0/空=0.0 集成测试过）、scripts/train_agent_rl.sh
-（print-only；超参未获用户批准，--launch 必须拒绝）。
+【已完成】阶段① SFT 验收全过(见 reports/);curated 291 qualification(88 合格)+
+27B 难度筛选 348/348(带内仅 12——curated 池 79% 零解,故有扩池决策 D15);扩池配方
+探针(mypy 75%/moto 83%)+四处基建 bug 修复。
 
-【硬纪律】调研先行（先看别人实现，不自写）；训练参数变更需用户同意；bench 全本地
-（无 Docker/远端）；WANDB_MODE=online 不许改（key 在 configs/secrets/wandb.env）；
-GPU 逐次授权记 UUID 进 configs/gpu-allocation.json、用完验证释放；官方 benchmark
-只走官方协议；引用带标题+arXiv号+机构；没验证的不说完成；共享机 ray 独占端口
-（20379/28266），清理只杀自己会话目录匹配的 PID；vendor/slime 零修改。
+【等用户】①筛选 GPU 安排(round1b 合格池的 27B×4 难度筛选,1×H100 即可;GPU 2/5 已被
+他人占用需重看空闲卡);②RL 启动=4 卡已批但必须用户协调;③smoke 超参单已起草待批:
+configs/agent-rl/grpo-smoke-hyperparams-v1.md(grpo/cispo/gspo 三选推荐 gspo+奖励栈
+v1 开关全零/关+组归一化钩子推荐接线+DAPO 动态采样,5 项待拍板)。
 
-【下一步队列】① TR 调研成文→奖励栈实现（slime_dsh/ 内，带单测）→GRPO smoke
-（超参先给用户批）② qualification 出数定首轮规模 ③ evalplus 官方 CLI 双模型
-④ cudnn/torchaudio 升级 + iter_249/439（270G）清理确认 ⑤ LoopLM 探索臂最后。
+【硬纪律】调研先行(先看别人实现);训练参数变更需用户同意;bench 全本地;WANDB_MODE=
+online 不许改;GPU 逐次授权记 UUID、用完验证释放;官方 benchmark 只走官方协议;引用带
+标题+arXiv号+机构;没验证的不说完成;清理只杀自己会话目录匹配的 PID;vendor/slime
+零修改;prepare/评测一律绝对路径+env.sh 前置(相对路径在 git -C 语义下会炸,已踩)。
+
+【下一步队列】①round1b 收尾汇总→难度筛选(用户 GPU)→任务带 ②GRPO smoke 超参单→
+RL 启动(用户协调 4 卡)③harness-check fixture 改 local 契约 ④evalplus 官方 CLI 双模型
+⑤LoopLM 探索臂最后。

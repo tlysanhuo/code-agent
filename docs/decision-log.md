@@ -144,6 +144,45 @@
   (2-4 卡装不下全词表,接受 token 级+监控 Pass@k 风险);OT-Agent 的 teacher 发现
   (GLM-4.6 比 GPT 系好 2 倍)佐证 teacher 质量关键。
 
+### D15 扩池路线:smith 出局,gym 扩仓库(2026-09-13)
+- **背景**:难度筛选显示 curated 池 79% 零解、带内仅 12 任务,不够首轮;用户指令做 smith 扩池。
+- **备选**:SWE-smith 59k 池 / gym 池扩仓库 / 放宽预算重筛零解任务。
+- **裁决**:gym 扩仓库。smith 数据 schema 是 Docker 镜像绑定(无 base_commit/test_patch),
+  与本地 venv 路线结构性不兼容;gym 剩余 2,066 eligible(pandas 722/MONAI 355/moto 333/
+  mypy 255/dvc 221/modin 107/conan 73)完全管线兼容。
+- **验证**:探针实证 mypy 9/12=75%、moto ≈83% 合格率(vs 原 curated 池 30%)——配方经
+  7 轮迭代收敛;正式批 588 候选在飞(77.6%)。附带修复四处基建 bug(git safe.directory
+  chown 信任链/绝对路径契约/env.sh 必须前置/残骸清理)与两个新机制(--repos 白名单、
+  pytest_args 通道)。
+
+### D16 RL 资源与启动纪律(2026-09-13 用户裁定)
+- RL 训练放宽至 **4 卡**,但**启动必须由用户协调**——助手不得自行起训。
+- 筛选(非训练)GPU 照旧逐次申请;GPU 2/5 已被他人占用,起批时重看空闲卡。
+
+### D17 奖励栈落地:四个实现裁决(2026-09-13,设计锁定后的执行)
+- **背景**:D11f 锁定的奖励方案进入实现;设计文档 §3 列了四个模块与单测清单,
+  但机制细节(挂载点组合、token 定位、拦截器机制)留到实现时定。
+- **裁决与依据**(全部在锁定设计边界内):
+  1. **未完成惩罚的实际集成点=all-samples-process 而非 custom_rm 路径**——实测
+     agent 流里 reward 在 generate 内已设,rm_hub 只对 reward=None 的样本调 custom_rm;
+     组修复钩子本来就在归一化前跑,惩罚顺路进同一钩子(custom_rm 保留为独立可用的
+     slime 挂载形态)。
+  2. **组归一化用 custom-reward-post-process 整体替换而非依赖上游默认**——读源码发现
+     上游 reshape 依赖样本总数==K×batch,多分段 agent 轨迹恒不满足→退化为全批全局
+     均值归一化;GLM-5 语义要求按组统计,自写钩子按 instance_id 分组并剔除环境崩溃。
+  3. **格式罚 token 定位=字节级 BPE 精确对齐**(convert_ids_to_tokens+GPT-2 逆映射,
+     逐 token 字节拼接与解码文本 utf-8 全等断言)——单 token decode 有替换字符问题,
+     重编码不保证同 token 序;字节级对齐对 Qwen 族精确且有运行时断言兜底。
+  4. **拦截器=adapter 回复层命令改写(违规→无害 echo 打印反馈)而非丢弃工具调用**——
+     设计要求"agent 可继续任务而非直接终止";反馈作为工具结果回注即 Qwen3CN 原文行为
+     的协议等价物;wire/manager 同源改写保证下轮 echo 匹配不 fork 训练 tokens 不受影响。
+- **验证**:scripts/check_reward_stack.py 11/11 PASS(含真 tokenizer 对齐+loss_mask
+  正交性+组统计剔除);实现中实测抓出并修复组归一化的局部/全局索引 bug。
+- **边界**:所有系数/开关默认零/关、走环境变量——数值本体属 smoke 超参单(用户批前
+  不进任何配置);格式罚启用需同步关 --normalize-advantages(白化会吃掉罚项)。
+- **附带发现(如实入档)**:harness-check 3 lifecycle 用例自本地后端绑定起即失效
+  (fixture patch 的 E2BSandbox 已死)——先存问题,git 对照验证非 D17 引入,待改 local 契约。
+
 ---
 
 ## 讲解映射(PPT 骨架)

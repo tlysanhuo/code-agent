@@ -7,7 +7,7 @@
 > 新建理由（2026-09-12）：用户明确要求独立进度文档；README 已承载大量调研内容，
 > 进度状态不再与之混排。本文件与 docs/research-log.md 互补：本文件管进度，research-log 管调研全文。
 
-- **当前时间**：2026-09-12 ~09:15 UTC
+- **当前时间**：2026-09-14 ~02:35 UTC
 - **项目定位**：简历面试项目。dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
   LoopLM 循环层为限额加分臂（≤8 GPU·h，恢复 <50% dense 参照即止损封存）。
 
@@ -16,7 +16,7 @@
 | 阶段 | 状态 | 一句话 |
 |---|---|---|
 | ① SFT 冷启动 | **✅ 完成并通过验收 + 价值判定** | HumanEvalPlus 持平基线；NLL −33%；**A/B：解决率 15%→30%、提交纪律 10%→100%** |
-| ② Agentic RL | CPU 准备完成，环境层有缺口 | DSH→BaseHarness 接好（7 passed）；RL 任务清单冻结 v1；缺 Sandbox 本地后端 |
+| ② Agentic RL | CPU 准备+奖励栈完成，round1b 454 待筛选（curated 87 已筛带内 12），等筛选 GPU 与 RL 启动协调 | DSH 接线+本地后端+任务冻结 v1；**奖励栈四模块落地（11/11 单测）**；round1b 扩池合并完成（454 合格）；harness-check 3 用例待改 local 契约 |
 | ③ OPD | 配置草稿就绪 | teacher 27B SGLang 服务 smoke 未做；prompt-smoke 模式随时可跑 |
 | LoopLM 臂 | 未启动（按计划最后做） | E1 资产保留 |
 
@@ -93,19 +93,36 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 ## 阶段 ② Agentic RL 准备状态
 
 - **已接好**：`slime_dsh/`（DshHarness 生命周期 + generate 钩子，vendor/slime 零修改，
-  SHA 钉住）；复检 `--harness-check` 7 passed。
-- **任务清单冻结 v1**（configs/agent-rl/rl-task-freeze-v1.json）：SWE-Gym 2,438→
-  2,357 eligible（61 旧审计 blocked + 20 held-out，与 Verified/full-test 零交集，
+  SHA 钉住）；LocalProcessSandbox + local_backend（本地受限期用满 slime Sandbox 契约；
+  集成检查过：金标 1.0/空 0.0）；RL 任务清单冻结 v1（configs/agent-rl/rl-task-freeze-v1.json）：
+  SWE-Gym 2,438→2,357 eligible（61 旧审计 blocked + 20 held-out，与 Verified/full-test 零交集，
   独立复算）；SWE-smith 59,133 eligible（剔 3 冻结修复任务）；确定性 round 顺序
   + sha256 在 data/agent-rl/。10,894 个与 klear SFT 重合任务按设计保留（同分布课程）。
-- **缺口**：① Sandbox 本地后端（LocalProcessSandbox 实现 slime 的 Protocol，项目内
-  新文件）——阶段②真正的前置；② Docker 平台层（docker-proxy 探针失败）——只有
-  阶段⑤官方评估（SWE-bench Verified 官方 harness）硬需要，训练可走已验证的本地
-  受限进程路（自建训练协议标注，2026-09-09 用户已授权此路线用于训练）。
-- 训练不依赖 Docker；官方评估依赖 Docker。
-- **下一步（等用户指令）**：调研先行的 LocalProcessSandbox（先查 slime 生态/上游
-  是否已有 local/remote sandbox 实现可复用，再决定自写范围）→ 用冻结清单前缀任务
-  小规模 GRPO。
+- **奖励栈已实现（2026-09-13，设计锁定 §3 执行完毕，CPU+单测）**：
+  - `slime_dsh/reward.py`：二值核（金标 grading_solved）+ 未完成惩罚开关（DSH_C_UNFINISHED，
+    默认 0）+ 失败四分类（environment/model/budget/none）；
+  - `slime_dsh/group_repair.py`：GLM-5 组剔除+填充/丢弃（--rollout-all-samples-process-path；
+    环境崩溃槽轮转重复有效槽、有效≤半整组丢）+ 组归一化钩子
+    （--custom-reward-post-process-path；按 instance_id 组统计、剔除环境崩溃；
+    接线时整体替换上游默认——其 reshape 在多分段轨迹下会退化为全批全局均值归一化）；
+  - `slime_dsh/format_penalty.py`：Qwen3CN 规则级工具调用校验 + 字节级精确 token 定位
+    （真 Qwen3.5 tokenizer 验证逐 token 字节拼接==解码 utf-8 字节）+ custom advantage
+    钩子（复刻 grpo/gspo/cispo 基线后监督 token 减 DSH_C_FMT；与 loss_mask 正交）；
+  - `slime_dsh/blocker.py`：Qwen3CN 防作弊拦截器（仓库链接∧网络关键字→阻断+反馈回注，
+    轨迹可继续）；adapter 回复层改写机制，DSH_BLOCKER=1 显式启用（默认关）。
+  - 单测 scripts/check_reward_stack.py 11/11 PASS；超参数值全部走环境变量、默认零/关，
+    **数值本体=GRPO smoke 超参单待呈批**（含格式罚需同步关 --normalize-advantages 的注记）。
+- **检查现状（2026-09-13 复检）**：--dsh-check passed、check_local_backend OK、
+  reward-stack 11/11；**--harness-check 4 passed/3 failed——先存问题非新引入**
+  （git 对照验证）：3 个 lifecycle 用例的 fixture monkeypatch 上游 E2BSandbox，而
+  boot_agent_sandbox 已被 local_backend.bind 整体替换（09-11/12 本地后端接线时即失效，
+  此前记录"7 passed"已过期）——待把 fixture 改造为 local 契约（image='local'+注册
+  fixture 案例）。
+- **缺口**：Docker 平台层（docker-proxy 探针失败）——只有阶段⑤官方评估
+  （SWE-bench Verified 官方 harness）硬需要，训练走已验证的本地受限进程路
+  （自建训练协议标注，2026-09-09 用户已授权此路线用于训练）。
+- **下一步（等用户指令）**：难度筛选（GPU 待用户安排；合格池=round1 87+round1b 454=541）→
+  任务带→GRPO smoke 超参单呈批（grpo/cispo/gspo 三选一+组大小+奖励栈开关与系数）。
 
 ## 阶段 ③ OPD 状态
 
@@ -125,21 +142,103 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 
 ## 挂起 / 等用户
 
-1. ~~奖励设计过目~~ **已锁定（2026-09-12 用户批准）**：分级方案执行（v1=二值核+原生动态采样；格式罚带退场；部分分挂重访；过程正奖归阶段③）。下一步=slime_dsh 实现（带单测）+smoke 超参单。
-2. Polar B' 数据集：上游 401（gated），需用户 HF 账号接受条款+token 或等公开
-   （确切段址 `nvidia/polar-swegym-pi-qwen35-122b-a10b-trajectories`）。
-3. iter_249/439 清理已随 2026-09-12T08:59Z 清理执行完毕（见变更日志）；cudnn/torchaudio 升级时机。
-4. 阶段②③ GPU 使用照旧逐次授权；GRPO smoke 超参单（组大小/T_max/c_* 等）呈批。
+1. **筛选 GPU 安排**：待筛=**round1b 新增 454 任务**（mypy 198+moto 256，合并一致性
+   校验通过），27B×k=4（1×H100 即可；GPU 2/5 已被他人占用，起批时重看空闲卡）。
+   curated 87 任务**已于 09-12/13 筛过**（带内 12/全零 69/全解 4，结果沿用
+   rl-round1-screened.json，不重筛——D15 裁决扩池而非放宽预算重筛）。本批
+   454×4=1,816 attempts，按上批实测 25.8 attempts/h 约 3 天单卡，可分片；筛选后
+   任务带=12（curated）+round1b 产出。
+2. **RL 训练启动（用户协调）**：4 卡已获批但启动必须由用户协调；前置=筛选任务带+
+   **GRPO smoke 超参单已起草待批**：[configs/agent-rl/grpo-smoke-hyperparams-v1.md]
+   （configs/agent-rl/grpo-smoke-hyperparams-v1.md）——estimator 三选（推荐 gspo）、
+   官方配方锚点核心超参、奖励栈 v1 开关全零/关+组归一化钩子推荐接线、DAPO 动态采样、
+   5 项待拍板清单。
+3. Polar B' 数据集：上游 401（gated），需用户 HF token 或等公开；cudnn/torchaudio 升级时机。
 
 ## 在飞
 
-- **全量 291 任务 qualification 批**（nohup，PID 4078403，logs/prepare-rl-round1-full.log；
-  产出 configs/agent-rl/local-task-registry.json + data/agent-rl/rl-round1-prompts.parquet；
-  截至 09:02 UTC 约 153/291；日志见大量 infrastructure_startup_failure，与试点合格率
-  20-24% 一致；结束后统计合格数定首轮规模）。
+- **round1b 454 任务难度筛选全量批（2026-09-14 04:39 UTC 起）**：GPU 0（GPU-8c4bac00，
+  分配记录 configs/screen-gpu-allocation-r1b.json），27B vLLM :18095（max_num_seqs 12），
+  k=4、**并发 6**（试验批 6 题×4=24 attempts 实测 57.5 attempts/h=上批 2.2×、零抢占、
+  达理想吞吐 91%，故不加码），1,792 attempts 预计 **~31h（09-15 中午 UTC 前后）**收尾；
+  试验 24 条结果已并入免重跑。watcher scripts/run_screen_r1b_full.sh（结束自动停服+
+  验证 GPU 0 释放，报告落 runtime/agent-rl/round1b-screen/）。日志：
+  logs/screen-r1b-full.log（控制器）、logs/screen-qwen-server-r1b.log（服务）、
+  logs/screen-r1b-full-tail.log（watcher）。试验批结论：带内 1/全零 5/全解 0（小样本，
+  全量分布待出）；服务端并发上限曾是上批瓶颈之一（max_num_seqs 4→12）。
 
 ## 变更日志
 
+- 2026-09-14 04:4x UTC — **round1b 难度筛选起批（用户批 GPU 0 并指示调高并发、先试几题）**：
+  ①screen_rl_tasks.py 参数化（--registry/--prompts/--out-dir/--screened-json/
+  --screened-parquet，默认值保持 round1 原行为）；②服务端并发上限修正——发现上批
+  max_num_seqs=4 是隐性瓶颈，r1b 配置提到 12（configs/agent-rl/screen-qwen-server-r1b.json，
+  其余参数与上批逐字一致）；③**试验批 6 题×k=4 并发 6**（4 moto+2 mypy 跨原批/w2 段）：
+  24 attempts 25.1 min=**57.5 attempts/h（上批 2.2×）**，服务零抢占、6 并发达理想吞吐
+  91%（6×3600/341s），瓶颈在单 attempt 时长（p50 201s/p90 915s），再加大并发只会
+  逼近 1500s 超时线——全量定并发 6；④全量批 04:39 UTC 起（1,792 attempts，试验 24 条
+  并入免重跑），watcher 自动停服+释放验证。GPU 0 UUID 记录、分配文件
+  configs/screen-gpu-allocation-r1b.json。
+- 2026-09-14 02:3x UTC — **round1b 扩池批收尾+合并完成**：588 候选全量处理（原批 198 被
+  停未写 registry + w1 200/151 OK + w2 191/154 OK）。两处要点：①原批 registry 丢失系
+  prepare_rl_tasks.py 批末统一落盘+进程被停所致——从盘重建（case 目录+runtime-config
+  的 task_python，与 w1 registry 逐一比对零不一致）而非重跑；②原批被停前多跑 1 任务
+  （index 197=w1 首任务 mypy-15846，两边均 OK）——合并脚本修正为 python 一致性硬校验
+  +worker 优先去重（顺带修复 gp 局部导入 NameError，新增 454 条全量路径存在性校验）。
+  **结果：454 合格（mypy 198/moto 256，77.2%，与探针 75-83% 吻合）**；产物
+  configs/agent-rl/local-task-registry-r1b-merged.json + data/agent-rl/
+  rl-round1b-merged-prompts.parquet（454 行契约校验过）+ runtime/agent-rl/
+  round1b-merge-report.json。**待筛=round1b 454**（curated 87 已于 09-12/13 筛过、带内 12
+  沿用；初版本条误把 87 计入待筛，同日用户问询后修正口径）。research-log 第十三轮、
+  plan.json 同步。
+- 2026-09-13 15:0x UTC — **奖励栈 slime_dsh 实现完成（锁定设计 §3 全项）**：四模块
+  （reward/group_repair/format_penalty/blocker）+ generate.py 拦截器接线（DSH_BLOCKER=1
+  启用）+ scripts/check_reward_stack.py 11/11 PASS（含真实 Qwen3.5 tokenizer 字节对齐
+  验证）。要点：①失败四分类枚举+二值核+未完成惩罚（DSH_C_UNFINISHED 默认 0）；
+  ②GLM-5 组剔除+填充/丢弃+组归一化钩子（实例化时实测抓出并修复一个局部/全局索引
+  bug——第二组起 raw_rewards 索引错位）；③格式罚 token 定位用字节级 BPE 精确对齐
+  （convert_ids_to_tokens+GPT-2 逆映射，逐 token 字节拼接==utf-8 全等断言）；
+  ④拦截器=adapter 回复层改写为无害 echo+反馈回注，轨迹可继续。**超参数值全部默认
+  零/关走环境变量，数值本体进 smoke 超参单待批**。顺带：harness-check 3 个 lifecycle
+  用例失效为**先存问题**（本地后端接线期即坏，git 对照验证非本轮引入），PROGRESS 同步
+  纠正两处过期表述（"7 passed"、"缺 Sandbox 本地后端"）。**GRPO smoke 超参单 v1 起草**
+  （configs/agent-rl/grpo-smoke-hyperparams-v1.md）：官方 SWE 配方锚点+奖励栈 v1 开关
+  （全零/关）+组归一化钩子推荐接线+DAPO 动态采样+5 项待拍板——待用户批。文档同步：
+  research-log 第十二轮、decision-log D17、plan.json、handoff 刷新。
+- 2026-09-13 13:0x UTC — 扩池批提速并行化（用户问询后）：实测单任务 48s（make_case 11.4s
+  +evaluate 36.9s，三次全源码拷贝+金标测试），串行均摊 96s；prepare_rl_tasks 加 --skip
+  切片参数，原批 197 处后停，起 w1/w2 双 worker 分片（[197..397)/[397..588)），预计 2×
+  提速至 UTC 16-17 收尾。当前合计 292/588 处理、227 合格（77.6%）。文档全面同步：
+  decision-log D15/D16、research-log 第十一轮、handoff-prompt 刷新、plan.json 状态段。
+- 2026-09-13 06:0x UTC — 扩池探针迭代完成（mypy 通、moto 收尾中）：
+  **修复四处基础设施 bug**（如实入档）：①swe_prepare.git() 的 safe.directory 用相对路径在
+  本机构建无效→改绝对路径+per-copy 配置移到 root 属主的 tmp/gitcfg/（原沙箱内配置文件被
+  own() chown 后被 git 静默拒读——本轮最深的一坑）；②探针必须用绝对 --out（git apply 补丁
+  路径随 -C 工作目录解析）；③起批必须 source scripts/env.sh（否则 uv 把 venv python 链到
+  /root/.local，沙箱 uid 无法执行）；④install() 增加失败残骸 venv 清理（防毒化重试）。
+  **新增机制**：gym_prepare 增加 --repos 仓库白名单参数；runtime-config 新增 pytest_args
+  通用通道（mypy 用 -o addopts= 清掉 -nauto）。**探针结果**：mypy 12 任务 9 OK=75%（配方=
+  base+mypy_extensions+black+filelock/psutil 等）；moto 配方迭代 6 轮（py-partiql-parser
+  0.5.4/joserfc 解钉/boto3+botocore/responses/jinja2+werkzeug+flask/flask-cors+pytz），
+  首任务已 OK，等整批出率。私有任务缓存已为新仓库批量生成（1310 个）。
+
+- 2026-09-13 05:2x UTC — 用户裁定：①smith 环境准备+qualification 立即启动（CPU，探产批先行）；
+  ②RL 训练放宽到 4 卡，但**启动必须用户协调**（不得擅自起训）；③任务挑选=探产→qual→筛选
+  流程继续。筛选 GPU（②阶段 27B 服务）仍未批，等用户安排。
+- 2026-09-13 05:0x UTC — 难度筛选批完成（348/348，rc=0，GPU 2 释放 3 MiB，全程 12:09→01:38
+  UTC 约 13.5h）。**结果：LEGO-RL 带内仅 12 任务**（1解=6/2解=5/3解=1），27B 全程解出 35/348
+  （10%）；0 解 69（79%）——远高于 LEGO-RL 的 72.7% 未筛永不解率；4/4 全解 4 个（过易）；
+  2 个 bokeh 任务 incomplete（screen_error，与 qual 期 git 超时同源）待重试。产物：
+  configs/agent-rl/rl-round1-screened.json + data/agent-rl/rl-round1-screened-prompts.parquet。
+  **含义：curated-repo 子集对 27B+DSH+当前预算太难，首轮池太薄——需决策：直接 12 任务
+  smoke vs 扩筛下一批任务（curated 剩余 ~2,060 eligible + SWE-smith 59k 池）。**
+- 2026-09-12 12:1x UTC — qualification 收尾（88 OK in log / registry 87，298.6 分钟）+ 难度筛选批
+  已启动：GPU 2（GPU-2e106654，分配记录 configs/screen-gpu-allocation.json），vLLM 27B BF16
+  :18095，87 任务×4 rollout=348 attempts，并发 3，产物 runtime/agent-rl/round1-screen/
+  results.jsonl + rl-round1-screened.json；结束自动停服+验证 0 MiB（scripts/run_screen_tail.sh）。
+  途中修复三个启动坑（如实记录）：①27B 下载 manifest 历史未收尾→verify-only 补全 24 文件
+  sha256 全过；②screen-qwen-server.json 手抄 revision 错一字符（e773→e771）；③编排脚本
+  探活 URL 缺 /v1 前缀。超参：k=4、并发 3、rollout 墙钟 1500s+缓冲。
 - 2026-09-12T11:34:38Z — 全量 qualification 完成：87/291（29.9%）合格（pydantic 32/dask 29/bokeh 15/hydra 11），registry + 87 行 prompt parquet 落盘；首轮 GRPO 规模足够。
 - 2026-09-12 ~10:55 UTC — 用户三项裁定落档：①奖励设计锁定（分级方案，reward-design
   文档状态改已锁定）；②难度筛选 GPU 批准（全量，1×H100，前置=qual 收尾+脚本 CPU 验证）；

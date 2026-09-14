@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-09-10T03:30:00Z",
+ "updated_utc": "2026-09-14T02:35:00Z",
  "status": "main_line_dense_opd_replication_loop_demoted_to_stretch_arm_2026-09-10",
  "purpose": "resume-interview project; frozen design record for the LoopLM + OPD mainline",
  "user_decisions": {
@@ -575,5 +575,49 @@
    "Alibaba MeSH-style loop-ratio adjustment (pretraining-time; citation only)"
   ],
   "sequence": "user decision: architecture exploration is the final exploratory chapter; training-free shell is the cheapest first entry"
+ },
+ "stage2_status_2026_09_13": {
+  "reward_design": "LOCKED (user 2026-09-12): binary core + negative-only shaping + data hygiene; staged rollout (v1 binary + native DAPO dynamic sampling); partial credit deferred (contested); positive process rewards belong to stage-3 OPD; authority set = 6 TRs (Qwen3CN/GLM-5/DSV4/K2.5/MiniMax M2/KAT-Coder-V2.5) + Meta ScaleRL benchmark",
+  "reward_stack_implementation": {
+   "status": "COMPLETE (CPU, unit-tested)",
+   "checked_utc": "2026-09-13T15:00:00Z",
+   "modules": [
+    "slime_dsh/reward.py: binary core (grading_solved) + unfinished-penalty switch (DSH_C_UNFINISHED, default 0) + failure classification enum environment/model/budget/none (GLM-5 failure-reason recording)",
+    "slime_dsh/group_repair.py: GLM-5 crash exclusion + pad-by-repeating / drop-when-valid<=half (--rollout-all-samples-process-path) + per-instance_id group normalization excluding environment crashes (--custom-reward-post-process-path; replaces upstream default whose reshape degenerates to batch-global mean for multi-segment trajectories)",
+    "slime_dsh/format_penalty.py: Qwen3CN rule-based <tool_call> JSON validation + exact byte-level token localization (byte-level BPE inverse map, runtime equality assert; verified with the real Qwen3.5 tokenizer) + custom-advantage hook replicating grpo/gspo/cispo baseline then subtracting DSH_C_FMT on supervised tokens only (loss-mask orthogonal)",
+    "slime_dsh/blocker.py: Qwen3CN repo-link AND network-keyword interceptor at the adapter reply layer; offending commands rewritten to a harmless echo printing the feedback (trajectory continues); wire/manager co-rewritten so next-turn echo matches; DSH_BLOCKER=1 opt-in (default off keeps existing evidence paths byte-identical)"
+   ],
+   "tests": "scripts/check_reward_stack.py 11/11 PASS (.venv-train-rl CPU; run with PYTHONPATH=$CODE_AGENT_ROOT:$CODE_AGENT_ROOT/vendor/slime)",
+   "hyperparameter_boundary": "all coefficients/switches via env vars, default zero/off (DSH_C_UNFINISHED, DSH_C_FMT, DSH_GROUP_REPAIR, DSH_BLOCKER, DSH_TOOL_NAMES); actual values belong to the GRPO smoke sheet (user approval pending); format penalty requires --no-normalize-advantages",
+   "known_issue_preexisting": "check_slime_harness.py 3 lifecycle cases broken since the local-backend binding replaced boot_agent_sandbox (fixture patches E2BSandbox which is now dead code for this path; 'fake-image' reaches boot_local_sandbox and raises); verified via git A/B NOT introduced by this work; 4 contract cases + --dsh-check + check_local_backend all pass; fix = migrate fixture to the local contract (image=local + registered fixture case)"
+  },
+  "estimator": "pending smoke choice among grpo/cispo/gspo (all native in pinned slime); lean gspo (Qwen-family lineage + LEGO-RL precedent)",
+  "curated_pool": {
+   "qualification": "291 processed, 87-88 qualified (30%)",
+   "screening": "348/348 attempts, 27B solved 35; band(1-3/4)=12, zero=69 (79%), all=4, incomplete=2 (bokeh)",
+   "artifacts": [
+    "configs/agent-rl/rl-round1-screened.json",
+    "data/agent-rl/rl-round1-screened-prompts.parquet"
+   ]
+  },
+  "pool_expansion": {
+   "decision": "smith incompatible (Docker-bound schema: image_name, no base_commit/test_patch) -> expand gym repos instead (decision-log D15)",
+   "new_repos": "mypy+moto first (probe qual 75%/83%); pandas/MONAI/dvc/modin/conan recipes not yet built",
+   "round1b_batch": "COMPLETE + MERGED 2026-09-14: 588/588 processed (orig [0..197] 198 tasks killed mid-run without registry, reconstructed from case dirs + runtime-config task_python; w1 [197..397) 151/200 OK 326.4min; w2 [397..588) 154/191 OK 287.3min; 1 expected overlap python__mypy-15846 deduped with python-consistency check) -> 454 qualified (mypy 198 + moto 256, 77.2%, matches probe 75-83%)",
+   "round1b_merged_outputs": [
+    "configs/agent-rl/local-task-registry-r1b-merged.json",
+    "data/agent-rl/rl-round1b-merged-prompts.parquet (454 rows, local_backend contract)",
+    "runtime/agent-rl/round1b-merge-report.json (consistency=true)"
+   ],
+   "screening_scope": "27B x k=4 screen RUNNING since 2026-09-14T04:39Z on GPU 0 (GPU-8c4bac00, alloc record configs/screen-gpu-allocation-r1b.json): 454 tasks x 4 = 1816 attempts minus 24 trial attempts seeded = 1792 to run; concurrency 6 (trial-measured 57.5 attempts/h = 2.2x previous batch, server max_num_seqs raised 4->12, zero preemption); ETA ~31h (~2026-09-15 midday UTC); watcher scripts/run_screen_r1b_full.sh auto-stops server + verifies GPU release; outputs will be configs/agent-rl/rl-round1b-screened.json + data/agent-rl/rl-round1b-screened-prompts.parquet; curated 87 already screened (band 12, results stand); post-screen band = 12 + round1b yield"
+  },
+  "gpu_state": "screening server stopped+verified 3MiB after first batch; GPU 2/5 now occupied by others; RL training = 4 cards APPROVED but launch must be USER-coordinated (D16)",
+  "infra_fixes_2026_09_13": [
+   "swe_prepare.git(): safe.directory absolute + per-copy config moved to root-owned tmp/gitcfg (in-sandbox config chowned by own() was silently ignored by this git build)",
+   "absolute --out required for prepare/eval batches (git -C patch-path semantics)",
+   "source scripts/env.sh mandatory (else venv python symlinks to /root/.local, sandbox uid cannot exec)",
+   "install(): failed-venv residue cleanup before uv venv retry",
+   "pytest_args runtime-config channel (mypy: -o addopts= to neutralize -nauto)"
+  ]
  }
 }
