@@ -13,3 +13,10 @@ __pycache__/
 vendor/
 configs/secrets/
 .d/
+
+# research source snapshots: keep only provenance manifests in the repo
+# (raw upstream trees / paper HTML archives stay local-only)
+research/sources/**
+!research/sources/**/
+!research/sources/**/*manifest*.json
+!research/sources/**/source.json
