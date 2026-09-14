@@ -1,15 +1,13 @@
 # Code-Agent-RL：小预算三段式训练 Coding Agent
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
-![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
-![PyTorch 2.11](https://img.shields.io/badge/PyTorch-2.11-EE4C2C?logo=pytorch&logoColor=white)
-![slime](https://img.shields.io/badge/trainer-slime%20%404c193f1f-375A7F)
-![Megatron-LM](https://img.shields.io/badge/Megatron--LM-TE_2.16-2CA5E0?logo=nvidia&logoColor=white)
-![SGLang 0.5.15](https://img.shields.io/badge/SGLang-0.5.15-764ABC)
-![vLLM 0.19.1](https://img.shields.io/badge/vLLM-0.19.1-FFB13B)
-![Harness: DeepSeek DSH](https://img.shields.io/badge/harness-DeepSeek%20DSH-4D6BFE)
-[![wandB: SFT run](https://img.shields.io/badge/wandB-SFT%20run%2046hg4r4a-FFCC33?logo=weightsandbiases&logoColor=black)](https://wandb.ai/3120252125-/code-agent-dense-mainline/runs/46hg4r4a)
-![Status](https://img.shields.io/badge/stage--2-Agentic%20RL%20in%20progress-yellow)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://github.com/python/cpython)
+[![PyTorch 2.11](https://img.shields.io/badge/PyTorch-2.11-EE4C2C?logo=pytorch&logoColor=white)](https://github.com/pytorch/pytorch)
+[![slime](https://img.shields.io/badge/trainer-slime%20%404c193f1f-375A7F)](https://github.com/THUDM/slime)
+[![Megatron-LM](https://img.shields.io/badge/Megatron--LM-TE_2.16-2CA5E0?logo=nvidia&logoColor=white)](https://github.com/NVIDIA/Megatron-LM)
+[![SGLang 0.5.15](https://img.shields.io/badge/SGLang-0.5.15-764ABC)](https://github.com/sgl-project/sglang)
+[![vLLM 0.19.1](https://img.shields.io/badge/vLLM-0.19.1-FFB13B)](https://github.com/vllm-project/vllm)
+[![Harness: DeepSeek DSH](https://img.shields.io/badge/harness-DeepSeek%20DSH-4D6BFE)](https://github.com/deepseek-ai/deepseek-harness)
 
 > Qwen3.5-9B × DeepSeek Harness（DSH）× GRPO + On-Policy Distillation，
 > 在 2–4 张 H100 上完整复现工业级 coding-agent 训练管线。
