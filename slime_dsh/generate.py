@@ -29,7 +29,10 @@ def bind_upstream():
     if upstream._AdapterService in SingletonMeta._instances:
         raise RuntimeError("Select DSH before the upstream adapter service is initialized")
     upstream.HARNESS_CLS = DshHarness
-    upstream.ADAPTER_CLS = OpenAIAdapter
+    from slime_dsh import blocker
+    # Anti-cheat interceptor (locked design §2.4) rides the same seam: reply-path
+    # subclass, vendor untouched. Opt-in via DSH_BLOCKER=1 (smoke sheet wiring).
+    upstream.ADAPTER_CLS = blocker.blocked_adapter_cls() if blocker.blocker_enabled() else OpenAIAdapter
     upstream.AGENT_NAME = "dsh"
     from slime_dsh import local_backend
     local_backend.bind(upstream.swe)
