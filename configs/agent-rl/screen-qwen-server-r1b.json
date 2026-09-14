@@ -5,7 +5,7 @@
   "port": 18095,
   "dtype": "bfloat16",
   "max_model_len": 32768,
-  "max_num_seqs": 4,
+  "max_num_seqs": 12,
   "max_num_batched_tokens": 16384,
   "gpu_memory_utilization": 0.85,
   "enable_thinking": false,

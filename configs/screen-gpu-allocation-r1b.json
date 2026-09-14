@@ -1,0 +1,12 @@
+{
+ "gpu_uuids": [
+  "GPU-8c4bac00-daf6-32ee-fb29-46613f73a5bf"
+ ],
+ "gpu_indices": [
+  0
+ ],
+ "allocated_utc": "2026-09-14T03:36:32Z",
+ "allocated_by": "User approved 2026-09-14 (GPU 0 free at check): round1b difficulty screening, trial-first then full batch, concurrency raised",
+ "purpose": "27B teacher difficulty screening rollouts for round1b 454 tasks (DSH, k=4, LEGO-RL band)",
+ "service": "vLLM Qwen3.5-27B BF16 port 18095 max_num_seqs=12 + screen_rl_tasks.py"
+}

@@ -31,6 +31,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+DEFAULT_REGISTRY = ROOT / "configs/agent-rl/local-task-registry.json"
+DEFAULT_PROMPTS = ROOT / "data/agent-rl/rl-round1-prompts.parquet"
+DEFAULT_OUT_DIR = ROOT / "runtime/agent-rl/round1-screen"
+DEFAULT_SCREENED_JSON = ROOT / "configs/agent-rl/rl-round1-screened.json"
+DEFAULT_SCREENED_PARQUET = ROOT / "data/agent-rl/rl-round1-screened-prompts.parquet"
+
 import types as _types
 if "gym_facility" not in sys.modules:  # evaluate() path only; execute() unused here
     _stub = _types.ModuleType("gym_facility")
@@ -39,9 +45,6 @@ if "gym_facility" not in sys.modules:  # evaluate() path only; execute() unused 
 
 import gym_prepare as gp
 import gym_run as gr  # frozen evaluator (trusted patch export + oracle tests)
-
-OUT_DIR = ROOT / "runtime/agent-rl/round1-screen"
-RESULTS = OUT_DIR / "results.jsonl"
 PROMPT_TMPL = (
     "Repair the issue in the repository at {workspace}. Inspect the relevant "
     "code, make a minimal source repair, and run the appropriate tests to "
@@ -54,10 +57,10 @@ def log(msg: str) -> None:
     print(f"[{time.strftime('%H:%M:%S')}] {msg}", flush=True)
 
 
-def load_done() -> set[tuple[str, int]]:
+def load_done(results_path: Path) -> set[tuple[str, int]]:
     done: set[tuple[str, int]] = set()
-    if RESULTS.exists():
-        for line in RESULTS.read_text().splitlines():
+    if results_path.exists():
+        for line in results_path.read_text().splitlines():
             try:
                 r = json.loads(line)
                 done.add((r["instance_id"], int(r["attempt"])))
@@ -66,14 +69,14 @@ def load_done() -> set[tuple[str, int]]:
     return done
 
 
-def record(result: dict, lock: threading.Lock) -> None:
+def record(result: dict, lock: threading.Lock, results_path: Path) -> None:
     with lock:
-        with RESULTS.open("a") as f:
+        with results_path.open("a") as f:
             f.write(json.dumps(result, ensure_ascii=False) + "\n")
 
 
 def run_attempt(iid: str, row: dict, python: Path, attempt: int, args) -> dict:
-    case = OUT_DIR / iid / f"a{attempt}"
+    case = Path(args.out_dir) / iid / f"a{attempt}"
     case.mkdir(parents=True, exist_ok=True)
     gp.make_case(case, row, python)  # fresh buggy workspace
     ws = case / "sandbox/workspace"
@@ -137,6 +140,12 @@ def main() -> None:
     ap.add_argument("--rollout-timeout", type=float, default=1500,
                     help="per-attempt DSH wall-clock budget in seconds")
     ap.add_argument("--aggregate-only", action="store_true")
+    ap.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
+    ap.add_argument("--prompts", type=Path, default=DEFAULT_PROMPTS,
+                    help="source prompt parquet for screened-prompts export")
+    ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
+    ap.add_argument("--screened-json", type=Path, default=DEFAULT_SCREENED_JSON)
+    ap.add_argument("--screened-parquet", type=Path, default=DEFAULT_SCREENED_PARQUET)
     args = ap.parse_args()
 
     if args.serve_check:
@@ -144,16 +153,17 @@ def main() -> None:
         return
 
     registry = {k: v for k, v in json.loads(
-        (ROOT / "configs/agent-rl/local-task-registry.json").read_text()).items()
+        args.registry.read_text()).items()
         if Path(v["case_dir"]).exists()}
     if args.limit:
         registry = dict(list(registry.items())[: args.limit])
     log(f"tasks in registry (with intact case): {len(registry)}")
 
+    results_path = args.out_dir / "results.jsonl"
     if not args.aggregate_only:
         serve_check(args.base_url)
-        OUT_DIR.mkdir(parents=True, exist_ok=True)
-        done = load_done()
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        done = load_done(results_path)
         jobs = []
         for iid, entry in registry.items():
             for a in range(1, args.k + 1):
@@ -176,14 +186,14 @@ def main() -> None:
                     res = {"instance_id": iid, "attempt": attempt, "resolved": False,
                            "category": f"screen_error:{type(exc).__name__}",
                            "error": str(exc)[:300]}
-                record(res, lock)
+                record(res, lock, results_path)
                 n_done += 1
                 log(f"[{n_done}/{len(futs)}] {iid} a{attempt}: "
                     f"resolved={res.get('resolved')} cat={res.get('category')} "
                     f"{res.get('seconds', '?')}s")
 
     # ---- aggregation: LEGO-RL band 1..k-1 ----
-    rows = [json.loads(l) for l in RESULTS.read_text().splitlines()] if RESULTS.exists() else []
+    rows = [json.loads(l) for l in results_path.read_text().splitlines()] if results_path.exists() else []
     by_task: dict[str, list[dict]] = {}
     for r in rows:
         by_task.setdefault(r["instance_id"], []).append(r)
@@ -209,10 +219,10 @@ def main() -> None:
                "band_size": len(stats["band"]), "zero_solve": len(stats["solved0"]),
                "all_solve": len(stats["solved_all"]), "incomplete": len(stats["incomplete"]),
                "task_lists": stats}
-    (ROOT / "configs/agent-rl/rl-round1-screened.json").write_text(json.dumps(summary, indent=1))
+    args.screened_json.write_text(json.dumps(summary, indent=1))
     # screened training prompts
     import pyarrow as pa, pyarrow.parquet as pq
-    src = pq.read_table(ROOT / "data/agent-rl/rl-round1-prompts.parquet")
+    src = pq.read_table(args.prompts)
     src_ids = src["metadata"].to_pylist() if src.num_rows else []
     keep = []
     for row_md in src_ids:
@@ -221,7 +231,7 @@ def main() -> None:
     if keep:
         cols = {name: [r.get(name) for r in keep] for name in src.column_names}
         pq.write_table(pa.Table.from_pydict(cols, schema=src.schema),
-                       ROOT / "data/agent-rl/rl-round1-screened-prompts.parquet")
+                       args.screened_parquet)
     log(json.dumps({k2: v2 for k2, v2 in summary.items() if k2 != "task_lists"}, indent=2))
 
 

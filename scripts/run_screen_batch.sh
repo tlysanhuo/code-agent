@@ -63,7 +63,7 @@ say "server launching pid=${SERVER_PID} (log: logs/screen-qwen-server.log)"
 
 for _ in $(seq 1 360); do
   if ! kill -0 "${SERVER_PID}" 2>/dev/null; then say "ABORT: server exited early"; tail -30 logs/screen-qwen-server.log; exit 1; fi
-  if curl -sf -H "Authorization: Bearer local-qwen" "${BASE_URL%/v1}/models" >/dev/null 2>&1; then break; fi
+  if curl -sf -H "Authorization: Bearer local-qwen" "${BASE_URL}/models" >/dev/null 2>&1; then break; fi
   sleep 10
 done
 say "server ready at ${BASE_URL}"

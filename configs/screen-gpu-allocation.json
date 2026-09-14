@@ -5,7 +5,7 @@
  "gpu_indices": [
   2
  ],
- "allocated_utc": "2026-09-12T11:32:37Z",
+ "allocated_utc": "2026-09-12T12:04:23Z",
  "allocated_by": "User approved 2026-09-12: difficulty screening full batch, 1x idle H100 (GPU 2 or 5)",
  "purpose": "27B teacher difficulty screening rollouts (DSH, k=4, LEGO-RL band)",
  "service": "vLLM Qwen3.5-27B BF16 port 18095 + screen_rl_tasks.py"
