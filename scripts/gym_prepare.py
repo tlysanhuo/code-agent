@@ -41,6 +41,21 @@ def requirements(row):
         req+=['pydantic-core=='+core,'typing-extensions==4.10.0','annotated-types==0.6.0',
               'dirty-equals==0.7.1','hypothesis==6.98.0','email-validator==2.1.1',
               'python-dateutil==2.9.0.post0','pytest-mock==3.12.0','pytest-examples==0.0.10']
+    elif repo in ('python/mypy','getmoto/moto'):
+        # first-cut recipes (probe-iterate): pure-Python repos run from
+        # workspace via PYTHONPATH; mypy self-test extras pinned, moto base-only
+        req = list(req)
+        if repo=='python/mypy':
+            req += ['typing-extensions==4.10.0','filelock==3.13.4','psutil==5.9.8',
+                    'pathspec==0.12.1','packaging==23.2','tomli==2.0.1',
+                    'mypy_extensions==1.0.0','black==24.3.0']
+        else:
+            req += ['cryptography==42.0.5','requests==2.31.0','xmltodict==0.13.0',
+                    'python-jose==3.3.0','docker==7.0.0','zipstream-ng==1.8.0',
+                    'aws-xray-sdk==2.12.0','multipart==0.2.4','boto3==1.34.144','botocore==1.34.144','responses==0.25.0','freezegun==1.5.0','inflection==0.5.1','sure==2.0.1',
+                    'click==8.1.7','prompt_toolkit==3.0.43','jsondiff==2.0.0','openapi-spec-validator==0.7.1',
+                    'pyparsing==3.1.2','cfn-lint==0.87.7','graphql-core==3.2.3','jsonpath-ng==1.6.1',
+                    'antlr4-python3-runtime==4.13.1','joserfc','PyYAML==6.0.1','py-partiql-parser==0.5.4','Jinja2==3.1.3','MarkupSafe==2.1.5','werkzeug==3.0.1','flask==3.0.2','flask-cors==4.0.0','pytz==2024.1']
     elif repo=='facebookresearch/hydra':
         content=(source/'requirements/requirements.txt').read_text()
         omega='2.1.0.dev25' if '2.1.0.dev25' in content else '2.1.2' if '2.1' in content else '2.2.3' if '2.2' in content else '2.0.6'
@@ -67,6 +82,8 @@ def install(row):
     metadata=BASE/'envs'/(key+'.json')
     if metadata.exists() and json.loads(metadata.read_text()).get('installed'):
         return env/'bin/python'
+    if env.exists():  # leftover from a failed install poisons `uv venv`
+        shutil.rmtree(env)
     env.parent.mkdir(exist_ok=True)
     reqpath=BASE/'envs'/(key+'.in')
     reqpath.write_text('\n'.join(req)+'\n')
@@ -166,7 +183,8 @@ def make_case(case,row,python,acceptance=False):
     paths=[str(work)]
     if (work/'src').exists():
         paths.append(str(work/'src'))
-    runtime={'task_python':str(python),'task_env':{'PYTHONPATH':os.pathsep.join(paths), 'PYTEST_DISABLE_PLUGIN_AUTOLOAD':''}}
+    extra=['-o','addopts='] if row['repo']=='python/mypy' else []
+    runtime={'task_python':str(python),'task_env':{'PYTHONPATH':os.pathsep.join(paths), 'PYTEST_DISABLE_PLUGIN_AUTOLOAD':''},'pytest_args':extra}
     write(case/'runtime-config.json',runtime)
     patch=ROOT/'configs/gym-dsh.patch.yml'
     shutil.copy2(patch if patch.exists() else ROOT/'configs/gym-dsh-candidate.patch.yml',case/'qwen.patch.yml')
@@ -188,7 +206,7 @@ def test(case,row,label):
     plugins=['_gym_oracle']
     cmd=[str(PY),str(ROOT/'scripts/gym_task_env.py'),'--sandbox',str(sandbox),'--',python,'-m','pytest','-q','--tb=short']
     for name in plugins:cmd+=['-p',name]
-    cmd+=files
+    cmd+=json.loads((case/'runtime-config.json').read_text()).get('pytest_args',[])+files
     started=time.monotonic()
     try:
         p=subprocess.run(cmd,capture_output=True,text=True,timeout=120)

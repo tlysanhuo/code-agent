@@ -80,7 +80,10 @@ def fetch_source(row) -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=20)
+    ap.add_argument("--skip", type=int, default=0, help="skip first N candidates (parallel slicing)")
     ap.add_argument("--source", choices=["gym", "smith"], default="gym")
+    ap.add_argument("--repos", type=str, default="",
+                    help="comma-separated repo allowlist overriding CURATED_REPOS (gym source)")
     ap.add_argument("--out", type=Path, default=ROOT / "runtime/agent-rl/round1")
     ap.add_argument("--parquet", type=Path,
                     default=ROOT / "data/agent-rl/rl-round1-prompts.parquet")
@@ -97,7 +100,8 @@ def main() -> None:
                       columns=["instance_id", "repo"])
     repo_of = dict(zip(t["instance_id"].to_pylist(), t["repo"].to_pylist()))
 
-    candidates = [i for i in order if repo_of.get(i) in CURATED_REPOS][: args.limit]
+    allowed = {r.strip() for r in args.repos.split(",") if r.strip()} if args.repos else CURATED_REPOS
+    candidates = [i for i in order if repo_of.get(i) in allowed][args.skip: args.skip + args.limit]
     print(f"candidates: {len(candidates)} from {order_file.name} (curated repos)", flush=True)
 
     args.out.mkdir(parents=True, exist_ok=True)

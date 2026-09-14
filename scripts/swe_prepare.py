@@ -46,11 +46,19 @@ def git(work, *args, **kw):
     # This platform's Git 2.34 safety backport does not honor command-line
     # safe.directory. Use a project-local per-copy global config, scoped to
     # this subprocess only; never change the user's shared Git configuration.
-    config = work.parent / '.operator-gitconfig'
-    config.write_text('[safe]\n\tdirectory = ' + str(work) + '\n')
+    # This build ignores -c/env-var safe.directory AND silently distrusts
+    # config files not owned by root -- so the per-copy config must live in a
+    # root-owned project dir that own() never chowns (found 2026-09-13: the
+    # old in-sandbox .operator-gitconfig was chown'd to the task uid and
+    # ignored, breaking every post-own() git call on new paths).
+    resolved = str(work.resolve())
+    cfg_dir = ROOT / 'tmp' / 'gitcfg'
+    cfg_dir.mkdir(parents=True, exist_ok=True)
+    config = cfg_dir / (hashlib.sha1(resolved.encode()).hexdigest()[:16] + '.cfg')
+    config.write_text('[safe]\n\tdirectory = ' + resolved + '\n')
     env = os.environ.copy()
     env.update(GIT_CONFIG_GLOBAL=str(config), GIT_CONFIG_NOSYSTEM='1')
-    return subprocess.run(['git', '-c', 'safe.directory=' + str(work), '-C', str(work), *args],
+    return subprocess.run(['git', '-C', str(work), '-c', 'safe.directory=' + resolved, *args],
                           capture_output=True, text=True, timeout=30, env=env, **kw)
 
 

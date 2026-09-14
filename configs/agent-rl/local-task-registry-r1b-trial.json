@@ -1,0 +1,26 @@
+{
+ "getmoto__moto-7647": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b/getmoto__moto-7647",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/992a8a24cc83/bin/python"
+ },
+ "getmoto__moto-7434": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b/getmoto__moto-7434",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/992a8a24cc83/bin/python"
+ },
+ "getmoto__moto-5177": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b/getmoto__moto-5177",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/992a8a24cc83/bin/python"
+ },
+ "getmoto__moto-5119": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b/getmoto__moto-5119",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/992a8a24cc83/bin/python"
+ },
+ "python__mypy-11828": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b/python__mypy-11828",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/39a84c4793ca/bin/python"
+ },
+ "python__mypy-16905": {
+  "case_dir": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/agent-rl/round1b-w2/python__mypy-16905",
+  "python": "/lustre/prod_glm_volumes/volume-20260201002229-o7c51/code-agent/runtime/gym-baseline/envs/39a84c4793ca/bin/python"
+ }
+}
