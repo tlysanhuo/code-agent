@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-09-14T02:35:00Z",
+ "updated_utc": "2026-09-16T06:00:00Z",
  "status": "main_line_dense_opd_replication_loop_demoted_to_stretch_arm_2026-09-10",
  "purpose": "resume-interview project; frozen design record for the LoopLM + OPD mainline",
  "user_decisions": {
@@ -609,7 +609,7 @@
     "data/agent-rl/rl-round1b-merged-prompts.parquet (454 rows, local_backend contract)",
     "runtime/agent-rl/round1b-merge-report.json (consistency=true)"
    ],
-   "screening_scope": "27B x k=4 screen RUNNING since 2026-09-14T04:39Z on GPU 0 (GPU-8c4bac00, alloc record configs/screen-gpu-allocation-r1b.json): 454 tasks x 4 = 1816 attempts minus 24 trial attempts seeded = 1792 to run; concurrency 6 (trial-measured 57.5 attempts/h = 2.2x previous batch, server max_num_seqs raised 4->12, zero preemption); ETA ~31h (~2026-09-15 midday UTC); watcher scripts/run_screen_r1b_full.sh auto-stops server + verifies GPU release; outputs will be configs/agent-rl/rl-round1b-screened.json + data/agent-rl/rl-round1b-screened-prompts.parquet; curated 87 already screened (band 12, results stand); post-screen band = 12 + round1b yield"
+   "screening_scope": "COMPLETE 2026-09-15T21:31Z (rc=0, 41h, 1816 attempts on GPU 0, server auto-stopped + release verified 3 MiB): band 91 / zero 340 / all-solve 13 / incomplete 10 (band rate 20%, zero 75% independently echoing LEGO-RL 72.7%). RL task band ASSEMBLED: 103 tasks (curated 12 + r1b 91; moto 56/mypy 35/dask 7/pydantic 3/hydra 1/bokeh 1) at data/agent-rl/rl-round1-band-prompts.parquet, path-verified, dedup-checked. BUG FIXED same day: screen_rl_tasks.py aggregation wrote screened parquets with all-None columns (metadata dicts mistaken for rows) since 09-12; rebuilt with take()-based selection. RL launch pending: 2 hyperparam approvals (group-norm hook, ablation coefficients; estimator=GSPO locked by user 09-16; smoke-batch item mooted by direct-full+first-20-step-gate decision) + 4-GPU coordination (7 idle at 09-16)"
   },
   "gpu_state": "screening server stopped+verified 3MiB after first batch; GPU 2/5 now occupied by others; RL training = 4 cards APPROVED but launch must be USER-coordinated (D16)",
   "infra_fixes_2026_09_13": [

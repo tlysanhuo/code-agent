@@ -220,18 +220,14 @@ def main() -> None:
                "all_solve": len(stats["solved_all"]), "incomplete": len(stats["incomplete"]),
                "task_lists": stats}
     args.screened_json.write_text(json.dumps(summary, indent=1))
-    # screened training prompts
-    import pyarrow as pa, pyarrow.parquet as pq
+    # screened training prompts (row-level selection via take; the old
+    # dict-reconstruction path wrote all-None columns — caught 2026-09-16)
+    import pyarrow.parquet as pq
     src = pq.read_table(args.prompts)
-    src_ids = src["metadata"].to_pylist() if src.num_rows else []
-    keep = []
-    for row_md in src_ids:
-        if row_md.get("instance_id") in screened:
-            keep.append(row_md)
-    if keep:
-        cols = {name: [r.get(name) for r in keep] for name in src.column_names}
-        pq.write_table(pa.Table.from_pydict(cols, schema=src.schema),
-                       args.screened_parquet)
+    md = src["metadata"].to_pylist()
+    idx = [i for i, m in enumerate(md) if m and m.get("instance_id") in screened]
+    if idx:
+        pq.write_table(src.take(idx), args.screened_parquet)
     log(json.dumps({k2: v2 for k2, v2 in summary.items() if k2 != "task_lists"}, indent=2))
 
 

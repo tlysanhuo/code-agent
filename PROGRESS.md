@@ -7,7 +7,7 @@
 > 新建理由（2026-09-12）：用户明确要求独立进度文档；README 已承载大量调研内容，
 > 进度状态不再与之混排。本文件与 docs/research-log.md 互补：本文件管进度，research-log 管调研全文。
 
-- **当前时间**：2026-09-14 ~02:35 UTC
+- **当前时间**：2026-09-16 ~06:00 UTC
 - **项目定位**：简历面试项目。dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
   LoopLM 循环层为限额加分臂（≤8 GPU·h，恢复 <50% dense 参照即止损封存）。
 
@@ -16,7 +16,7 @@
 | 阶段 | 状态 | 一句话 |
 |---|---|---|
 | ① SFT 冷启动 | **✅ 完成并通过验收 + 价值判定** | HumanEvalPlus 持平基线；NLL −33%；**A/B：解决率 15%→30%、提交纪律 10%→100%** |
-| ② Agentic RL | CPU 准备+奖励栈完成，round1b 454 待筛选（curated 87 已筛带内 12），等筛选 GPU 与 RL 启动协调 | DSH 接线+本地后端+任务冻结 v1；**奖励栈四模块落地（11/11 单测）**；round1b 扩池合并完成（454 合格）；harness-check 3 用例待改 local 契约 |
+| ② Agentic RL | **任务带就绪（103），奖励栈完成，等超参 2 项批复+4 卡协调启动** | DSH 接线+本地后端+任务冻结 v1；奖励栈四模块（11/11 单测）；round1b 筛选完成（带内 91/454=20%）；任务带 103 已合成 |
 | ③ OPD | 配置草稿就绪 | teacher 27B SGLang 服务 smoke 未做；prompt-smoke 模式随时可跑 |
 | LoopLM 臂 | 未启动（按计划最后做） | E1 资产保留 |
 
@@ -121,8 +121,24 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 - **缺口**：Docker 平台层（docker-proxy 探针失败）——只有阶段⑤官方评估
   （SWE-bench Verified 官方 harness）硬需要，训练走已验证的本地受限进程路
   （自建训练协议标注，2026-09-09 用户已授权此路线用于训练）。
-- **下一步（等用户指令）**：难度筛选（GPU 待用户安排；合格池=round1 87+round1b 454=541）→
-  任务带→GRPO smoke 超参单呈批（grpo/cispo/gspo 三选一+组大小+奖励栈开关与系数）。
+- **下一步（等用户指令）**：**RL 启动只差两件事**——超参单剩余 2 项批复（组归一化钩子
+  接线、消融系数区间；estimator=GSPO 已按用户 09-16 问询定档，smoke-batch 项因
+  「直接全量+前 20 步闸门」作废）+4 卡协调（当前 7 卡空闲）。任务带 103 已就绪
+  （data/agent-rl/rl-round1-band-prompts.parquet）。
+
+## 阶段 ② 补充：难度筛选结果（2026-09-16 汇总）
+
+- **round1b 全量筛选完成**（09-14 04:39 → 09-15 21:31 UTC，41h，1,816 attempts，
+  rc=0）：**带内 91 / 全零 340 / 全解 13 / 不完整 10**（带内率 20%，与滚动预估 21%
+  一致；全零率 75% 独立呼应 LEGO-RL 的 72.7%）。GPU 0 watcher 自动停服+释放验证
+  3 MiB（runtime/agent-rl/round1b-screen/gpu-release.txt）。
+- **任务带=103**（curated 12 + r1b 91；moto 56/mypy 35/dask 7/pydantic 3/hydra 1/
+  bokeh 1）：data/agent-rl/rl-round1-band-prompts.parquet，全路径验证+零重复。
+- **bug 修复（如实入档）**：screen_rl_tasks.py 聚合段写 screened parquet 时把
+  metadata 字典错当整行重建→所有列为 None（curated 09-12 起即坏，未被消费故未
+  暴露；r1b 同路径同病）。已改 `src.take(idx)` 行级选择并重建两张 screened parquet
+  （12/91 行，与 screened.json 的 band 清单逐一对应）。
+- 不完整 10（screen_error 类）不阻塞首轮，后续可重试补筛。
 
 ## 阶段 ③ OPD 状态
 
@@ -142,32 +158,27 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 
 ## 挂起 / 等用户
 
-1. **筛选 GPU 安排**：待筛=**round1b 新增 454 任务**（mypy 198+moto 256，合并一致性
-   校验通过），27B×k=4（1×H100 即可；GPU 2/5 已被他人占用，起批时重看空闲卡）。
-   curated 87 任务**已于 09-12/13 筛过**（带内 12/全零 69/全解 4，结果沿用
-   rl-round1-screened.json，不重筛——D15 裁决扩池而非放宽预算重筛）。本批
-   454×4=1,816 attempts，按上批实测 25.8 attempts/h 约 3 天单卡，可分片；筛选后
-   任务带=12（curated）+round1b 产出。
-2. **RL 训练启动（用户协调）**：4 卡已获批但启动必须由用户协调；前置=筛选任务带+
-   **GRPO smoke 超参单已起草待批**：[configs/agent-rl/grpo-smoke-hyperparams-v1.md]
-   （configs/agent-rl/grpo-smoke-hyperparams-v1.md）——estimator 三选（推荐 gspo）、
-   官方配方锚点核心超参、奖励栈 v1 开关全零/关+组归一化钩子推荐接线、DAPO 动态采样、
-   5 项待拍板清单。
-3. Polar B' 数据集：上游 401（gated），需用户 HF token 或等公开；cudnn/torchaudio 升级时机。
+1. **RL 启动（只差两项）**：①超参单剩余批复——组归一化钩子（推荐接）、消融系数
+   区间（未完成罚 0.1 起/格式罚 0.05-0.1 起）；estimator=GSPO 已定档；数值其余
+   默认接受与否。②4 卡协调（09-16 时 7 卡空闲，起训时记 UUID）。启动后
+   「直接全量+前 20 步闸门」（无 NaN/OOM、loss 正常、组方差非退化）。
+2. Polar B' 数据集：上游 401（gated），需用户 HF token 或等公开；cudnn/torchaudio 升级时机。
 
 ## 在飞
 
-- **round1b 454 任务难度筛选全量批（2026-09-14 04:39 UTC 起）**：GPU 0（GPU-8c4bac00，
-  分配记录 configs/screen-gpu-allocation-r1b.json），27B vLLM :18095（max_num_seqs 12），
-  k=4、**并发 6**（试验批 6 题×4=24 attempts 实测 57.5 attempts/h=上批 2.2×、零抢占、
-  达理想吞吐 91%，故不加码），1,792 attempts 预计 **~31h（09-15 中午 UTC 前后）**收尾；
-  试验 24 条结果已并入免重跑。watcher scripts/run_screen_r1b_full.sh（结束自动停服+
-  验证 GPU 0 释放，报告落 runtime/agent-rl/round1b-screen/）。日志：
-  logs/screen-r1b-full.log（控制器）、logs/screen-qwen-server-r1b.log（服务）、
-  logs/screen-r1b-full-tail.log（watcher）。试验批结论：带内 1/全零 5/全解 0（小样本，
-  全量分布待出）；服务端并发上限曾是上批瓶颈之一（max_num_seqs 4→12）。
+- **无**（round1b 筛选已于 09-15 21:31 UTC 完成：带内 91/全零 340/全解 13/不完整 10，
+  GPU 0 已释放验证；任务带 103 已合成）。
 
 ## 变更日志
+
+- 2026-09-16 06:0x UTC — **round1b 筛选完成+任务带合成（RL 启动条件基本齐备）**：
+  1,816 attempts/41h/rc=0，带内 91（20%）/全零 340（75%）/全解 13/不完整 10；
+  GPU 0 watcher 自动停服释放验证 3 MiB。任务带 103=curated 12+r1b 91
+  （rl-round1-band-prompts.parquet，全路径+零重复验证）。**顺带修一个真 bug**：
+  screen_rl_tasks.py 聚合段 screened parquet 全列 None（metadata 字典误当整行），
+  09-12 起两张产物即坏未被消费故未暴露；改 take() 行级选择并重建。estimator=GSPO
+  按用户问询定档；超参单剩 2 项待批；09-16 时 7 卡空闲。research-log 第十五轮同步。
+- 2026-09-14 04:4x UTC — **round1b 难度筛选起批（用户批 GPU 0 并指示调高并发、先试几题）**：
 
 - 2026-09-14 04:4x UTC — **round1b 难度筛选起批（用户批 GPU 0 并指示调高并发、先试几题）**：
   ①screen_rl_tasks.py 参数化（--registry/--prompts/--out-dir/--screened-json/
