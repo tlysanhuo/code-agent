@@ -11,7 +11,7 @@ from deepseek_harness import DeepSeekHarness
 def main(path):
     job = json.loads(Path(path).read_text())
     harness = DeepSeekHarness(
-        dsh_bin=job['dsh_bin'], provider='qwen-local', model='Qwen3.5-27B',
+        dsh_bin=job['dsh_bin'], provider='qwen-local', model='Qwen3.5-9B-SFT',
         cwd=job['workspace'], dsh_home=job['dsh_home'], profile='sdk-minimal',
         patches=(job['patch'],), max_tokens=job['max_tokens'],
         initialize_timeout_seconds=60, request_timeout_seconds=job['timeout'], shutdown_timeout_seconds=3)

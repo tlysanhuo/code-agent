@@ -1,0 +1,15 @@
+{
+ "gpu_uuids": [
+  "GPU-fdfa4d77-7c26-ef94-8ad9-617c68b6d062",
+  "GPU-204352f6-1086-4f94-1350-65b3540752e5",
+  "GPU-469b3d58-7a10-61ee-57a7-fbbcbf61447b",
+  "GPU-e0f05c12-b5e0-2f1c-4651-bea0e470e783"
+ ],
+ "gpu_indices": [3, 4, 6, 7],
+ "allocated_utc": "2026-09-16T2026-09-26T03:55:33Z",
+ "allocated_by": "User: '开始训练吧,wandb一定要保存' (attempt 2, post window-fix; attempt 1 GPUs 1-4 moved off after external loads took 1/2)",
+ "purpose": "agentic RL: 9B SFT student, DSH rollouts on 103-task band, binary reward + blocker (attempt 2: contextWindow 28672 fix)",
+ "service": "slime train.py colocate TP2xDP2 (Megatron + SGLang TP4), ray ports 24379/32266",
+ "artifacts": "models/dense-9B-rl/round1-gspo (save-interval 20); logs/rl-round1-gspo.log; wandb group stage2-gspo-round1; sidecar runtime/agent-rl/round1-monitor",
+ "note": "GPU 0 hosts our own 27B eval service (other task); 1/2/5 external. Attempt-1 zero-gradient checkpoints deleted before launch per runlog checklist."
+}

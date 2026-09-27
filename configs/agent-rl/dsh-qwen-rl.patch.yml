@@ -1,4 +1,6 @@
-# RL deployment: server-side native chat_template_kwargs enables thinking.
+# RL deployment: rollout runs enable_thinking=false (train.py
+# --apply-chat-template-kwargs), matching SFT/A-B/screening and keeping
+# the DSH echo round-trip byte-stable for trajectory stitching (incident #5).
 # Deployment configuration only: retain the official sdk-minimal composition.
 - id: llm-deepseek
   disabled: true
@@ -21,10 +23,20 @@
               supportsStore: false
               maxTokensField: max_tokens
             models:
-              - id: Qwen3.5-27B
-                name: Qwen3.5-27B local BF16
-                # pi-ai 0.84.2 reserves 4096 tokens before applying the cap.
-                contextWindow: 8192
+              - id: Qwen3.5-9B-SFT
+                name: Qwen3.5-9B SFT local BF16
+                # pi-ai 0.84.2 reserves maxTokens before applying the cap:
+                # usable conversation = contextWindow - maxTokens.
+                # 2026-09-16 round1 post-mortem: at 8192 every rollout died
+                # finish_reason=max-tokens at step ~8-11 (input 5-9k, output
+                # clamped to ~1 token) -> 2161/2162 zero rewards and 40
+                # zero-gradient steps. 28672 keeps the worst-case training
+                # sample (input 24576 + last response 4096) under the
+                # training-side rollout-max-context-len 32768, mirroring the
+                # official example's autoCompact(80k) < MAX_CONTEXT_LEN(96k)
+                # invariant. Label fixed too: this deployment serves the 9B
+                # student (the old 27B id was copied from the screening sheet).
+                contextWindow: 28672
                 maxTokens: 4096
                 reasoningEfforts: false
                 input: [text]

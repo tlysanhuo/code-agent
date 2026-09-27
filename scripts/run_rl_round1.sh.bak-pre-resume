@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+# Stage-2 ROUND-1 GSPO launch — faithful 4xH100 scale-down of the official
+# vendor/slime/examples/coding_agent_rl/run_qwen36_35b_a3b_swe_8nodes.sh
+# (user-approved 2026-09-16: "去改" after the deviation-table review).
+# Canonical bits (quick_start.md CKPT_ARGS / ROLLOUT_ARGS, example SGLANG_ARGS,
+# FAQ#3/#8/#10, agent.md adapter parsers) — every flag matches upstream docs.
+# Ray hygiene: dedicated ports + short tmpdir (AF_UNIX 107B limit), scoped teardown.
+set -euo pipefail
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+source scripts/env.sh
+source scripts/env-train-gpu.sh
+set -a; source configs/secrets/wandb.env; set +a
+
+export CUDA_VISIBLE_DEVICES=1,2,3,4
+export WANDB_MODE=online
+export WANDB_DIR="$CODE_AGENT_ROOT/logs/wandb"
+export NCCL_NVLS_ENABLE=0
+export MASTER_ADDR=127.0.0.1
+export no_proxy="127.0.0.1,localhost"
+export CUDA_DEVICE_MAX_CONNECTIONS=1
+export PYTHONPATH="$CODE_AGENT_ROOT:$CODE_AGENT_ROOT/vendor/slime${PYTHONPATH:+:$PYTHONPATH}"
+
+# ---- DSH rollout knobs (upstream example env names; budgets per approved sheet) ----
+# ADAPTER_PUBLIC_HOST must be routable from inside the sandbox (official example:
+# not 127.0.0.1) — use this node's primary IP.
+export ADAPTER_PUBLIC_HOST="${ADAPTER_PUBLIC_HOST:-$(hostname -I | awk '{print $1}')}"
+export ADAPTER_BIND_HOST="${ADAPTER_BIND_HOST:-0.0.0.0}"
+export ADAPTER_PORT="${ADAPTER_PORT:-18001}"
+export SWE_AGENT_TIME_BUDGET_SEC=1800
+export SWE_EVAL_TIMEOUT_SEC=600
+export SWE_BOOT_CONCURRENCY=8
+export SWE_BOOT_RETRIES=2
+# ---- reward stack v1 (approved: binary core, shaping OFF, blocker ON) ----
+export DSH_BLOCKER=1
+export DSH_C_UNFINISHED=0
+export DSH_C_FMT=0
+export DSH_GROUP_REPAIR=0
+
+# canonical CKPT_ARGS: hf-checkpoint for tokenizer only; ref-load = SFT mcore
+# (fresh start: --load unset -> slime falls back to ref-load with fresh optimizer)
+SFT_HF="$CODE_AGENT_ROOT/models/dense-9B-sft/formal-2card/hf-iter500"
+REF_MODEL_PATH="$CODE_AGENT_ROOT/models/dense-9B-sft/formal-2card"
+PROMPT_DATA="$CODE_AGENT_ROOT/data/agent-rl/rl-round1-band-prompts.parquet"
+SAVE_DIR="$CODE_AGENT_ROOT/models/dense-9B-rl/round1-gspo"
+SLIME="$CODE_AGENT_ROOT/vendor/slime"
+mkdir -p "$SAVE_DIR/rollout_dumps"
+
+RAY_PORT=24379
+RAY_DASH_PORT=32266
+RAY_BIN="$CODE_AGENT_ROOT/.venv-train-rl/bin/ray"
+# ray AF_UNIX socket paths must stay under 107 bytes — short /tmp prefix,
+# removed explicitly on exit (no residue).
+export RAY_TMPDIR=/tmp/ray-rl-r1
+rm -rf "$RAY_TMPDIR"; mkdir -p "$RAY_TMPDIR"
+
+scoped_ray_stop() {
+  local pids=""
+  pids+="$(ps aux | grep '[r]ay' | grep -F "$RAY_TMPDIR" | awk '{print $2}' | tr '\n' ' ' || true)"
+  local raylet_pids child
+  raylet_pids="$(ps aux | grep '[r]aylet' | grep -F "$RAY_TMPDIR" | awk '{print $2}' || true)"
+  for rp in $raylet_pids; do
+    for child in $(ps --ppid "$rp" -o pid --no-headers 2>/dev/null); do
+      pids+="$child "
+    done
+  done
+  pids=$(echo "$pids" | tr ' ' '\n' | sort -u | grep -v '^$' || true)
+  if [ -n "$pids" ]; then
+    echo "[$(date -u '+%H:%M:%S')] scoped stop: killing $pids" >&2
+    # shellcheck disable=SC2086
+    kill $pids 2>/dev/null || true; sleep 8
+    # shellcheck disable=SC2086
+    kill -9 $pids 2>/dev/null || true
+  else
+    echo "[$(date -u '+%H:%M:%S')] scoped stop: no ray processes under $RAY_TMPDIR" >&2
+  fi
+}
+trap 'scoped_ray_stop; rm -rf "$RAY_TMPDIR"; nvidia-smi --query-gpu=index,uuid,memory.used --format=csv,noheader -i 1,2,3,4 | tee "$CODE_AGENT_ROOT/runtime/agent-rl/round1-gspo-gpu-release.txt" || true' EXIT
+
+scoped_ray_stop
+"$RAY_BIN" start --head --node-ip-address 127.0.0.1 --port "$RAY_PORT" \
+  --num-gpus 4 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port="$RAY_DASH_PORT" \
+  > "$CODE_AGENT_ROOT/logs/rl-round1-ray.log" 2>&1
+sleep 5
+
+source "$SLIME/scripts/models/qwen3.5-9B.sh"
+
+CMD=(
+  .venv-train-rl/bin/python "$SLIME/train.py"
+  --actor-num-nodes 1 --actor-num-gpus-per-node 4
+  --rollout-num-gpus 4 --rollout-num-gpus-per-engine 4 --colocate
+  "${MODEL_ARGS[@]}"
+
+  --hf-checkpoint "$SFT_HF"
+  --ref-load "$REF_MODEL_PATH"
+  --save "$SAVE_DIR" --save-interval 20
+
+  --custom-generate-function-path slime_dsh.generate.generate
+  --custom-reward-post-process-path slime_dsh.group_repair.reward_post_process
+  --no-gradient-accumulation-fusion
+
+  --prompt-data "$PROMPT_DATA" --input-key prompt --metadata-key metadata
+  --num-rollout 100
+  --rollout-batch-size 8 --n-samples-per-prompt 8
+  --num-steps-per-rollout 1 --global-batch-size 64
+  --rollout-max-context-len 32768 --rollout-max-response-len 8192
+  --rollout-temperature 1.0
+  --rollout-stop-token-ids 248046 248044
+  --rollout-shuffle --balance-data
+  # DAPO dynamic sampling DROPPED for v1: pinned slime's filter_hub assumes flat
+  # sample lists while agent fan-out returns nested sibling lists
+  # (sglang_rollout.py:460); official SWE example also runs without it.
+  --save-debug-rollout-data "$SAVE_DIR/rollout_dumps/rollout_{rollout_id}.pt"
+  --micro-batch-size 1
+
+  --advantage-estimator gspo --kl-loss-coef 0.0 --kl-loss-type low_var_kl --kl-coef 0.0 --entropy-coef 0.0
+  --eps-clip 0.2 --eps-clip-high 0.28
+
+  --optimizer adam --lr 1e-6 --lr-decay-style constant --min-lr 1e-6
+  --weight-decay 0.1 --adam-beta1 0.9 --adam-beta2 0.98
+  --optimizer-cpu-offload --overlap-cpu-optimizer-d2h-h2d --use-precision-aware-optimizer
+
+  --tensor-model-parallel-size 2 --sequence-parallel
+  --pipeline-model-parallel-size 1
+  --recompute-granularity full --recompute-method uniform --recompute-num-layers 1
+  --use-dynamic-batch-size --max-tokens-per-gpu 8192
+  --log-probs-chunk-size 1024
+
+  --sglang-mem-fraction-static 0.8
+  --sglang-tool-call-parser qwen3_coder
+  --sglang-reasoning-parser qwen3
+
+  --use-wandb --wandb-project code-agent-dense-mainline
+  --wandb-group stage2-gspo-round1
+  --attention-dropout 0.0 --hidden-dropout 0.0
+  --accumulate-allreduce-grads-in-fp32 --attention-softmax-in-fp32
+  --attention-backend flash
+)
+
+echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] stage-2 round1 GSPO (official-recipe port): 4xH100 GPUs 1-4, band=103" >&2
+printf ' %q' "${CMD[@]}"; echo
+exec "${CMD[@]}"

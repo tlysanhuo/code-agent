@@ -44,6 +44,13 @@ class DshHarness(BaseHarness):
         await sb.exec(cmd, user="root", check=True, timeout=30)
 
     async def run(self, sb: Sandbox, **kwargs) -> int:
+        # The local backend boots each sample on its own case copy; the
+        # workdir upstream passes (from task-level md) is only a nominal path.
+        # Prefer the sandbox's workspace when present (per-rollout isolation),
+        # fall back to the passed workdir for non-local sandboxes.
+        ws = getattr(sb, "workspace", None)
+        if ws:
+            kwargs = {**kwargs, "workdir": str(ws)}
         run_directory(kwargs["workdir"])  # before BaseHarness can mutate the sandbox
         return await super().run(sb, **kwargs)
 
@@ -75,10 +82,11 @@ class DshHarness(BaseHarness):
             "XDG_DATA_HOME": str(directory / "data"),
             "XDG_STATE_HOME": str(directory / "state"),
             "npm_config_cache": str(directory / "cache/npm"),
-            "TMPDIR": str(directory / "tmp"),
-            "TMP": str(directory / "tmp"), "TEMP": str(directory / "tmp"),
+            # TMPDIR/TMP/TEMP stay sandbox-managed (reserved keys in
+            # LocalProcessSandbox.exec); per-task isolation already comes from
+            # the per-case sandbox root and its self.tmp.
         }
-        await sb.exec(f"mkdir -p {shlex.quote(env['TMPDIR'])}", user="agent", check=True, timeout=30)
+        await sb.exec(f"mkdir -p {shlex.quote(str(directory / 'tmp'))}", user="agent", check=True, timeout=30)
         return await run_agent(
             sb, workdir=ctx.workdir,
             start_cmd=shlex.join([str(PYTHON), str(WORKER), str(job_path)]),

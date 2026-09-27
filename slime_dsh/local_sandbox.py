@@ -33,6 +33,7 @@ succeed verbatim).
 from __future__ import annotations
 
 import asyncio
+import uuid
 import os
 import re
 import shutil
@@ -65,14 +66,20 @@ class LocalProcessSandbox:
         # the frozen evaluator reads the same tree the agent worked in
         self.workspace = (Path(workspace).resolve() if workspace
                           else self.root / "workspace")
-        self.tmp = self.root / "tmp"
+        self.tmp = self.root / "tmp"  # rebound per-instance in __aenter__
         self.home = self.root / "home"
         self.sandbox_id = f"local-{self.root.name}"
         self._python_dir = Path(python_dir).resolve() if python_dir else None
         self._extra_env = dict(extra_env or {})
+        self._gitconfig_system = self.root / "gitconfig-system"  # rebound per-instance
         self._proc: asyncio.subprocess.Process | None = None
 
     async def __aenter__(self) -> "LocalProcessSandbox":
+        # per-INSTANCE tmp and git config: K sibling rollouts of one task share
+        # the case root concurrently; shared paths made exec_and_wait marker
+        # files (/tmp/.{tag}.*) and `git config --system` lock files collide.
+        self.tmp = self.root / f"tmp-{uuid.uuid4().hex[:8]}"
+        self._gitconfig_system = self.root / f"gitconfig-system-{uuid.uuid4().hex[:8]}"
         for d in (self.root, self.workspace, self.tmp, self.home):
             d.mkdir(parents=True, exist_ok=True)
         # git in the sandbox reads $HOME/.gitconfig (HOME is sandbox-scoped);
@@ -81,6 +88,10 @@ class LocalProcessSandbox:
         gc = self.home / ".gitconfig"
         if not gc.exists():
             gc.write_text("[safe]\n\tdirectory = *\n")
+        # upstream ensure_agent_user runs `git config --system --add ...`; with
+        # GIT_CONFIG_SYSTEM redirected here (per-instance, no lock contention,
+        # no host /etc mutation), seeded with the same ownership exception
+        self._gitconfig_system.write_text("[safe]\n\tdirectory = *\n")
         return self
 
     async def __aexit__(self, exc_type, exc, tb) -> None:
@@ -94,6 +105,7 @@ class LocalProcessSandbox:
         env = dict(_ENV_BASE)
         env["HOME"] = str(self.home)
         env["TMPDIR"] = str(self.tmp)
+        env["GIT_CONFIG_SYSTEM"] = str(self._gitconfig_system)
         if self._python_dir:
             env["PATH"] = f"{self._python_dir}:{env['PATH']}"
         env.update(self._extra_env)

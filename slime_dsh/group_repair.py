@@ -158,10 +158,29 @@ def reward_post_process(args, samples):
     cursor = 0  # groups are consecutive partitions of the flat sample list
     for group in _group_samples(samples, group_size):
         keep = [i for i, s in enumerate(group) if classify_failure(s) != FailureClass.ENVIRONMENT]
-        if keep:  # all-environment group: dropped, normalized reward stays 0.0
-            vals = [raw_rewards[cursor + i] for i in keep]
+        if keep:
+            # SESSION-level baseline: segments of one rollout share a reward,
+            # and a session votes once regardless of how many segments it
+            # emitted. Segment-weighted centering (the previous behavior)
+            # lets long sessions -- disproportionately the solved ones --
+            # dominate the mean, punishing failures ~6x harder than rewarding
+            # successes (observed as the attempt-12 reward decline).
+            by_session: dict = {}
+            for i in keep:
+                rid = (group[i].rollout_id
+                       if getattr(group[i], "rollout_id", None) is not None
+                       else (isinstance(group[i].metadata, dict)
+                             and group[i].metadata.get("session_id")) or i)
+                by_session.setdefault(rid, raw_rewards[cursor + i])
+            vals = list(by_session.values())
             mean = sum(vals) / len(vals)
-            centered = [raw_rewards[cursor + i] - mean for i in keep]
+            centered_session = {rid: v - mean for rid, v in by_session.items()}
+            centered = [centered_session[rid] for rid in (
+                (group[i].rollout_id
+                 if getattr(group[i], "rollout_id", None) is not None
+                 else (isinstance(group[i].metadata, dict)
+                       and group[i].metadata.get("session_id")) or i)
+                for i in keep)]
             if (
                 getattr(args, "advantage_estimator", "grpo") in ["grpo", "gspo", "cispo"]
                 and getattr(args, "grpo_std_normalization", False)
