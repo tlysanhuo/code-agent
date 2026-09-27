@@ -70,16 +70,20 @@ fi
 RAY_PORT=24379
 RAY_DASH_PORT=32266
 RAY_BIN="$CODE_AGENT_ROOT/.venv-train-rl/bin/ray"
-# ray AF_UNIX socket paths must stay under 107 bytes — short /tmp prefix,
-# removed explicitly on exit (no residue).
-export RAY_TMPDIR=/tmp/ray-rl-r1
+# Per-generation tmpdir (incident #12: two launch generations shared one
+# RAY_TMPDIR and each one's cleanup killed the other's live ray head). The pid
+# suffix makes every cleanup provably own-scoped and lets later launches sweep
+# orphaned ray heads of DEAD generations. Path stays well under the 107B
+# AF_UNIX limit even with the suffix + ray's session subdir.
+export RAY_TMPDIR="/tmp/ray-rl-r1-g$$"
 rm -rf "$RAY_TMPDIR"; mkdir -p "$RAY_TMPDIR"
 
-scoped_ray_stop() {
-  local pids=""
-  pids+="$(ps aux | grep '[r]ay' | grep -F "$RAY_TMPDIR" | awk '{print $2}' | tr '\n' ' ' || true)"
-  local raylet_pids child
-  raylet_pids="$(ps aux | grep '[r]aylet' | grep -F "$RAY_TMPDIR" | awk '{print $2}' || true)"
+# kill ray processes under dir $1 (+ raylet children). Matching by our unique
+# path prefix never touches other users' ray clusters on this shared box.
+stop_ray_under() {
+  local dir="$1" pids="" raylet_pids rp child
+  pids+="$(ps aux | grep '[r]ay' | grep -F "$dir" | awk '{print $2}' | tr '\n' ' ' || true)"
+  raylet_pids="$(ps aux | grep '[r]aylet' | grep -F "$dir" | awk '{print $2}' || true)"
   for rp in $raylet_pids; do
     for child in $(ps --ppid "$rp" -o pid --no-headers 2>/dev/null); do
       pids+="$child "
@@ -87,17 +91,43 @@ scoped_ray_stop() {
   done
   pids=$(echo "$pids" | tr ' ' '\n' | sort -u | grep -v '^$' || true)
   if [ -n "$pids" ]; then
-    echo "[$(date -u '+%H:%M:%S')] scoped stop: killing $pids" >&2
+    echo "[$(date -u '+%H:%M:%S')] scoped stop ($dir): killing $pids" >&2
     # shellcheck disable=SC2086
     kill $pids 2>/dev/null || true; sleep 8
     # shellcheck disable=SC2086
     kill -9 $pids 2>/dev/null || true
-  else
-    echo "[$(date -u '+%H:%M:%S')] scoped stop: no ray processes under $RAY_TMPDIR" >&2
+  fi
+}
+
+scoped_ray_stop() { stop_ray_under "$RAY_TMPDIR"; }
+
+# An exec'd trainer has no bash EXIT trap, so a dead generation leaves its ray
+# head daemons behind holding port 24379. Sweep them at startup — but ONLY
+# dirs whose generation pid is provably dead: a live generation's head is
+# never touched (the exact #12 failure mode), other users' ray never matches.
+sweep_dead_generations() {
+  local d pid
+  for d in /tmp/ray-rl-r1-g[0-9]*; do
+    [ -d "$d" ] || continue
+    pid="${d##*-g}"
+    kill -0 "$pid" 2>/dev/null && continue
+    echo "[$(date -u '+%H:%M:%S')] sweeping dead generation $d" >&2
+    stop_ray_under "$d"
+    rm -rf "$d"
+  done
+  # legacy fixed path from pre-#12 scripts. Guarded by "no trainer lineage
+  # alive" — under a (forbidden) concurrent manual launch this cleans nothing
+  # and our own ray start then fails loudly on the busy port instead of
+  # killing the live generation.
+  if [ -d /tmp/ray-rl-r1 ] && ! pgrep -f "vendor/slime/train[.]py" >/dev/null 2>&1; then
+    echo "[$(date -u '+%H:%M:%S')] sweeping legacy /tmp/ray-rl-r1 (no live lineage)" >&2
+    stop_ray_under /tmp/ray-rl-r1
+    rm -rf /tmp/ray-rl-r1
   fi
 }
 trap 'scoped_ray_stop; rm -rf "$RAY_TMPDIR"; nvidia-smi --query-gpu=index,uuid,memory.used --format=csv,noheader -i 3,4,6,7 | tee "$CODE_AGENT_ROOT/runtime/agent-rl/round1-gspo-gpu-release.txt" || true' EXIT
 
+sweep_dead_generations
 scoped_ray_stop
 "$RAY_BIN" start --head --node-ip-address 127.0.0.1 --port "$RAY_PORT" \
   --num-gpus 4 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port="$RAY_DASH_PORT" \
@@ -114,7 +144,7 @@ CMD=(
 
   --hf-checkpoint "$SFT_HF"
   --ref-load "$REF_MODEL_PATH"
-  --save "$SAVE_DIR" --save-interval 20
+  --save "$SAVE_DIR" --save-interval 10
   "${LOAD_ARGS[@]}"
 
   --custom-generate-function-path slime_dsh.generate.generate

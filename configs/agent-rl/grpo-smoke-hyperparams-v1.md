@@ -86,7 +86,7 @@ slime 旗标:`--advantage-estimator grpo|gspo|cispo`(原生,arguments.py:954 cho
 - 首要观测(为消融臂定值):组内奖励方差分布、0/8 全零组占比、abort 分类占比
   (environment/budget)、格式错误 token 率(rollout dump 离线统计)、rollout 墙钟/步;
 - smoke 通过标准(建议):≥20 步无 NaN/无 OOM/loss 下降趋势+组方差非退化(具体阈值用户可改);
-- 每步 GPU·h 与 rollout 数入账(简历项目成本披露惯例)。
+- 每步 GPU·h 与 rollout 数入账(项目成本披露惯例)。
 
 ## 6. 待用户拍板清单
 

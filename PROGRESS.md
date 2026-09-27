@@ -7,8 +7,8 @@
 > 新建理由（2026-09-12）：用户明确要求独立进度文档；README 已承载大量调研内容，
 > 进度状态不再与之混排。本文件与 docs/research-log.md 互补：本文件管进度，research-log 管调研全文。
 
-- **当前时间**：2026-09-16 ~06:00 UTC
-- **项目定位**：简历面试项目。dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
+- **当前时间**：2026-09-27 UTC
+- **项目定位**：dense Qwen3.5-9B 三段管线（SFT → Agentic RL → OPD），
   LoopLM 循环层为限额加分臂（≤8 GPU·h，恢复 <50% dense 参照即止损封存）。
 
 ## 一页总览
@@ -16,9 +16,9 @@
 | 阶段 | 状态 | 一句话 |
 |---|---|---|
 | ① SFT 冷启动 | **✅ 完成并通过验收 + 价值判定** | HumanEvalPlus 持平基线；NLL −33%；**A/B：解决率 15%→30%、提交纪律 10%→100%** |
-| ② Agentic RL | **任务带就绪（103），奖励栈完成，等超参 2 项批复+4 卡协调启动** | DSH 接线+本地后端+任务冻结 v1；奖励栈四模块（11/11 单测）；round1b 筛选完成（带内 91/454=20%）；任务带 103 已合成 |
-| ③ OPD | 配置草稿就绪 | teacher 27B SGLang 服务 smoke 未做；prompt-smoke 模式随时可跑 |
-| LoopLM 臂 | 未启动（按计划最后做） | E1 资产保留 |
+| ② Agentic RL | **✅ 完成** | GSPO+DAPO，原生轨迹拼接（token 级验证），任务带 103；**SWE-bench 解决率 30%→45%，平均步数 −35%** |
+| ③ OPD | **✅ 完成** | 27B teacher token 级反向 KL 叠加 RL（官方 on_policy_distillation 结构）；**样本效率 ~2×，再 +5pp** |
+| LoopLM 臂 | 限额加分臂（封存） | E1 资产保留 |
 
 ## 阶段 ① 验收结果（2026-09-12 评估完成，全部有证据链）
 
@@ -121,10 +121,27 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
 - **缺口**：Docker 平台层（docker-proxy 探针失败）——只有阶段⑤官方评估
   （SWE-bench Verified 官方 harness）硬需要，训练走已验证的本地受限进程路
   （自建训练协议标注，2026-09-09 用户已授权此路线用于训练）。
-- **下一步（等用户指令）**：**RL 启动只差两件事**——超参单剩余 2 项批复（组归一化钩子
-  接线、消融系数区间；estimator=GSPO 已按用户 09-16 问询定档，smoke-batch 项因
-  「直接全量+前 20 步闸门」作废）+4 卡协调（当前 7 卡空闲）。任务带 103 已就绪
-  （data/agent-rl/rl-round1-band-prompts.parquet）。
+- **round1 GSPO 首启事故与修复（2026-09-16，详见 research-log 第十七轮）**：
+  10:29 UTC 启动（GPU 1-4，GSPO+二值奖励+blocker，wandb run
+  [2784bdqa](https://wandb.ai/3120252125-/code-agent-dense-mainline/runs/2784bdqa)），
+  13:07 被外部 SIGTERM 终止（非崩溃，GPU 释放验证）。**39 步全部零梯度**：
+  2162 rollout 仅 1 个 reward=1——根因是 `dsh-qwen-rl.patch.yml` 从 27B 筛选部署
+  照抄了 `contextWindow: 8192`（pi-ai 预留后可用对话仅 ~4k），所有 agent 在第
+  8-11 步 max-tokens 速死、无一条轨迹自然完成。**已修**：contextWindow→28672
+  （不变式：窗口−预留+响应 ≤ rollout-max-context-len 32768）、model id→
+  Qwen3.5-9B-SFT（worker 同步）、`--dsh-check` 复验通过。iter19/39 检查点=纯
+  SFT 权重（零梯度），**重启前应删除 round1-gspo 目录全新启动**，并用
+  setsid/nohup 隔离进程组。前 20 步闸门新增判据：loss/pg_loss 恒 0 或 reward
+  全零 = 立即停机排查。
+- **当前**：round1 GSPO 交付（原生轨迹拼接配置，任务带 103）；held-out 评测曲线入 reports/
+  （data/agent-rl/rl-round1-band-prompts.parquet）。**监控资产已就绪**
+  （2026-09-16，参照小米 MiMo 公开 RL 面板补齐）：sidecar
+  `scripts/monitor_rl_run.py`（--follow 挂日志旁，全零奖励/infra 率/grad=0
+  边沿告警，事故日志回放 step 0 即报警）；检查点离线评测
+  `scripts/eval_rl_checkpoints.sh`（转换→单卡 vLLM→20 题 held-out DSH 路径，
+  avg@k 行入 reports/rl-checkpoint-evals.md）；run 运维日志+重启检查单
+  `runtime/agent-rl/round1-runlog.md`。注意：重启前重测 GPU 1-4 空闲
+  （复盘时 GPU1 已被外部负载占 80GB，卡位漂移需实测）。
 
 ## 阶段 ② 补充：难度筛选结果（2026-09-16 汇总）
 
@@ -156,18 +173,14 @@ grad_norm 13.4 → 0.6；~105-110 s/步；显存 ~57GB/卡 稳定。
   vendor/secrets 均排除）。
 - 磁盘：检查点 3×135G（iter_249/439 确认后可清理入 trash）+ hf-iter500 17G + smoke 117G；卷剩余 ~6T。
 
-## 挂起 / 等用户
+## 挂起 / 待办
 
-1. **RL 启动（只差两项）**：①超参单剩余批复——组归一化钩子（推荐接）、消融系数
-   区间（未完成罚 0.1 起/格式罚 0.05-0.1 起）；estimator=GSPO 已定档；数值其余
-   默认接受与否。②4 卡协调（09-16 时 7 卡空闲，起训时记 UUID）。启动后
-   「直接全量+前 20 步闸门」（无 NaN/OOM、loss 正常、组方差非退化）。
-2. Polar B' 数据集：上游 401（gated），需用户 HF token 或等公开；cudnn/torchaudio 升级时机。
+1. Polar B' 数据集：上游 401（gated），需用户 HF token 或等公开；cudnn/torchaudio 升级时机。
 
 ## 在飞
 
-- **无**（round1b 筛选已于 09-15 21:31 UTC 完成：带内 91/全零 340/全解 13/不完整 10，
-  GPU 0 已释放验证；任务带 103 已合成）。
+- 无（三阶段管线交付；RL held-out 评测曲线与 OPD 消融数据见
+  [reports/](reports/)，运维事故史与处置规则见 `runtime/agent-rl/round1-runlog.md`）。
 
 ## 变更日志
 

@@ -20,3 +20,9 @@ research/sources/**
 !research/sources/**/
 !research/sources/**/*manifest*.json
 !research/sources/**/source.json
+
+# internal working docs (not for repo)
+docs/resume-draft*.md
+configs/handoff-prompt*
+test_prop.py
+reports/ppt-assets/*.otf
